@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Dražba</title> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --google-blue: #1a73e8; --google-blue-hover: #1765cc; 
+            --background-color: #f8f9fa; --surface-color: #ffffff; 
+            --text-primary: #202124; --text-secondary: #5f6368; 
+            --border-color: #dadce0; --error-color: #d93025; 
+        }
+        body { 
+            font-family: 'Roboto', sans-serif; background-color: var(--background-color); color: var(--text-primary); 
+            display: flex; justify-content: center; align-items: center; 
+            padding: 24px; min-height: 100vh;
+            flex-direction: column; 
+        }
+        
+        /* --- Sekcia Výber Role --- */
+        #role-selection {
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            background-color: var(--surface-color); border-radius: 8px; padding: 40px;
+            box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+            width: 100%; max-width: 500px; box-sizing: border-box;
+        }
+        #role-selection h1 { font-size: 28px; font-weight: 500; margin: 0 0 16px 0; }
+        #role-selection p { font-size: 16px; color: var(--text-secondary); margin: 0 0 32px 0; max-width: 400px; }
+        .role-buttons { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; }
+        .role-buttons button { width: 100%; padding: 16px; font-size: 16px; }
+
+        /* --- Kontajnery Pohľadov (skryté) --- */
+        #navrhovatel-view, #zaujemca-view {
+            display: none; width: 100%; max-width: 800px; 
+            align-self: flex-start; margin-top: 0; 
+        }
+        .view-header { display: flex; justify-content: flex-end; margin-bottom: 16px; width: 100%; }
+        .view-header button { width: auto; }
+
+        /* --- Panel Formulára/Zoznamu --- */
+        .panel { 
+            background-color: var(--surface-color); border-radius: 8px; border: 1px solid var(--border-color); 
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); 
+            padding: 24px; width: 100%; box-sizing: border-box; 
+        }
+        
+        h2 { font-size: 22px; font-weight: 500; margin-top: 0; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } /* 2 stĺpce */
+        .form-group { margin-bottom: 16px; } /* Len spodný margin */
+        .form-group-full { grid-column: 1 / -1; } /* Položka cez celú šírku */
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text-secondary); }
+        input, select, textarea { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 16px; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        textarea { resize: vertical; min-height: 100px; }
+        input[type="datetime-local"] { font-family: sans-serif; } /* Lepšie zobrazenie dátumu */
+        
+        button { padding: 12px; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; border: none; }
+        button:disabled { background-color: #f1f3f4; color: #bdc1c6; cursor: not-allowed; }
+        .btn-primary { background-color: var(--google-blue); color: white; width: 100%; } .btn-primary:not(:disabled):hover { background-color: var(--google-blue-hover); }
+        .btn-secondary { background-color: var(--surface-color); color: var(--google-blue); border: 1px solid var(--border-color); width: auto; } .btn-secondary:not(:disabled):hover { background-color: #f8f9fa; }
+
+        /* --- Štýly pre Zoznam Dražieb --- */
+        #drazby-list { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .drazba-item { background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
+        .drazba-item h3 { margin: 0 0 12px 0; color: var(--google-blue); font-size: 18px; }
+        .drazba-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14px; }
+        .drazba-item-grid p { margin: 4px 0; }
+        .drazba-item-grid p strong { color: var(--text-primary); }
+        .drazba-item-full { grid-column: 1 / -1; }
+        .drazba-item .btn-primary { width: auto; padding: 8px 16px; margin-top: 16px; }
+
+        /* --- Responzivita --- */
+         @media (max-width: 600px) { 
+             body { padding: 8px; gap: 8px;}
+             #role-selection { padding: 20px; margin-top: 20px;}
+             #role-selection h1 { font-size: 24px;}
+             .role-buttons { flex-direction: column; width: 100%;} 
+             .role-buttons button { width: 100%; }
+             
+             .panel { padding: 12px; } 
+             h2 { font-size: 18px; }
+             /* Formulár a gridy na 1 stĺpec */
+             .form-grid, .drazba-item-grid { grid-template-columns: 1fr; }
+             .form-group-full { grid-column: 1; } /* Reset */
+         }
+    </style>
+</head>
+<body>
+
+    <div id="role-selection">
+        <h1>Vitajte v E-Dražbe</h1>
+        <p>Ste tu, aby ste navrhli novú dražbu, alebo sa chcete zúčastniť ako záujemca?</p>
+        <div class="role-buttons">
+            <button class="btn-primary" onclick="showNavrhovatelView()">Som Navrhovateľ</button>
+            <button class="btn-primary" onclick="showZaujemcaView()">Som Záujemca (kupujúci)</button>
+        </div>
+    </div>
+
+    <div id="navrhovatel-view">
+         <div class="view-header">
+             <button class="btn-secondary" onclick="showRoleSelection()">Zmeniť rolu</button>
+         </div>
+         <div class="panel">
+             <h2>Navrhnúť novú dražbu</h2>
+             <form id="drazba-form" onsubmit="handleDrazbaSubmit(event)">
+                 <div class="form-grid">
+                     <div class="form-group">
+                         <label for="navrhovatel">Navrhovateľ:</label>
+                         <select id="navrhovatel" required>
+                             <option value="">-- Vyberte rolu --</option>
+                             <option value="Vlastník">Vlastník</option>
+                             <option value="Správca">Správca</option>
+                             <option value="Záložný veriteľ">Záložný veriteľ</option>
+                             <option value="Exekútor">Exekútor</option>
+                         </select>
+                     </div>
+                     <div class="form-group">
+                         <label for="typNehnutelnosti">Typ nehnuteľnosti:</label>
+                         <select id="typNehnutelnosti" required>
+                             <option value="">-- Vyberte typ --</option>
+                             <option value="Rodinný dom">Rodinný dom</option>
+                             <option value="Byt">Byt</option>
+                             <option value="Pozemok">Pozemok</option>
+                             <option value="Komerčný objekt">Komerčný objekt</option>
+                             <option value="Iné">Iné</option>
+                         </select>
+                     </div>
+                     <div class="form-group">
+                         <label for="okres">Okres:</label>
+                         <input type="text" id="okres" placeholder="Napr. Trnava" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="adresa">Adresa nehnuteľnosti:</label>
+                         <input type="text" id="adresa" placeholder="Napr. Hlavná 1, 91701 Trnava" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="znalecnaCena">Znalcom určená cena (€):</label>
+                         <input type="number" id="znalecnaCena" placeholder="Napr. 150000" min="0" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="najnizsiePodanie">Najnižšie podanie (€):</label>
+                         <input type="number" id="najnizsiePodanie" placeholder="Napr. 100000" min="0" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="minimalnePrihodenie">Minimálne prihodenie (€):</label>
+                         <input type="number" id="minimalnePrihodenie" placeholder="Napr. 1000" min="1" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="mobilNavrhovatela">Kontaktný mobil:</label>
+                         <input type="tel" id="mobilNavrhovatela" placeholder="09XX XXX XXX (10 číslic)" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="casZaciatku">Dátum a čas začatia dražby:</label>
+                         <input type="datetime-local" id="casZaciatku" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="casSkoncenia">Dátum a čas skončenia dražby:</label>
+                         <input type="datetime-local" id="casSkoncenia" required>
+                     </div>
+                     <div class="form-group form-group-full">
+                         <label for="predmetDrazby">Predmet dražby (popis):</label>
+                         <textarea id="predmetDrazby" placeholder="Stručne popíšte predmet dražby..." required></textarea>
+                     </div>
+                 </div>
+                 <button type="submit" id="submitDrazbaButton" class="btn-primary" style="margin-top: 16px;">Vytvoriť dražbu</button>
+             </form>
+         </div>
+    </div>
+
+    <div id="zaujemca-view">
+         <div class="view-header">
+             <button class="btn-secondary" onclick="showRoleSelection()">Zmeniť rolu</button>
+         </div>
+         <div class="panel">
+              <h2>Prehľad aktuálnych dražieb</h2>
+              <div id="drazby-list">
+                  <p>Načítavam zoznam dražieb...</p>
+              </div>
+         </div>
+    </div>
+    
+    <script>
+        console.log("Kontrolný bod: Skript začal."); 
+        
+        // --- DÔLEŽITÉ: URL adresa tvojho NOVÉHO backendu na Renderi ---
+        // Budeš ju musieť nastaviť na Renderi v Environment premenných pre Vercel
+        const API_URL = 'https://e-drazba.onrender.com'; // Príklad - doplň si svoju
+        
+        // Globálne premenné pre elementy
+        let roleSelectionDiv, tipperViewDiv, buyerViewDiv, drazbyListDiv, drazbaForm;
+
+        // --- Funkcie na prepínanie pohľadov ---
+        function showRoleSelection() {
+            console.log("Zobrazujem výber role.");
+            if (roleSelectionDiv) roleSelectionDiv.style.display = 'flex';
+            if (tipperViewDiv) tipperViewDiv.style.display = 'none';
+            if (buyerViewDiv) buyerViewDiv.style.display = 'none';
+            document.body.style.alignItems = 'center'; 
+        }
+        function showNavrhovatelView() {
+             console.log("Zobrazujem pohľad Navrhovateľa.");
+            if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
+            if (tipperViewDiv) tipperViewDiv.style.display = 'block'; 
+            if (buyerViewDiv) buyerViewDiv.style.display = 'none';
+            document.body.style.alignItems = 'flex-start'; 
+        }
+         function showZaujemcaView() {
+             console.log("Zobrazujem pohľad Záujemcu.");
+            if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
+            if (tipperViewDiv) tipperViewDiv.style.display = 'none';
+            if (buyerViewDiv) buyerViewDiv.style.display = 'block'; 
+            document.body.style.alignItems = 'flex-start'; 
+            loadDrazby(); // Načítaj dražby pri zobrazení pohľadu
+        }
+        
+        // --- Funkcia na načítanie dražieb (pre Záujemcu) ---
+        async function loadDrazby() {
+            console.log("Načítavam dražby...");
+            if (!drazbyListDiv) return;
+            drazbyListDiv.innerHTML = '<p>Načítavam zoznam dražieb...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/drazby`);
+                if (!response.ok) throw new Error(`Chyba servera: ${response.statusText}`);
+                const drazby = await response.json();
+                
+                drazbyListDiv.innerHTML = ''; // Vyčisti
+                
+                if (drazby.length === 0) {
+                    drazbyListDiv.innerHTML = '<p>Momentálne nie sú k dispozícii žiadne dražby.</p>';
+                    return;
+                }
+                
+                drazby.forEach(drazba => {
+                    const item = document.createElement('div');
+                    item.className = 'drazba-item';
+                    
+                    // Formátovanie dátumu
+                    const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK');
+                    const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK');
+
+                    item.innerHTML = `
+                        <h3>${drazba.predmetDrazby}</h3>
+                        <div class="drazba-item-grid">
+                            <p><strong>Adresa:</strong> ${drazba.adresa}, ${drazba.okres}</p>
+                            <p><strong>Typ:</strong> ${drazba.typNehnutelnosti}</p>
+                            <p><strong>Znal. cena:</strong> ${drazba.znalecnaCena.toLocaleString('sk-SK')} €</p>
+                            <p><strong>Najnižšie podanie:</strong> ${drazba.najnizsiePodanie.toLocaleString('sk-SK')} €</p>
+                            <p><strong>Začiatok:</strong> ${zaciatok}</p>
+                            <p><strong>Koniec:</strong> ${koniec}</p>
+                        </div>
+                        <button class="btn-primary" onclick="alert('Prihlásenie do dražby (ID: ${drazba._id}) príde vo Fáze 2!')">Prihlásiť sa do dražby</button>
+                    `;
+                    drazbyListDiv.appendChild(item);
+                });
+                
+            } catch (error) {
+                console.error("Chyba pri načítaní dražieb:", error);
+                drazbyListDiv.innerHTML = `<p style="color: red;">Chyba pri načítaní dražieb: ${error.message}</p>`;
+            }
+        }
+        
+        // --- Funkcia na odoslanie formulára (pre Navrhovateľa) ---
+        async function handleDrazbaSubmit(event) {
+            event.preventDefault(); // Zabráni klasickému odoslaniu formulára
+            console.log("Formulár sa odosiela...");
+            
+            const submitButton = document.getElementById('submitDrazbaButton');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Odosielam...';
+            
+            try {
+                // Zozbierame dáta z formulára
+                const data = {
+                    navrhovatel: document.getElementById('navrhovatel').value,
+                    typNehnutelnosti: document.getElementById('typNehnutelnosti').value,
+                    okres: document.getElementById('okres').value,
+                    adresa: document.getElementById('adresa').value,
+                    znalecnaCena: Number(document.getElementById('znalecnaCena').value),
+                    najnizsiePodanie: Number(document.getElementById('najnizsiePodanie').value),
+                    minimalnePrihodenie: Number(document.getElementById('minimalnePrihodenie').value),
+                    casZaciatku: document.getElementById('casZaciatku').value,
+                    casSkoncenia: document.getElementById('casSkoncenia').value,
+                    mobilNavrhovatela: document.getElementById('mobilNavrhovatela').value,
+                    predmetDrazby: document.getElementById('predmetDrazby').value
+                };
+                
+                console.log("Odosielam dáta:", data);
+                
+                const response = await fetch(`${API_URL}/api/drazby`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Server vrátil chybu.');
+                }
+                
+                const novaDrazba = await response.json();
+                console.log("Odpoveď zo servera:", novaDrazba);
+                alert('Dražba bola úspešne vytvorená!');
+                
+                drazbaForm.reset(); // Vyčistí formulár
+                
+            } catch (error) {
+                 console.error("Chyba pri odosielaní formulára:", error);
+                 alert(`Nastala chyba pri vytváraní dražby: ${error.message}`);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Vytvoriť dražbu';
+            }
+        }
+
+        // --- INICIALIZÁCIA APLIKÁCIE ---
+        document.addEventListener('DOMContentLoaded', () => {
+             console.log("Kontrolný bod: DOM načítaný, inicializácia.");
+             try {
+                 // Inicializuj elementy
+                 roleSelectionDiv = document.getElementById('role-selection');
+                 tipperViewDiv = document.getElementById('navrhovatel-view');
+                 buyerViewDiv = document.getElementById('zaujemca-view');
+                 drazbyListDiv = document.getElementById('drazby-list');
+                 drazbaForm = document.getElementById('drazba-form');
+                 
+                 // Zobraz úvodný výber
+                 showRoleSelection(); 
+                 
+                 console.log("Kontrolný bod: Inicializácia dokončená.");
+             } catch (error) {
+                 console.error("KRITICKÁ CHYBA počas inicializácie:", error);
+                 const body = document.querySelector('body');
+                 if(body) body.innerHTML = `<p style="color:red;">Kritická chyba: ${error.message}</p>`;
+             }
+        });
+        
+        console.log("Kontrolný bod: Skript načítaný.");
+    </script>
+
+</body>
+</html>

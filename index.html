@@ -20,7 +20,6 @@
             flex-direction: column; 
         }
         
-        /* --- Sekcia Výber Role --- */
         #role-selection {
             display: flex; flex-direction: column; align-items: center; text-align: center;
             background-color: var(--surface-color); border-radius: 8px; padding: 40px;
@@ -32,7 +31,6 @@
         .role-buttons { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; }
         .role-buttons button { width: 100%; padding: 16px; font-size: 16px; }
 
-        /* --- Kontajnery Pohľadov (skryté) --- */
         #navrhovatel-view, #zaujemca-view {
             display: none; width: 100%; max-width: 800px; 
             align-self: flex-start; margin-top: 0; 
@@ -40,7 +38,6 @@
         .view-header { display: flex; justify-content: flex-end; margin-bottom: 16px; width: 100%; }
         .view-header button { width: auto; }
 
-        /* --- Panel Formulára/Zoznamu --- */
         .panel { 
             background-color: var(--surface-color); border-radius: 8px; border: 1px solid var(--border-color); 
             box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); 
@@ -48,21 +45,21 @@
         }
         
         h2 { font-size: 22px; font-weight: 500; margin-top: 0; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } /* 2 stĺpce */
-        .form-group { margin-bottom: 16px; } /* Len spodný margin */
-        .form-group-full { grid-column: 1 / -1; } /* Položka cez celú šírku */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 0; } /* Už neriadime cez margin, ale cez gap */
+        .form-group-full { grid-column: 1 / -1; } 
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text-secondary); }
+        label a.address-map-link { font-size: 12px; margin-left: 8px; float: right; } /* Odkaz na mapu vpravo */
         input, select, textarea { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 16px; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
         textarea { resize: vertical; min-height: 100px; }
-        input[type="datetime-local"] { font-family: sans-serif; } /* Lepšie zobrazenie dátumu */
+        input[type="datetime-local"] { font-family: sans-serif; } 
         
         button { padding: 12px; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; border: none; }
         button:disabled { background-color: #f1f3f4; color: #bdc1c6; cursor: not-allowed; }
         .btn-primary { background-color: var(--google-blue); color: white; width: 100%; } .btn-primary:not(:disabled):hover { background-color: var(--google-blue-hover); }
         .btn-secondary { background-color: var(--surface-color); color: var(--google-blue); border: 1px solid var(--border-color); width: auto; } .btn-secondary:not(:disabled):hover { background-color: #f8f9fa; }
 
-        /* --- Štýly pre Zoznam Dražieb --- */
-        #drazby-list { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        #drazby-list { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
         .drazba-item { background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
         .drazba-item h3 { margin: 0 0 12px 0; color: var(--google-blue); font-size: 18px; }
         .drazba-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14px; }
@@ -71,7 +68,6 @@
         .drazba-item-full { grid-column: 1 / -1; }
         .drazba-item .btn-primary { width: auto; padding: 8px 16px; margin-top: 16px; }
 
-        /* --- Responzivita --- */
          @media (max-width: 600px) { 
              body { padding: 8px; gap: 8px;}
              #role-selection { padding: 20px; margin-top: 20px;}
@@ -81,9 +77,8 @@
              
              .panel { padding: 12px; } 
              h2 { font-size: 18px; }
-             /* Formulár a gridy na 1 stĺpec */
              .form-grid, .drazba-item-grid { grid-template-columns: 1fr; }
-             .form-group-full { grid-column: 1; } /* Reset */
+             .form-group-full { grid-column: 1; } 
          }
     </style>
 </head>
@@ -111,29 +106,40 @@
                          <select id="navrhovatel" required>
                              <option value="">-- Vyberte rolu --</option>
                              <option value="Vlastník">Vlastník</option>
-                             <option value="Správca">Správca</option>
-                             <option value="Záložný veriteľ">Záložný veriteľ</option>
+                             <option value="Dražobník">Dražobník</option>
                              <option value="Exekútor">Exekútor</option>
+                             <option value="Správca">Správca</option>
                          </select>
                      </div>
                      <div class="form-group">
                          <label for="typNehnutelnosti">Typ nehnuteľnosti:</label>
                          <select id="typNehnutelnosti" required>
                              <option value="">-- Vyberte typ --</option>
+                             <option value="Garzónka">Garzónka</option>
+                             <option value="1-izbový byt">1-izbový byt</option>
+                             <option value="2-izbový byt">2-izbový byt</option>
+                             <option value="3-izbový byt">3-izbový byt</option>
+                             <option value="4-izbový byt">4-izbový byt</option>
                              <option value="Rodinný dom">Rodinný dom</option>
-                             <option value="Byt">Byt</option>
-                             <option value="Pozemok">Pozemok</option>
+                             <option value="Garáž">Garáž</option>
+                             <option value="Záhrada">Záhrada</option>
+                             <option value="Stavebný pozemok">Stavebný pozemok</option>
                              <option value="Komerčný objekt">Komerčný objekt</option>
                              <option value="Iné">Iné</option>
                          </select>
                      </div>
                      <div class="form-group">
                          <label for="okres">Okres:</label>
-                         <input type="text" id="okres" placeholder="Napr. Trnava" required>
+                         <select id="okres" required onchange="updateMapLink()">
+                             <option value="">-- Vyberte okres --</option>
+                             <option value="Bánovce nad Bebravou">Bánovce nad Bebravou</option><option value="Banská Bystrica">Banská Bystrica</option><option value="Banská Štiavnica">Banská Štiavnica</option><option value="Bardejov">Bardejov</option><option value="Bratislava I">Bratislava I</option><option value="Bratislava II">Bratislava II</option><option value="Bratislava III">Bratislava III</option><option value="Bratislava IV">Bratislava IV</option><option value="Bratislava V">Bratislava V</option><option value="Brezno">Brezno</option><option value="Bytča">Bytča</option><option value="Čadca">Čadca</option><option value="Detva">Detva</option><option value="Dolný Kubín">Dolný Kubín</option><option value="Dunajská Streda">Dunajská Streda</option><option value="Galanta">Galanta</option><option value="Gelnica">Gelnica</option><option value="Hlohovec">Hlohovec</option><option value="Humenné">Humenné</option><option value="Ilava">Ilava</option><option value="Kežmarok">Kežmarok</option><option value="Komárno">Komárno</option><option value="Košice I">Košice I</option><option value="Košice II">Košice II</option><option value="Košice III">Košice III</option><option value="Košice IV">Košice IV</option><option value="Košice-okolie">Košice-okolie</option><option value="Krupina">Krupina</option><option value="Kysucké Nové Mesto">Kysucké Nové Mesto</option><option value="Levice">Levice</option><option value="Levoča">Levoča</option><option value="Liptovský Mikuláš">Liptovský Mikuláš</option><option value="Lučenec">Lučenec</option><option value="Malacky">Malacky</option><option value="Martin">Martin</option><option value="Medzilaborce">Medzilaborce</option><option value="Michalovce">Michalovce</option><option value="Myjava">Myjava</option><option value="Námestovo">Námestovo</option><option value="Nitra">Nitra</option><option value="Nové Mesto nad Váhom">Nové Mesto nad Váhom</option><option value="Nové Zámky">Nové Zámky</option><option value="Partizánske">Partizánske</option><option value="Pezinok">Pezinok</option><option value="Piešťany">Piešťany</option><option value="Poltár">Poltár</option><option value="Poprad">Poprad</option><option value="Považská Bystrica">Považská Bystrica</option><option value="Prešov">Prešov</option><option value="Prievidza">Prievidza</option><option value="Púchov">Púchov</option><option value="Revúca">Revúca</option><option value="Rimavská Sobota">Rimavská Sobota</option><option value="Rožňava">Rožňava</option><option value="Ružomberok">Ružomberok</option><option value="Sabinov">Sabinov</option><option value="Senec">Senec</option><option value="Senica">Senica</option><option value="Skalica">Skalica</option><option value="Snina">Snina</option><option value="Sobrance">Sobrance</option><option value="Spišská Nová Ves">Spišská Nová Ves</option><option value="Stará Ľubovňa">Stará Ľubovňa</option><option value="Stropkov">Stropkov</option><option value="Svidník">Svidník</option><option value="Šaľa">Šaľa</option><option value="Topoľčany">Topoľčany</option><option value="Trebišov">Trebišov</option><option value="Trenčín">Trenčín</option><option value="Trnava">Trnava</option><option value="Turčianske Teplice">Turčianske Teplice</option><option value="Tvrdošín">Tvrdošín</option><option value="Veľký Krtíš">Veľký Krtíš</option><option value="Vranov nad Topľou">Vranov nad Topľou</option><option value="Zlaté Moravce">Zlaté Moravce</option><option value="Zvolen">Zvolen</option><option value="Žarnovica">Žarnovica</option><option value="Žiar nad Hronom">Žiar nad Hronom</option><option value="Žilina">Žilina</option>
+                         </select>
                      </div>
                      <div class="form-group">
-                         <label for="adresa">Adresa nehnuteľnosti:</label>
-                         <input type="text" id="adresa" placeholder="Napr. Hlavná 1, 91701 Trnava" required>
+                         <label for="adresa">Adresa nehnuteľnosti:
+                             <a href="#" id="adresaMapLink" target="_blank" class="address-map-link" style="display: none;">(Zobraziť na mape)</a>
+                         </label>
+                         <input type="text" id="adresa" placeholder="Napr. Hlavná 1, 91701 Trnava" required oninput="updateMapLink()">
                      </div>
                      <div class="form-group">
                          <label for="znalecnaCena">Znalcom určená cena (€):</label>
@@ -182,37 +188,52 @@
     </div>
     
     <script>
-        console.log("Kontrolný bod: Skript začal."); 
+        console.log("Kontrolný bod: E-Dražba Skript začal."); 
         
         // --- DÔLEŽITÉ: URL adresa tvojho NOVÉHO backendu na Renderi ---
-        // Budeš ju musieť nastaviť na Renderi v Environment premenných pre Vercel
+        // Nezabudni ju zmeniť na tvoju skutočnú .onrender.com adresu
         const API_URL = 'https://e-drazba.onrender.com'; // Príklad - doplň si svoju
         
         // Globálne premenné pre elementy
-        let roleSelectionDiv, tipperViewDiv, buyerViewDiv, drazbyListDiv, drazbaForm;
+        let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, drazbyListDiv, drazbaForm,
+            adresaInput, okresSelect, adresaMapLink; // Pre odkaz na mapu
 
         // --- Funkcie na prepínanie pohľadov ---
         function showRoleSelection() {
             console.log("Zobrazujem výber role.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'flex';
-            if (tipperViewDiv) tipperViewDiv.style.display = 'none';
-            if (buyerViewDiv) buyerViewDiv.style.display = 'none';
+            if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
+            if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             document.body.style.alignItems = 'center'; 
         }
         function showNavrhovatelView() {
              console.log("Zobrazujem pohľad Navrhovateľa.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
-            if (tipperViewDiv) tipperViewDiv.style.display = 'block'; 
-            if (buyerViewDiv) buyerViewDiv.style.display = 'none';
+            if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'block'; 
+            if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             document.body.style.alignItems = 'flex-start'; 
         }
          function showZaujemcaView() {
              console.log("Zobrazujem pohľad Záujemcu.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
-            if (tipperViewDiv) tipperViewDiv.style.display = 'none';
-            if (buyerViewDiv) buyerViewDiv.style.display = 'block'; 
+            if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
+            if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'block'; 
             document.body.style.alignItems = 'flex-start'; 
             loadDrazby(); // Načítaj dražby pri zobrazení pohľadu
+        }
+        
+        // --- Nová funkcia na aktualizáciu odkazu na mapu ---
+        function updateMapLink() {
+             if (!adresaInput || !okresSelect || !adresaMapLink) { return; }
+             const address = adresaInput.value.trim(); 
+             const okres = okresSelect.value;
+             if (address && okres) {
+                  const mapQuery = encodeURIComponent(`${address}, ${okres}`);
+                  adresaMapLink.href = `https://www.google.com/maps?q=${mapQuery}`; 
+                  adresaMapLink.style.display = 'inline'; 
+             } else { 
+                  adresaMapLink.style.display = 'none'; 
+             }
         }
         
         // --- Funkcia na načítanie dražieb (pre Záujemcu) ---
@@ -226,7 +247,7 @@
                 if (!response.ok) throw new Error(`Chyba servera: ${response.statusText}`);
                 const drazby = await response.json();
                 
-                drazbyListDiv.innerHTML = ''; // Vyčisti
+                drazbyListDiv.innerHTML = ''; 
                 
                 if (drazby.length === 0) {
                     drazbyListDiv.innerHTML = '<p>Momentálne nie sú k dispozícii žiadne dražby.</p>';
@@ -236,20 +257,20 @@
                 drazby.forEach(drazba => {
                     const item = document.createElement('div');
                     item.className = 'drazba-item';
-                    
-                    // Formátovanie dátumu
                     const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK');
                     const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK');
+                    const mapQuery = encodeURIComponent(`${drazba.adresa}, ${drazba.okres}`);
 
                     item.innerHTML = `
                         <h3>${drazba.predmetDrazby}</h3>
                         <div class="drazba-item-grid">
-                            <p><strong>Adresa:</strong> ${drazba.adresa}, ${drazba.okres}</p>
+                            <p><strong>Adresa:</strong> ${drazba.adresa} <a href="https://www.google.com/maps?q=${mapQuery}" target="_blank" style="font-size: 12px;">(Mapa)</a></p>
                             <p><strong>Typ:</strong> ${drazba.typNehnutelnosti}</p>
                             <p><strong>Znal. cena:</strong> ${drazba.znalecnaCena.toLocaleString('sk-SK')} €</p>
                             <p><strong>Najnižšie podanie:</strong> ${drazba.najnizsiePodanie.toLocaleString('sk-SK')} €</p>
                             <p><strong>Začiatok:</strong> ${zaciatok}</p>
                             <p><strong>Koniec:</strong> ${koniec}</p>
+                            <p class="drazba-item-full"><strong>Navrhovateľ:</strong> ${drazba.navrhovatel}</p>
                         </div>
                         <button class="btn-primary" onclick="alert('Prihlásenie do dražby (ID: ${drazba._id}) príde vo Fáze 2!')">Prihlásiť sa do dražby</button>
                     `;
@@ -264,7 +285,7 @@
         
         // --- Funkcia na odoslanie formulára (pre Navrhovateľa) ---
         async function handleDrazbaSubmit(event) {
-            event.preventDefault(); // Zabráni klasickému odoslaniu formulára
+            event.preventDefault(); 
             console.log("Formulár sa odosiela...");
             
             const submitButton = document.getElementById('submitDrazbaButton');
@@ -272,7 +293,6 @@
             submitButton.textContent = 'Odosielam...';
             
             try {
-                // Zozbierame dáta z formulára
                 const data = {
                     navrhovatel: document.getElementById('navrhovatel').value,
                     typNehnutelnosti: document.getElementById('typNehnutelnosti').value,
@@ -304,7 +324,8 @@
                 console.log("Odpoveď zo servera:", novaDrazba);
                 alert('Dražba bola úspešne vytvorená!');
                 
-                drazbaForm.reset(); // Vyčistí formulár
+                drazbaForm.reset(); 
+                updateMapLink(); // Skryje odkaz na mapu po resete
                 
             } catch (error) {
                  console.error("Chyba pri odosielaní formulára:", error);
@@ -321,12 +342,14 @@
              try {
                  // Inicializuj elementy
                  roleSelectionDiv = document.getElementById('role-selection');
-                 tipperViewDiv = document.getElementById('navrhovatel-view');
-                 buyerViewDiv = document.getElementById('zaujemca-view');
+                 navrhovatelViewDiv = document.getElementById('navrhovatel-view');
+                 zaujemcaViewDiv = document.getElementById('zaujemca-view');
                  drazbyListDiv = document.getElementById('drazby-list');
                  drazbaForm = document.getElementById('drazba-form');
+                 adresaInput = document.getElementById('adresa');
+                 okresSelect = document.getElementById('okres');
+                 adresaMapLink = document.getElementById('adresaMapLink');
                  
-                 // Zobraz úvodný výber
                  showRoleSelection(); 
                  
                  console.log("Kontrolný bod: Inicializácia dokončená.");

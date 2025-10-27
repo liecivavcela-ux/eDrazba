@@ -1,28 +1,25 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// --- ZJEDNODUŠENÁ SCHÉMA ---
 const auctionSchema = new Schema({
-    // Polia z formulára
+    // Polia zo zjednodušeného formulára
     navrhovatel: { type: String, required: true },
-    typNehnutelnosti: { type: String, required: true },
     okres: { type: String, required: true },
     adresa: { type: String, required: true },
-    znalecnaCena: { type: Number, required: true },
     najnizsiePodanie: { type: Number, required: true },
     minimalnePrihodenie: { type: Number, required: true },
+    mobilNavrhovatela: { type: String, required: true }, // Zostáva pre kontakt
     casZaciatku: { type: Date, required: true },
     casSkoncenia: { type: Date, required: true },
-    mobilNavrhovatela: { type: String, required: true },
-    predmetDrazby: { type: String, required: true },
-    imageUrl: { type: String, required: false },
-
-    // Polia pre logiku aukcie
+    
+    // Polia pre logiku aukcie (zostávajú)
     currentPrice: { 
         type: Number, 
         default: 0 
     },
     highestBidder: { 
-        type: String 
+        type: String // Anonymný kód záujemcu
     },
     bidHistory: { 
         type: [{ 
@@ -32,22 +29,20 @@ const auctionSchema = new Schema({
         }], 
         default: [] 
     },
-    // ===== NOVÉ POLE PRE AUTOMATICKÉ PRIHADZOVANIE =====
+    // Pole pre automatické prihadzovanie (zatiaľ necháme, využijeme neskôr)
     proxyBids: {
-        type: [{
-            bidderId: String, // Kto nastavil limit
-            maxBid: Number    // Aký je jeho limit
-        }],
-        default: [] // Štartuje ako prázdne pole
+        type: [{ bidderId: String, maxBid: Number }],
+        default: [] 
     }
-    // ===================================================
 }, {
-    timestamps: true 
+    timestamps: true // Automaticky pridá createdAt a updatedAt
 });
 
+// Hook na nastavenie currentPrice = najnizsiePodanie pri vytvorení
 auctionSchema.pre('save', function(next) {
     if (this.isNew) { 
-        this.currentPrice = this.najnizsiePodanie;
+        // Overíme, či najnizsiePodanie je platné číslo, inak dáme 0
+        this.currentPrice = typeof this.najnizsiePodanie === 'number' ? this.najnizsiePodanie : 0;
     }
     next(); 
 });

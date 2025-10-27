@@ -189,7 +189,7 @@
     <script>
         console.log("Kontrolný bod: E-Dražba Skript začal."); 
         
-        // --- DÔLEŽITÉ: TOTO JE OPRAVENÁ ADRESA NA NÁŠ SERVER ---
+        // --- DÔLEŽITÉ: Adresa nášho servera na Renderi ---
         const API_URL = 'https://e-drazba-server.onrender.com';
         
         // Globálne premenné pre elementy
@@ -257,9 +257,21 @@
                     const item = document.createElement('div');
                     item.className = 'drazba-item';
                     
-                    // Používame správne názvy polí z našej novej schémy
-                    const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK');
-                    const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK');
+                    // ===== TU JE OPRAVA PRE FORMÁT DÁTUMU =====
+                    // Definujeme si presný formát, aký chceme
+                    const options = { 
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    };
+                    
+                    // Použijeme tieto 'options' pri konverzii
+                    const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK', options);
+                    const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK', options);
+                    // ===== KONIEC OPRAVY =====
+
                     const mapQuery = encodeURIComponent(`${drazba.adresa}, ${drazba.okres}`);
 
                     item.innerHTML = `

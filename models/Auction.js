@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Toto je nová schéma, ktorá PRESNE zodpovedá poliam v tvojom formulári
 const auctionSchema = new Schema({
     // Polia z formulára
     navrhovatel: { type: String, required: true },
@@ -15,45 +14,38 @@ const auctionSchema = new Schema({
     casSkoncenia: { type: Date, required: true },
     mobilNavrhovatela: { type: String, required: true },
     predmetDrazby: { type: String, required: true },
+    imageUrl: { type: String, required: false },
 
-    // ===== TOTO JE NOVÉ POLE PRE OBRÁZOK =====
-    imageUrl: { 
-        type: String, 
-        required: false // Obrázok nebude povinný
-    },
-    // ==========================================
-
-    // Tieto polia si pridáme pre logiku aukcie
-    // (formulár ich neposiela, doplnia sa samé pri vytvorení)
+    // Polia pre logiku aukcie
     currentPrice: { 
         type: Number, 
         default: 0 
     },
+    // ===== ZMENA: highestBidder bude ukladať anonymný kód =====
     highestBidder: { 
-        type: String, 
-        default: 'Nikto' 
+        type: String 
+        // Už nemá default hodnotu 'Nikto', bude null/undefined kým niekto neprihodí
     },
+    // ===== ZMENA: bidHistory bude ukladať objekty s bidderId =====
     bidHistory: { 
-        type: Array, 
-        default: [] 
+        type: [{ // Definuje pole objektov s konkrétnou štruktúrou
+            bidderId: String, // Anonymný kód záujemcu
+            amount: Number,
+            timestamp: Date
+        }], 
+        default: [] // Štartuje ako prázdne pole
     }
 }, {
-    // Automaticky pridá polia 'createdAt' a 'updatedAt' (kedy bol záznam vytvorený/upravený)
     timestamps: true 
 });
 
-// Toto je "hook", ktorý sa spustí VŽDY pred uložením NOVÉHO dokumentu
-// Zabezpečí, že 'currentPrice' (aktuálna cena) sa automaticky nastaví
-// na hodnotu 'najnizsiePodanie' (najnižšie podanie) pri vytváraní novej dražby.
 auctionSchema.pre('save', function(next) {
-    if (this.isNew) { // Spustí sa len pri vytváraní (this.isNew), nie pri úprave
+    if (this.isNew) { 
         this.currentPrice = this.najnizsiePodanie;
     }
-    next(); // Pokračuj v procese ukladania
+    next(); 
 });
 
-// Vytvoríme model z našej schémy
 const Auction = mongoose.model('Auction', auctionSchema);
 
-// Exportujeme model, aby ho mohol 'server.js' používať
 module.exports = Auction;

@@ -16,6 +16,13 @@ const auctionSchema = new Schema({
     mobilNavrhovatela: { type: String, required: true },
     predmetDrazby: { type: String, required: true },
 
+    // ===== TOTO JE NOVÉ POLE PRE OBRÁZOK =====
+    imageUrl: { 
+        type: String, 
+        required: false // Obrázok nebude povinný
+    },
+    // ==========================================
+
     // Tieto polia si pridáme pre logiku aukcie
     // (formulár ich neposiela, doplnia sa samé pri vytvorení)
     currentPrice: { 

@@ -31,15 +31,13 @@
         .role-buttons { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; }
         .role-buttons button { width: 100%; padding: 16px; font-size: 16px; }
 
-        /* ===== ZMENA: Pridaný #bidder-login-view ===== */
         #navrhovatel-view, #zaujemca-view, #detail-view, #bidder-login-view {
             display: none; width: 100%; max-width: 800px; 
             align-self: flex-start; margin-top: 0; 
         }
-        /* Špeciálne centrovanie pre login form */
         #bidder-login-view { 
             max-width: 500px; 
-            align-self: center; /* Centrovanie na stránke */
+            align-self: center; 
             margin-top: 50px;
         } 
         
@@ -117,7 +115,7 @@
 
          @media (max-width: 600px) { 
               body { padding: 8px; gap: 8px;}
-              #role-selection, #bidder-login-view { /* Pridaný bidder login */
+              #role-selection, #bidder-login-view { 
                   padding: 20px; margin-top: 20px;
               }
               #role-selection h1 { font-size: 24px;}
@@ -248,7 +246,8 @@
                 Vaša identita zostane ostatným účastníkom skrytá.
             </p>
             <form id="bidder-login-form" onsubmit="handleBidderLoginSubmit(event)">
-                <input type="hidden" id="loginAuctionId" value=""> <div class="form-group" style="margin-bottom: 16px;">
+                <input type="hidden" id="loginAuctionId" value="">
+                <div class="form-group" style="margin-bottom: 16px;">
                     <label for="bidderIdDoc">Číslo dokladu totožnosti (napr. OP):</label>
                     <input type="text" id="bidderIdDoc" placeholder="Napr. EB123456" required>
                 </div>
@@ -261,6 +260,7 @@
             </form>
         </div>
     </div>
+
     <div id="detail-view">
         <div class="view-header">
             <button class="btn-secondary" onclick="showZaujemcaView()">Späť na prehľad</button>
@@ -292,7 +292,6 @@
         
         const API_URL = 'https://e-drazba-server.onrender.com';
         
-        // ===== ZMENA: Pridaná premenná pre bidderLoginViewDiv =====
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, bidderLoginViewDiv, 
             drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink, imageUrlInput; 
 
@@ -303,7 +302,7 @@
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             if (detailViewDiv) detailViewDiv.style.display = 'none'; 
-            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none'; // Skryjeme aj login
+            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
             document.body.style.alignItems = 'center'; 
         }
         function showNavrhovatelView() {
@@ -312,7 +311,7 @@
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'block'; 
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             if (detailViewDiv) detailViewDiv.style.display = 'none'; 
-            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none'; // Skryjeme aj login
+            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
             document.body.style.alignItems = 'flex-start'; 
         }
          function showZaujemcaView() {
@@ -321,40 +320,35 @@
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'block'; 
             if (detailViewDiv) detailViewDiv.style.display = 'none'; 
-            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none'; // Skryjeme aj login
+            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
             document.body.style.alignItems = 'flex-start'; 
             loadDrazby(); 
         }
 
-        // ===== ZMENA: showDetailView teraz volá showBidderLogin =====
-        // Táto funkcia sa už nevolá priamo z tlačidla v zozname
         function showDetailView(auctionId) {
             console.log(`Zobrazujem detail pre dražbu ID: ${auctionId}`);
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             if (detailViewDiv) detailViewDiv.style.display = 'block'; 
-            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none'; // Skryjeme login
+            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
             document.body.style.alignItems = 'flex-start';
             loadAuctionDetail(auctionId); 
         }
 
-        // ===== NOVÁ FUNKCIA: Zobrazenie formulára pre identifikáciu Záujemcu =====
         function showBidderLogin(auctionId) {
             console.log(`Zobrazujem login formulár pre dražbu ID: ${auctionId}`);
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
-            if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none'; // Skryjeme zoznam
+            if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             if (detailViewDiv) detailViewDiv.style.display = 'none'; 
-            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'block'; // Zobrazíme login
+            if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'block'; 
             
-            // Uložíme si ID aukcie do skrytého poľa vo formulári
             const loginAuctionIdInput = document.getElementById('loginAuctionId');
             if (loginAuctionIdInput) {
                 loginAuctionIdInput.value = auctionId;
             }
-            
-            document.body.style.alignItems = 'center'; // Vycentrujeme login formulár
+            document.body.style.alignItems = 'center'; 
         }
         
         function updateMapLink() {
@@ -417,9 +411,9 @@
                             <p class="drazba-item-full"><strong>Navrhovateľ:</strong> ${drazba.navrhovatel}</p>
                         </div>
                         
-                       <button class="btn-primary" onclick="showBidderLogin('${drazba._id}')">
-                        Vstúpiť do dražby
-                    </button>
+                        <button class="btn-primary" onclick="showBidderLogin('${drazba._id}')">
+                            Vstúpiť do dražby
+                        </button>
                     `;
                     drazbyListDiv.appendChild(item);
                 });
@@ -455,12 +449,14 @@
                     `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby}" class="detail-image">` : 
                     '<p>Obrázok nebol poskytnutý.</p>';
 
-                // ===== ZMENA: Anonymizácia highestBidder =====
+                // ===== OPRAVENÁ KONTROLA PRE highestBidder =====
                 let highestBidderDisplay = 'Nikto';
-                if (drazba.highestBidder) {
+                // Skontrolujeme, či drazba.highestBidder existuje a nie je prázdny reťazec
+                if (drazba.highestBidder && drazba.highestBidder.length > 4) { 
                     // Zobrazíme len časť ID (napr. prvé 2 a posledné 4 znaky)
                     highestBidderDisplay = `ID: ${drazba.highestBidder.substring(0, 2)}...${drazba.highestBidder.substring(drazba.highestBidder.length - 4)}`;
                 }
+                // ============================================
                 
                 contentDiv.innerHTML = `
                     <div class="detail-grid">
@@ -493,8 +489,13 @@
                     drazba.bidHistory.reverse().forEach(bid => { 
                         const li = document.createElement('li');
                         const bidTime = new Date(bid.timestamp).toLocaleString('sk-SK', options);
-                        // ===== ZMENA: Anonymizácia bidderId v histórii =====
-                        const bidderDisplay = `ID: ${bid.bidderId.substring(0, 2)}...${bid.bidderId.substring(bid.bidderId.length - 4)}`;
+                        // ===== OPRAVENÁ KONTROLA PRE bidderId v histórii =====
+                        let bidderDisplay = 'Neznámy';
+                        // Skontrolujeme, či bid.bidderId existuje a nie je prázdny
+                        if (bid.bidderId && bid.bidderId.length > 4) {
+                           bidderDisplay = `ID: ${bid.bidderId.substring(0, 2)}...${bid.bidderId.substring(bid.bidderId.length - 4)}`;
+                        }
+                        // ===============================================
                         li.innerHTML = `<strong>${bid.amount.toLocaleString('sk-SK')} €</strong> (${bidderDisplay}) - ${bidTime}`;
                         historyList.appendChild(li);
                     });
@@ -509,7 +510,6 @@
         }
         
         async function handleDrazbaSubmit(event) {
-            // ... (Táto funkcia zostáva rovnaká) ...
             event.preventDefault(); 
             console.log("Formulár sa odosiela...");
             const submitButton = document.getElementById('submitDrazbaButton');
@@ -554,56 +554,43 @@
             }
         }
 
-        // ===== NOVÁ FUNKCIA: Spracovanie formulára pre identifikáciu Záujemcu =====
         function handleBidderLoginSubmit(event) {
-            event.preventDefault(); // Zastavíme odoslanie
+            event.preventDefault(); 
             console.log("Spracovávam bidder login...");
 
             const docIdInput = document.getElementById('bidderIdDoc');
             const mobileInput = document.getElementById('bidderMobile');
             const auctionIdInput = document.getElementById('loginAuctionId');
 
-            const docId = docIdInput.value.trim().toUpperCase(); // Pre istotu dáme veľké písmená
+            const docId = docIdInput.value.trim().toUpperCase(); 
             const mobile = mobileInput.value.trim();
             const auctionId = auctionIdInput.value;
 
-            // Jednoduchá validácia (môže byť robustnejšia)
             if (!docId || !mobile || !auctionId) {
                 alert("Prosím, vyplňte obe polia.");
                 return;
             }
-             // Validácia formátu mobilu (jednoduchá)
             if (!/^09\d{2} \d{3} \d{3}$/.test(mobile)) {
                  alert("Prosím, zadajte mobilné číslo v správnom tvare (09XX XXX XXX).");
-                 mobileInput.focus(); // Zameriame sa na chybné pole
+                 mobileInput.focus(); 
                  return;
             }
 
-
-            // --- Vytvorenie jednoduchého anonymného ID ---
-            // POZOR: Toto NIE JE bezpečné pre produkciu! Len na ukážku.
-            // Použijeme len časť čísla dokladu (napr. posledné 4 znaky) a časť mobilu.
-            const anonymizedDocId = docId.substring(docId.length - 4);
-            const anonymizedMobile = mobile.substring(mobile.length - 3);
+            // Jednoduché anonymné ID (NEBEZPEČNÉ!)
+            const anonymizedDocId = docId.length > 4 ? docId.substring(docId.length - 4) : docId;
+            const anonymizedMobile = mobile.length > 3 ? mobile.substring(mobile.length - 3) : mobile;
             const bidderIdentifier = `ID-${anonymizedDocId}${anonymizedMobile}`;
             console.log(`Vygenerované Bidder ID: ${bidderIdentifier}`);
-            // ---------------------------------------------
 
-            // Uložíme si tento identifikátor do sessionStorage
-            // sessionStorage vydrží len kým je otvorený tab/okno prehliadača
             try {
                 sessionStorage.setItem('currentBidderId', bidderIdentifier);
                 console.log("Bidder ID uložené do sessionStorage.");
-
-                // Ak sa uloženie podarilo, zobrazíme detail dražby
-                showDetailView(auctionId);
-
+                showDetailView(auctionId); // Zobrazíme detail
             } catch (error) {
                 console.error("Chyba pri ukladaní do sessionStorage:", error);
                 alert("Nastala chyba prehliadača pri ukladaní vašich údajov. Skúste prosím znova.");
             }
         }
-
 
         async function handleBidSubmit(event) {
             event.preventDefault(); 
@@ -616,30 +603,24 @@
 
             const amount = Number(bidAmountInput.value);
 
-            // ===== ZMENA: Načítame uložený bidderId =====
             const bidderId = sessionStorage.getItem('currentBidderId');
             if (!bidderId) {
                 alert("Chyba: Váš identifikátor sa nenašiel. Skúste sa vrátiť späť a znova zadať údaje.");
-                // Možno by sme mali používateľa vrátiť na login? showBidderLogin(auctionId);
                 return; 
             }
             console.log(`Prihadzujem ako ${bidderId} sumu ${amount}`);
-            // ===========================================
 
             bidButton.disabled = true;
             bidButton.textContent = 'Odosielam...';
 
             try {
-                // ===== ZMENA: Posielame amount aj bidderId =====
                 const response = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    // Posielame objekt s oboma hodnotami
                     body: JSON.stringify({ amount: amount, bidderId: bidderId }) 
                 });
-                // =============================================
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -651,7 +632,7 @@
                 
                 alert('Vaše prihodenie bolo úspešne prijaté!');
 
-                loadAuctionDetail(auctionId); // Obnoví detail s novými dátami
+                loadAuctionDetail(auctionId); // Obnoví detail
 
             } catch (error) {
                 console.error('Chyba pri prihadzovaní:', error);
@@ -670,7 +651,7 @@
                  navrhovatelViewDiv = document.getElementById('navrhovatel-view');
                  zaujemcaViewDiv = document.getElementById('zaujemca-view');
                  detailViewDiv = document.getElementById('detail-view'); 
-                 bidderLoginViewDiv = document.getElementById('bidder-login-view'); // Inicializujeme nový pohľad
+                 bidderLoginViewDiv = document.getElementById('bidder-login-view'); 
                  drazbyListDiv = document.getElementById('drazby-list');
                  drazbaForm = document.getElementById('drazba-form');
                  adresaInput = document.getElementById('adresa');

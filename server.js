@@ -12,8 +12,7 @@ app.use(cors());
 app.use(express.json()); // Umožní nám čítať JSON z tela požiadavky
 
 // --- KROK 4: Pripojenie k MongoDB Databáze ---
-// !! DÔLEŽITÉ: Neskôr sem vložíš svoj NOVÝ Connection String z Atlasu pre Projekt 2 !!
-// Uložíme ho ako premennú prostredia na Renderi
+// Adresu si zoberie z Render premennej prostredia
 const DB_CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
 
 async function connectToDb() {
@@ -27,24 +26,22 @@ async function connectToDb() {
 }
 
 // --- KROK 5: Definícia "Schémy" (Ako vyzerá naša Dražba) ---
-// Presne podľa tvojich požiadaviek
 const drazbaSchema = new mongoose.Schema({
     navrhovatel: { type: String, required: true },
     typNehnutelnosti: { type: String, required: true },
     okres: { type: String, required: true },
     adresa: { type: String, required: true },
-    znalecnaCena: { type: Number, required: true },
-    najnizsiePodanie: { type: Number, required: true },
-    minimalnePrihodenie: { type: Number, required: true },
+    znalecnaCena: { type: Number, required: true, min: 0 },
+    najnizsiePodanie: { type: Number, required: true, min: 0 },
+    minimalnePrihodenie: { type: Number, required: true, min: 1 },
     casZaciatku: { type: Date, required: true },
     casSkoncenia: { type: Date, required: true },
-    mobilNavrhovatela: { type: String, required: true },
+    mobilNavrhovatela: { type: String, required: true }, // Neskôr pridáme validáciu
     predmetDrazby: { type: String, required: true },
     
-    // Polia pre Fázu 2 a ďalšie (zatiaľ ich nebudeme používať)
-    status: { type: String, default: 'pripravovana' }, // napr. pripravovana, prebieha, ukoncena
-    aktualnaCena: { type: Number, default: 0 },
-    vitaz: { type: String, default: null }
+    // Polia pre budúcnosť
+    status: { type: String, default: 'pripravovana' }, 
+    aktualnaCena: { type: Number, default: 0 }
 });
 
 const Drazba = mongoose.model('Drazba', drazbaSchema); // Vytvorí kolekciu 'drazby'
@@ -60,12 +57,7 @@ app.post('/api/drazby', async (req, res) => {
     try {
         const dataDrazby = req.body;
         
-        // Jednoduchá validácia (mongoose to skontroluje aj cez 'required')
-        if (!dataDrazby.predmetDrazby || !dataDrazby.najnizsiePodanie) {
-             return res.status(400).json({ message: 'Chýbajú povinné údaje.' });
-        }
-        
-        // Nastavíme aktuálnu cenu na najnižšie podanie na začiatku
+        // Nastavíme aktuálnu cenu na najnižšie podanie
         dataDrazby.aktualnaCena = dataDrazby.najnizsiePodanie;
         
         const novaDrazba = new Drazba(dataDrazby);
@@ -87,8 +79,7 @@ app.post('/api/drazby', async (req, res) => {
 app.get('/api/drazby', async (req, res) => {
      console.log("Požiadavka: Záujemca chce vidieť všetky dražby.");
      try {
-         // Zatiaľ nájdeme všetky, neskôr môžeme filtrovať len 'pripravovane' a 'prebiehajuce'
-        const vsetkyDrazby = await Drazba.find({}).sort({ casZaciatku: 1 }); // Zoradíme podľa času začiatku
+        const vsetkyDrazby = await Drazba.find({ status: 'pripravovana' }).sort({ casZaciatku: 1 }); // Zoradíme podľa času začiatku
         res.json(vsetkyDrazby);
      } catch (error) {
          console.error("CHYBA DB pri hľadaní všetkých dražieb:", error);
@@ -96,14 +87,19 @@ app.get('/api/drazby', async (req, res) => {
      }
 });
 
-
 // --- KROK 7: Spustenie servera ---
-console.log("Pripájam sa k MongoDB Atlas...");
-connectToDb().then(() => {
-    app.listen(PORT, () => {
-        console.log("-----------------------------------------");
-        console.log(`Backend server "E-Dražba" beží!`);
-        console.log(`Čakám na požiadavky na porte ${PORT}`);
-        console.log("-----------------------------------------");
+// Spustíme server len ak je DB_CONNECTION_STRING nastavená
+if (!DB_CONNECTION_STRING) {
+    console.error("CHYBA: Chýba DB_CONNECTION_STRING. Server sa nespustí.");
+    process.exit(1);
+} else {
+    console.log("Pripájam sa k MongoDB Atlas...");
+    connectToDb().then(() => {
+        app.listen(PORT, () => {
+            console.log("-----------------------------------------");
+            console.log(`Backend server "E-Dražba" beží!`);
+            console.log(`Čakám na požiadavky na porte ${PORT}`);
+            console.log("-----------------------------------------");
+        });
     });
-});
+}

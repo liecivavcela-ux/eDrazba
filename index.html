@@ -69,15 +69,15 @@
         .drazba-item .btn-primary { width: auto; padding: 8px 16px; margin-top: 16px; }
 
          @media (max-width: 600px) { 
-             body { padding: 8px; gap: 8px;}
-             #role-selection { padding: 20px; margin-top: 20px;}
-             #role-selection h1 { font-size: 24px;}
-             .role-buttons { flex-direction: column; width: 100%;} 
-             .role-buttons button { width: 100%; }
-             .panel { padding: 12px; } 
-             h2 { font-size: 18px; }
-             .form-grid, .drazba-item-grid { grid-template-columns: 1fr; }
-             .form-group-full { grid-column: 1; } 
+              body { padding: 8px; gap: 8px;}
+              #role-selection { padding: 20px; margin-top: 20px;}
+              #role-selection h1 { font-size: 24px;}
+              .role-buttons { flex-direction: column; width: 100%;} 
+              .role-buttons button { width: 100%; }
+              .panel { padding: 12px; } 
+              h2 { font-size: 18px; }
+              .form-grid, .drazba-item-grid { grid-template-columns: 1fr; }
+              .form-group-full { grid-column: 1; } 
          }
     </style>
 </head>
@@ -189,9 +189,8 @@
     <script>
         console.log("Kontrolný bod: E-Dražba Skript začal."); 
         
-        // --- DÔLEŽITÉ: URL adresa tvojho NOVÉHO backendu na Renderi ---
-        // Nezabudni ju zmeniť na tvoju skutočnú .onrender.com adresu
-        const API_URL = 'https://e-drazba.onrender.com'; // Príklad - doplň si svoju
+        // --- DÔLEŽITÉ: TOTO JE OPRAVENÁ ADRESA NA NÁŠ SERVER ---
+        const API_URL = 'https://e-drazba-server.onrender.com';
         
         // Globálne premenné pre elementy
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, drazbyListDiv, drazbaForm,
@@ -213,7 +212,7 @@
             document.body.style.alignItems = 'flex-start'; 
         }
          function showZaujemcaView() {
-             console.log("Zobrazujem pohľad Záujemcu.");
+              console.log("Zobrazujem pohľad Záujemcu.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'block'; 
@@ -227,11 +226,11 @@
              const address = adresaInput.value.trim(); 
              const okres = okresSelect.value;
              if (address && okres) {
-                  const mapQuery = encodeURIComponent(`${address}, ${okres}`);
-                  adresaMapLink.href = `https://www.google.com/maps?q=${mapQuery}`; 
-                  adresaMapLink.style.display = 'inline'; 
+                 const mapQuery = encodeURIComponent(`${address}, ${okres}`);
+                 adresaMapLink.href = `https://www.google.com/maps?q=${mapQuery}`; 
+                 adresaMapLink.style.display = 'inline'; 
              } else { 
-                  adresaMapLink.style.display = 'none'; 
+                 adresaMapLink.style.display = 'none'; 
              }
         }
         
@@ -242,6 +241,7 @@
             drazbyListDiv.innerHTML = '<p>Načítavam zoznam dražieb...</p>';
             
             try {
+                // Používame správnu cestu, ktorú si nastavíme na serveri
                 const response = await fetch(`${API_URL}/api/drazby`);
                 if (!response.ok) throw new Error(`Chyba servera: ${response.statusText}`);
                 const drazby = await response.json();
@@ -256,6 +256,8 @@
                 drazby.forEach(drazba => {
                     const item = document.createElement('div');
                     item.className = 'drazba-item';
+                    
+                    // Používame správne názvy polí z našej novej schémy
                     const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK');
                     const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK');
                     const mapQuery = encodeURIComponent(`${drazba.adresa}, ${drazba.okres}`);
@@ -292,6 +294,7 @@
             submitButton.textContent = 'Odosielam...';
             
             try {
+                // Zbierame dáta presne podľa formulára
                 const data = {
                     navrhovatel: document.getElementById('navrhovatel').value,
                     typNehnutelnosti: document.getElementById('typNehnutelnosti').value,
@@ -308,6 +311,7 @@
                 
                 console.log("Odosielam dáta:", data);
                 
+                // Používame správnu cestu, ktorú si nastavíme na serveri
                 const response = await fetch(`${API_URL}/api/drazby`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

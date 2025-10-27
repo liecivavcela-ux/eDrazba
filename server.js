@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 app.use(cors()); 
 app.use(express.json()); 
 
-// --- Pripojenie k MongoDB (zostáva rovnaké) ---
+// --- Pripojenie k MongoDB ---
 const dbURI = process.env.MONGODB_URI;
 if (!dbURI) {
   console.error('CHYBA: MONGODB_URI nebola nájdená v premenných prostredia!');
@@ -36,12 +36,12 @@ mongoose.connect(dbURI)
 // API Endpoints (Cesty)
 // -----------------------------------------------------------------
 
-// Testovacia cesta
+// --- 1. Testovacia cesta ---
 app.get('/', (req, res) => {
   res.send('Vitajte na E-Drazba API serveri! Frontend je pripojený.');
 });
 
-// --- ZMENA 1: Načítanie VŠETKÝCH aukcií ---
+// --- 2. Načítanie VŠETKÝCH aukcií ---
 app.get('/api/drazby', async (req, res) => {
   try {
     const allAuctions = await Auction.find({}).sort({ createdAt: -1 });
@@ -52,7 +52,7 @@ app.get('/api/drazby', async (req, res) => {
   }
 });
 
-// --- ZMENA 2: Vytvorenie NOVEJ aukcie ---
+// --- 3. Vytvorenie NOVEJ aukcie ---
 app.post('/api/drazby', async (req, res) => {
   try {
     console.log('Server prijal dáta na vytvorenie dražby:', req.body);
@@ -65,36 +65,97 @@ app.post('/api/drazby', async (req, res) => {
   }
 });
 
-// ===== NOVÝ KÓD ZAČÍNA TU =====
-
-// --- ZMENA 3: Načítanie JEDNEJ dražby podľa jej ID ---
-// Toto je nový endpoint, ktorý bude frontend volať, keď klikneš na detail
-// :id je "parameter" - znamená to, že čokoľvek, čo príde po /api/drazby/,
-// sa uloží do premennej req.params.id
+// --- 4. Načítanie JEDNEJ dražby podľa jej ID ---
 app.get('/api/drazby/:id', async (req, res) => {
   try {
-    // 1. Získame ID z URL adresy
     const auctionId = req.params.id;
-
-    // 2. Skontrolujeme, či je to platné MongoDB ID (ochrana pred chybou)
     if (!mongoose.Types.ObjectId.isValid(auctionId)) {
         return res.status(404).json({ message: 'Neplatné ID dražby' });
     }
-
-    // 3. Nájdeme dražbu v databáze podľa tohto ID
     const auction = await Auction.findById(auctionId);
+    if (!auction) {
+      return res.status(404).json({ message: 'Dražba nebola nájdená' });
+    }
+    res.status(200).json(auction);
+  } catch (error) {
+    console.error('Chyba pri načítaní detailu dražby:', error.message);
+    res.status(500).json({ message: 'Nastala chyba na serveri.' });
+  }
+});
 
-    // 4. Ak sa dražba s takým ID nenašla
+// ===== NOVÝ KÓD ZAČÍNA TU =====
+
+// --- ZMENA 4: Prihodenie na aukciu ---
+// Tento endpoint prijme 'POST' požiadavku na /api/drazby/NEJAKE_ID/bid
+app.post('/api/drazby/:id/bid', async (req, res) => {
+  try {
+    // 1. Získame ID dražby z URL a sumu (amount) z tela požiadavky
+    const auctionId = req.params.id;
+    const { amount } = req.body; // Očakávame, že frontend pošle JSON objekt: { "amount": 150000 }
+    
+    // Zatiaľ nemáme prihlásenie, tak si meno prihadzujúceho vymyslíme:
+    const bidderName = "Anonymný Záujemca"; 
+
+    // 2. Skontrolujeme, či je ID platné
+    if (!mongoose.Types.ObjectId.isValid(auctionId)) {
+      return res.status(404).json({ message: 'Neplatné ID dražby' });
+    }
+
+    // 3. NÁJDEME dražbu v databáze
+    const auction = await Auction.findById(auctionId);
     if (!auction) {
       return res.status(404).json({ message: 'Dražba nebola nájdená' });
     }
 
-    // 5. Ak sme ju našli, pošleme ju klientovi
-    res.status(200).json(auction);
+    // 4. --- VALIDAČNÁ LOGIKA (Veľmi dôležité!) ---
+    
+    // a) Skontrolujeme, či je suma platné číslo
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ message: 'Musíte zadať platnú sumu.' });
+    }
+
+    // b) Skontrolujeme, či aukcia ešte beží (či už neskončila)
+    const now = new Date();
+    if (now > auction.casSkoncenia) {
+      return res.status(400).json({ message: 'Táto aukcia sa už skončila.' });
+    }
+    // c) Skontrolujeme, či sa aukcia už začala
+    if (now < auction.casZaciatku) {
+      return res.status(400).json({ message: 'Táto aukcia sa ešte nezačala.' });
+    }
+
+    // d) Skontrolujeme, či je ponuka dostatočne vysoká
+    // Musí byť aspoň (aktuálna cena + minimálne prihodenie)
+    const requiredMinBid = auction.currentPrice + auction.minimalnePrihodenie;
+    if (amount < requiredMinBid) {
+      return res.status(400).json({ 
+        message: `Vaša ponuka je príliš nízka. Musíte ponúknuť aspoň ${requiredMinBid.toLocaleString('sk-SK')} €.` 
+      });
+    }
+
+    // 5. --- VŠETKO JE V PORIADKU: Aktualizujeme dražbu ---
+    
+    // Vytvoríme nový záznam do histórie
+    const newBid = {
+      bidder: bidderName,
+      amount: amount,
+      timestamp: new Date()
+    };
+
+    // Aktualizujeme polia v dokumente
+    auction.currentPrice = amount;
+    auction.highestBidder = bidderName;
+    auction.bidHistory.push(newBid); // Pridáme nový záznam do poľa
+
+    // 6. ULOŽÍME zmeny do databázy
+    const updatedAuction = await auction.save();
+
+    // 7. Pošleme klientovi naspäť aktualizovanú dražbu
+    // (aby frontend vedel zobraziť novú cenu a históriu)
+    res.status(200).json(updatedAuction);
 
   } catch (error) {
-    // 6. Ak nastala všeobecná chyba servera
-    console.error('Chyba pri načítaní detailu dražby:', error.message);
+    console.error('Chyba pri spracovaní prihodenia:', error.message);
     res.status(500).json({ message: 'Nastala chyba na serveri.' });
   }
 });

@@ -150,76 +150,28 @@
                  <div class="form-grid">
                      <div class="form-group">
                          <label for="navrhovatel">Navrhovateľ:</label>
-                         <select id="navrhovatel" required>
-                             <option value="">-- Vyberte rolu --</option>
-                             <option value="Vlastník">Vlastník</option>
-                             <option value="Dražobník">Dražobník</option>
-                             <option value="Exekútor">Exekútor</option>
-                             <option value="Správca">Správca</option>
-                         </select>
+                         <select id="navrhovatel" required> <option value="">-- Vyberte rolu --</option> <option value="Vlastník">Vlastník</option> <option value="Dražobník">Dražobník</option> <option value="Exekútor">Exekútor</option> <option value="Správca">Správca</option> </select>
                      </div>
                      <div class="form-group">
                          <label for="typNehnutelnosti">Typ nehnuteľnosti:</label>
-                         <select id="typNehnutelnosti" required>
-                             <option value="">-- Vyberte typ --</option>
-                             <option value="Garzónka">Garzónka</option>
-                             <option value="1-izbový byt">1-izbový byt</option>
-                             <option value="2-izbový byt">2-izbový byt</option>
-                             <option value="3-izbový byt">3-izbový byt</option>
-                             <option value="4-izbový byt">4-izbový byt</option>
-                             <option value="Rodinný dom">Rodinný dom</option>
-                             <option value="Garáž">Garáž</option>
-                             <option value="Záhrada">Záhrada</option>
-                             <option value="Stavebný pozemok">Stavebný pozemok</option>
-                             <option value="Komerčný objekt">Komerčný objekt</option>
-                             <option value="Iné">Iné</option>
-                         </select>
+                         <select id="typNehnutelnosti" required> <option value="">-- Vyberte typ --</option> <option value="Garzónka">Garzónka</option> <option value="1-izbový byt">1-izbový byt</option> <option value="2-izbový byt">2-izbový byt</option> <option value="3-izbový byt">3-izbový byt</option> <option value="4-izbový byt">4-izbový byt</option> <option value="Rodinný dom">Rodinný dom</option> <option value="Garáž">Garáž</option> <option value="Záhrada">Záhrada</option> <option value="Stavebný pozemok">Stavebný pozemok</option> <option value="Komerčný objekt">Komerčný objekt</option> <option value="Iné">Iné</option> </select>
                      </div>
                      <div class="form-group">
                          <label for="okres">Okres:</label>
-                         <select id="okres" required onchange="updateMapLink()">
-                             <option value="">-- Vyberte okres --</option>
-                             <option value="Bánovce nad Bebravou">Bánovce nad Bebravou</option><option value="Banská Bystrica">Banská Bystrica</option><option value="Banská Štiavnica">Banská Štiavnica</option><option value="Bardejov">Bardejov</option><option value="Bratislava I">Bratislava I</option><option value="Bratislava II">Bratislava II</option><option value="Bratislava III">Bratislava III</option><option value="Bratislava IV">Bratislava IV</option><option value="Bratislava V">Bratislava V</option><option value="Brezno">Brezno</option><option value="Bytča">Bytča</option><option value="Čadca">Čadca</option><option value="Detva">Detva</option><option value="Dolný Kubín">Dolný Kubín</option><option value="Dunajská Streda">Dunajská Streda</option><option value="Galanta">Galanta</option><option value="Gelnica">Gelnica</option><option value="Hlohovec">Hlohovec</option><option value="Humenné">Humenné</option><option value="Ilava">Ilava</option><option value="Kežmarok">Kežmarok</option><option value="Komárno">Komárno</option><option value="Košice I">Košice I</option><option value="Košice II">Košice II</option><option value="Košice III">Košice III</option><option value="Košice IV">Košice IV</option><option value="Košice-okolie">Košice-okolie</option><option value="Krupina">Krupina</option><option value="Kysucké Nové Mesto">Kysucké Nové Mesto</option><option value="Levice">Levice</option><option value="Levoča">Levoča</option><option value="Liptovský Mikuláš">Liptovský Mikuláš</option><option value="Lučenec">Lučenec</option><option value="Malacky">Malacky</option><option value="Martin">Martin</option><option value="Medzilaborce">Medzilaborce</option><option value="Michalovce">Michalovce</option><option value="Myjava">Myjava</option><option value="Námestovo">Námestovo</option><option value="Nitra">Nitra</option><option value="Nové Mesto nad Váhom">Nové Mesto nad Váhom</option><option value="Nové Zámky">Nové Zámky</option><option value="Partizánske">Partizánske</option><option value="Pezinok">Pezinok</option><option value="Piešťany">Piešťany</option><option value="Poltár">Poltár</option><option value="Poprad">Poprad</option><option value="Považská Bystrica">Považská Bystrica</option><option value="Prešov">Prešov</option><option value="Prievidza">Prievidza</option><option value="Púchov">Púchov</option><option value="Revúca">Revúca</option><option value="Rimavská Sobota">Rimavská Sobota</option><option value="Rožňava">Rožňava</option><option value="Ružomberok">Ružomberok</option><option value="Sabinov">Sabinov</option><option value="Senec">Senec</option><option value="Senica">Senica</option><option value="Skalica">Skalica</option><option value="Snina">Snina</option><option value="Sobrance">Sobrance</option><option value="Spišská Nová Ves">Spišská Nová Ves</option><option value="Stará Ľubovňa">Stará Ľubovňa</option><option value="Stropkov">Stropkov</option><option value="Svidník">Svidník</option><option value="Šaľa">Šaľa</option><option value="Topoľčany">Topoľčany</option><option value="Trebišov">Trebišov</option><option value="Trenčín">Trenčín</option><option value="Trnava">Trnava</option><option value="Turčianske Teplice">Turčianske Teplice</option><option value="Tvrdošín">Tvrdošín</option><option value="Veľký Krtíš">Veľký Krtíš</option><option value="Vranov nad Topľou">Vranov nad Topľou</option><option value="Zlaté Moravce">Zlaté Moravce</option><option value="Zvolen">Zvolen</option><option value="Žarnovica">Žarnovica</option><option value="Žiar nad Hronom">Žiar nad Hronom</option><option value="Žilina">Žilina</option>
-                         </select>
+                         <select id="okres" required onchange="updateMapLink()"> <option value="">-- Vyberte okres --</option> <option value="Bánovce nad Bebravou">Bánovce nad Bebravou</option><option value="Banská Bystrica">Banská Bystrica</option><option value="Banská Štiavnica">Banská Štiavnica</option><option value="Bardejov">Bardejov</option><option value="Bratislava I">Bratislava I</option><option value="Bratislava II">Bratislava II</option><option value="Bratislava III">Bratislava III</option><option value="Bratislava IV">Bratislava IV</option><option value="Bratislava V">Bratislava V</option><option value="Brezno">Brezno</option><option value="Bytča">Bytča</option><option value="Čadca">Čadca</option><option value="Detva">Detva</option><option value="Dolný Kubín">Dolný Kubín</option><option value="Dunajská Streda">Dunajská Streda</option><option value="Galanta">Galanta</option><option value="Gelnica">Gelnica</option><option value="Hlohovec">Hlohovec</option><option value="Humenné">Humenné</option><option value="Ilava">Ilava</option><option value="Kežmarok">Kežmarok</option><option value="Komárno">Komárno</option><option value="Košice I">Košice I</option><option value="Košice II">Košice II</option><option value="Košice III">Košice III</option><option value="Košice IV">Košice IV</option><option value="Košice-okolie">Košice-okolie</option><option value="Krupina">Krupina</option><option value="Kysucké Nové Mesto">Kysucké Nové Mesto</option><option value="Levice">Levice</option><option value="Levoča">Levoča</option><option value="Liptovský Mikuláš">Liptovský Mikuláš</option><option value="Lučenec">Lučenec</option><option value="Malacky">Malacky</option><option value="Martin">Martin</option><option value="Medzilaborce">Medzilaborce</option><option value="Michalovce">Michalovce</option><option value="Myjava">Myjava</option><option value="Námestovo">Námestovo</option><option value="Nitra">Nitra</option><option value="Nové Mesto nad Váhom">Nové Mesto nad Váhom</option><option value="Nové Zámky">Nové Zámky</option><option value="Partizánske">Partizánske</option><option value="Pezinok">Pezinok</option><option value="Piešťany">Piešťany</option><option value="Poltár">Poltár</option><option value="Poprad">Poprad</option><option value="Považská Bystrica">Považská Bystrica</option><option value="Prešov">Prešov</option><option value="Prievidza">Prievidza</option><option value="Púchov">Púchov</option><option value="Revúca">Revúca</option><option value="Rimavská Sobota">Rimavská Sobota</option><option value="Rožňava">Rožňava</option><option value="Ružomberok">Ružomberok</option><option value="Sabinov">Sabinov</option><option value="Senec">Senec</option><option value="Senica">Senica</option><option value="Skalica">Skalica</option><option value="Snina">Snina</option><option value="Sobrance">Sobrance</option><option value="Spišská Nová Ves">Spišská Nová Ves</option><option value="Stará Ľubovňa">Stará Ľubovňa</option><option value="Stropkov">Stropkov</option><option value="Svidník">Svidník</option><option value="Šaľa">Šaľa</option><option value="Topoľčany">Topoľčany</option><option value="Trebišov">Trebišov</option><option value="Trenčín">Trenčín</option><option value="Trnava">Trnava</option><option value="Turčianske Teplice">Turčianske Teplice</option><option value="Tvrdošín">Tvrdošín</option><option value="Veľký Krtíš">Veľký Krtíš</option><option value="Vranov nad Topľou">Vranov nad Topľou</option><option value="Zlaté Moravce">Zlaté Moravce</option><option value="Zvolen">Zvolen</option><option value="Žarnovica">Žarnovica</option><option value="Žiar nad Hronom">Žiar nad Hronom</option><option value="Žilina">Žilina</option> </select>
                      </div>
                      <div class="form-group">
-                         <label for="adresa">Adresa nehnuteľnosti:
-                             <a href="#" id="adresaMapLink" target="_blank" class="address-map-link" style="display: none;">(Zobrať na mape)</a>
-                         </label>
+                         <label for="adresa">Adresa nehnuteľnosti: <a href="#" id="adresaMapLink" target="_blank" class="address-map-link" style="display: none;">(Zobrať na mape)</a> </label>
                          <input type="text" id="adresa" placeholder="Napr. Hlavná 1, 91701 Trnava" required oninput="updateMapLink()">
                      </div>
-                     <div class="form-group">
-                         <label for="znalecnaCena">Znalcom určená cena (€):</label>
-                         <input type="number" id="znalecnaCena" placeholder="Napr. 150000" min="0" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="najnizsiePodanie">Najnižšie podanie (€):</label>
-                         <input type="number" id="najnizsiePodanie" placeholder="Napr. 100000" min="0" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="minimalnePrihodenie">Minimálne prihodenie (€):</label>
-                         <input type="number" id="minimalnePrihodenie" placeholder="Napr. 1000" min="1" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="mobilNavrhovatela">Kontaktný mobil (10 číslic):</label>
-                         <input type="tel" id="mobilNavrhovatela" placeholder="09XX XXX XXX" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="casZaciatku">Dátum a čas začatia dražby:</label>
-                         <input type="datetime-local" id="casZaciatku" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="casSkoncenia">Dátum a čas skončenia dražby:</label>
-                         <input type="datetime-local" id="casSkoncenia" required>
-                     </div>
-                     <div class="form-group form-group-full">
-                         <label for="imageUrl">URL adresa obrázka (nepovinné):</label>
-                         <input type="url" id="imageUrl" placeholder="https://... (napr. adresa z Imgur)">
-                     </div>
-                     <div class="form-group form-group-full">
-                         <label for="predmetDrazby">Predmet dražby (popis):</label>
-                         <textarea id="predmetDrazby" placeholder="Stručne popíšte predmet dražby..." required></textarea>
-                     </div>
+                     <div class="form-group"> <label for="znalecnaCena">Znalcom určená cena (€):</label> <input type="number" id="znalecnaCena" placeholder="Napr. 150000" min="0" required> </div>
+                     <div class="form-group"> <label for="najnizsiePodanie">Najnižšie podanie (€):</label> <input type="number" id="najnizsiePodanie" placeholder="Napr. 100000" min="0" required> </div>
+                     <div class="form-group"> <label for="minimalnePrihodenie">Minimálne prihodenie (€):</label> <input type="number" id="minimalnePrihodenie" placeholder="Napr. 1000" min="1" required> </div>
+                     <div class="form-group"> <label for="mobilNavrhovatela">Kontaktný mobil (10 číslic):</label> <input type="tel" id="mobilNavrhovatela" placeholder="09XX XXX XXX" required> </div>
+                     <div class="form-group"> <label for="casZaciatku">Dátum a čas začatia dražby:</label> <input type="datetime-local" id="casZaciatku" required> </div>
+                     <div class="form-group"> <label for="casSkoncenia">Dátum a čas skončenia dražby:</label> <input type="datetime-local" id="casSkoncenia" required> </div>
+                     <div class="form-group form-group-full"> <label for="imageUrl">URL adresa obrázka (nepovinné):</label> <input type="url" id="imageUrl" placeholder="https://... (napr. adresa z Imgur)"> </div>
+                     <div class="form-group form-group-full"> <label for="predmetDrazby">Predmet dražby (popis):</label> <textarea id="predmetDrazby" placeholder="Stručne popíšte predmet dražby..." required></textarea> </div>
                  </div>
                  <button type="submit" id="submitDrazbaButton" class="btn-primary" style="margin-top: 16px;">Vytvoriť dražbu</button>
              </form>
@@ -246,16 +198,21 @@
                 Vaša identita zostane ostatným účastníkom skrytá.
             </p>
             <form id="bidder-login-form" onsubmit="handleBidderLoginSubmit(event)">
-                <input type="hidden" id="loginAuctionId" value="">
+                <input type="hidden" id="loginAuctionId" value=""> 
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label for="bidderIdDoc">Číslo dokladu totožnosti (napr. OP):</label>
                     <input type="text" id="bidderIdDoc" placeholder="Napr. EB123456" required>
                 </div>
-                <div class="form-group" style="margin-bottom: 24px;">
+                <div class="form-group" style="margin-bottom: 16px;">
                     <label for="bidderMobile">Mobilné číslo (formát 09XX XXX XXX):</label>
                     <input type="tel" id="bidderMobile" placeholder="09XX XXX XXX" pattern="09\d{2} \d{3} \d{3}" required title="Zadajte číslo v tvare 09XX XXX XXX">
                 </div>
-                <button type="submit" class="btn-primary">Vstúpiť do dražby</button>
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label for="bidderMaxBid">Moja maximálna ponuka (€) (nepovinné):</label>
+                    <input type="number" id="bidderMaxBid" placeholder="Zadajte Váš limit" min="0">
+                    <small style="color: var(--text-secondary); font-size: 12px; display: block; margin-top: 4px;">Ak zadáte, systém bude automaticky prihadzovať za Vás až do tejto sumy.</small>
+                </div>
+                <button type="submit" id="bidderLoginSubmitButton" class="btn-primary">Vstúpiť do dražby</button> 
                 <button type="button" class="btn-secondary" onclick="showZaujemcaView()" style="margin-top: 16px; width: 100%;">Zrušiť a späť na prehľad</button>
             </form>
         </div>
@@ -278,7 +235,7 @@
                     </div>
                     <button type="submit" class="btn-primary" style="width: auto;">Prihodiť</button>
                 </div>
-            </form>
+                </form>
             <h2 style="margin-top: 24px;">História prihodení</h2>
             <ul id="bid-history-list">
                 <li>Zatiaľ žiadne prihodenia.</li>
@@ -295,8 +252,8 @@
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, bidderLoginViewDiv, 
             drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink, imageUrlInput; 
 
-        // --- Funkcie na prepínanie pohľadov ---
-        function showRoleSelection() {
+        // --- Prepínanie pohľadov (zostáva rovnaké) ---
+        function showRoleSelection() { /* ... */ 
             console.log("Zobrazujem výber role.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'flex';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
@@ -305,7 +262,7 @@
             if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
             document.body.style.alignItems = 'center'; 
         }
-        function showNavrhovatelView() {
+        function showNavrhovatelView() { /* ... */ 
              console.log("Zobrazujem pohľad Navrhovateľa.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'block'; 
@@ -314,7 +271,7 @@
             if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
             document.body.style.alignItems = 'flex-start'; 
         }
-         function showZaujemcaView() {
+         function showZaujemcaView() { /* ... */ 
               console.log("Zobrazujem pohľad Záujemcu.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
@@ -324,8 +281,7 @@
             document.body.style.alignItems = 'flex-start'; 
             loadDrazby(); 
         }
-
-        function showDetailView(auctionId) {
+        function showDetailView(auctionId) { /* ... */ 
             console.log(`Zobrazujem detail pre dražbu ID: ${auctionId}`);
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
@@ -335,23 +291,28 @@
             document.body.style.alignItems = 'flex-start';
             loadAuctionDetail(auctionId); 
         }
-
-        function showBidderLogin(auctionId) {
+        function showBidderLogin(auctionId) { /* ... */ 
             console.log(`Zobrazujem login formulár pre dražbu ID: ${auctionId}`);
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'none';
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
             if (detailViewDiv) detailViewDiv.style.display = 'none'; 
             if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'block'; 
-            
             const loginAuctionIdInput = document.getElementById('loginAuctionId');
-            if (loginAuctionIdInput) {
-                loginAuctionIdInput.value = auctionId;
-            }
+            if (loginAuctionIdInput) loginAuctionIdInput.value = auctionId;
+             // Vyčistíme staré hodnoty
+            const docInput = document.getElementById('bidderIdDoc');
+            const mobileInput = document.getElementById('bidderMobile');
+            const maxBidInput = document.getElementById('bidderMaxBid');
+            if(docInput) docInput.value = '';
+            if(mobileInput) mobileInput.value = '';
+            if(maxBidInput) maxBidInput.value = '';
+            
             document.body.style.alignItems = 'center'; 
         }
+        // ---------------------------------------------
         
-        function updateMapLink() {
+        function updateMapLink() { /* ... zostáva rovnaké ... */ 
              if (!adresaInput || !okresSelect || !adresaMapLink) { return; }
              const address = adresaInput.value.trim(); 
              const okres = okresSelect.value;
@@ -364,309 +325,175 @@
              }
         }
         
-        async function loadDrazby() {
+        async function loadDrazby() { /* ... zostáva rovnaké ... */ 
             console.log("Načítavam dražby...");
             if (!drazbyListDiv) return;
             drazbyListDiv.innerHTML = '<p>Načítavam zoznam dražieb...</p>';
-            
             try {
                 const response = await fetch(`${API_URL}/api/drazby`);
                 if (!response.ok) throw new Error(`Chyba servera: ${response.statusText}`);
                 const drazby = await response.json();
-                
                 drazbyListDiv.innerHTML = ''; 
-                
                 if (drazby.length === 0) {
-                    drazbyListDiv.innerHTML = '<p>Momentálne nie sú k dispozícii žiadne dražby.</p>';
-                    return;
+                    drazbyListDiv.innerHTML = '<p>Momentálne nie sú k dispozícii žiadne dražby.</p>'; return;
                 }
-                
                 drazby.forEach(drazba => {
-                    const item = document.createElement('div');
-                    item.className = 'drazba-item';
-                    
-                    const options = { 
-                        year: 'numeric', month: '2-digit', day: '2-digit', 
-                        hour: '2-digit', minute: '2-digit' 
-                    };
+                    const item = document.createElement('div'); item.className = 'drazba-item';
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
                     const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK', options);
                     const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK', options);
                     const mapQuery = encodeURIComponent(`${drazba.adresa}, ${drazba.okres}`);
-
-                    let imageHtml = ''; 
-                    if (drazba.imageUrl) {
-                        imageHtml = `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby}" class="drazba-item-image">`;
-                    }
-
-                    item.innerHTML = `
-                        ${imageHtml}
-                        <h3>${drazba.predmetDrazby}</h3>
-                        <div class="drazba-item-grid">
-                            <p><strong>Adresa:</strong> ${drazba.adresa} <a href="https://www.google.com/maps?q=${mapQuery}" target="_blank" style="font-size: 12px;">(Mapa)</a></p>
-                            <p><strong>Typ:</strong> ${drazba.typNehnutelnosti}</p>
-                            <p><strong>Znal. cena:</strong> ${drazba.znalecnaCena.toLocaleString('sk-SK')} €</p>
-                            <p><strong>Najnižšie podanie:</strong> ${drazba.najnizsiePodanie.toLocaleString('sk-SK')} €</p>
-                            <p><strong>Začiatok:</strong> ${zaciatok}</p>
-                            <p><strong>Koniec:</strong> ${koniec}</p>
-                            <p class="drazba-item-full"><strong>Navrhovateľ:</strong> ${drazba.navrhovatel}</p>
-                        </div>
-                        
-                        <button class="btn-primary" onclick="showBidderLogin('${drazba._id}')">
-                            Vstúpiť do dražby
-                        </button>
-                    `;
+                    let imageHtml = drazba.imageUrl ? `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby}" class="drazba-item-image">` : '';
+                    item.innerHTML = ` ${imageHtml} <h3>${drazba.predmetDrazby}</h3> <div class="drazba-item-grid"> <p><strong>Adresa:</strong> ${drazba.adresa} <a href="https://www.google.com/maps?q=${mapQuery}" target="_blank" style="font-size: 12px;">(Mapa)</a></p> <p><strong>Typ:</strong> ${drazba.typNehnutelnosti}</p> <p><strong>Znal. cena:</strong> ${drazba.znalecnaCena.toLocaleString('sk-SK')} €</p> <p><strong>Najnižšie podanie:</strong> ${drazba.najnizsiePodanie.toLocaleString('sk-SK')} €</p> <p><strong>Začiatok:</strong> ${zaciatok}</p> <p><strong>Koniec:</strong> ${koniec}</p> <p class="drazba-item-full"><strong>Navrhovateľ:</strong> ${drazba.navrhovatel}</p> </div> <button class="btn-primary" onclick="showBidderLogin('${drazba._id}')"> Vstúpiť do dražby </button> `;
                     drazbyListDiv.appendChild(item);
                 });
-                
             } catch (error) {
                 console.error("Chyba pri načítaní dražieb:", error);
                 drazbyListDiv.innerHTML = `<p style="color: red;">Chyba pri načítaní dražieb: ${error.message}</p>`;
             }
         }
 
-        async function loadAuctionDetail(auctionId) {
+        async function loadAuctionDetail(auctionId) { /* ... zostáva rovnaké s opravou pre substring ... */ 
             const contentDiv = document.getElementById('detail-content');
             const historyList = document.getElementById('bid-history-list');
             const bidForm = document.getElementById('bid-form');
             const bidAmountInput = document.getElementById('bidAmount');
-
-            contentDiv.innerHTML = '<p>Načítavam detail dražby...</p>';
-            historyList.innerHTML = '';
-            
+            contentDiv.innerHTML = '<p>Načítavam detail dražby...</p>'; historyList.innerHTML = '';
             try {
                 const response = await fetch(`${API_URL}/api/drazby/${auctionId}`);
                 if (!response.ok) throw new Error(`Chyba servera: ${response.statusText}`);
                 const drazba = await response.json();
-
-                const options = { 
-                    year: 'numeric', month: '2-digit', day: '2-digit', 
-                    hour: '2-digit', minute: '2-digit' 
-                };
+                const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
                 const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK', options);
                 const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK', options);
-                
-                let imageHtml = drazba.imageUrl ? 
-                    `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby}" class="detail-image">` : 
-                    '<p>Obrázok nebol poskytnutý.</p>';
-
-                // ===== OPRAVENÁ KONTROLA PRE highestBidder =====
+                let imageHtml = drazba.imageUrl ? `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby}" class="detail-image">` : '<p>Obrázok nebol poskytnutý.</p>';
                 let highestBidderDisplay = 'Nikto';
-                // Skontrolujeme, či drazba.highestBidder existuje a nie je prázdny reťazec
-                if (drazba.highestBidder && drazba.highestBidder.length > 4) { 
-                    // Zobrazíme len časť ID (napr. prvé 2 a posledné 4 znaky)
-                    highestBidderDisplay = `ID: ${drazba.highestBidder.substring(0, 2)}...${drazba.highestBidder.substring(drazba.highestBidder.length - 4)}`;
-                }
-                // ============================================
-                
-                contentDiv.innerHTML = `
-                    <div class="detail-grid">
-                        <div class="detail-image-container">
-                            ${imageHtml}
-                        </div>
-                        <div class="detail-info">
-                            <h2>${drazba.predmetDrazby}</h2>
-                            <p><strong>Aktuálna cena:</strong> <span class="current-price">${drazba.currentPrice.toLocaleString('sk-SK')} €</span></p>
-                            <p><strong>Najvyšší prihadzujúci:</strong> ${highestBidderDisplay}</p>
-                            <hr style="border:none; border-top: 1px solid #eee; margin: 16px 0;">
-                            <p><strong>Najnižšie podanie:</strong> ${drazba.najnizsiePodanie.toLocaleString('sk-SK')} €</p>
-                            <p><strong>Minimálne prihodenie:</strong> ${drazba.minimalnePrihodenie.toLocaleString('sk-SK')} €</p>
-                            <p><strong>Začiatok:</strong> ${zaciatok}</p>
-                            <p><strong>Koniec:</strong> ${koniec}</p>
-                            <p><strong>Adresa:</strong> ${drazba.adresa}, ${drazba.okres}</p>
-                            <p><strong>Navrhovateľ:</strong> ${drazba.navrhovatel}</p>
-                        </div>
-                    </div>
-                `;
-
+                if (drazba.highestBidder && drazba.highestBidder.length > 4) { highestBidderDisplay = `ID: ${drazba.highestBidder.substring(0, 2)}...${drazba.highestBidder.substring(drazba.highestBidder.length - 4)}`; }
+                contentDiv.innerHTML = ` <div class="detail-grid"> <div class="detail-image-container"> ${imageHtml} </div> <div class="detail-info"> <h2>${drazba.predmetDrazby}</h2> <p><strong>Aktuálna cena:</strong> <span class="current-price">${drazba.currentPrice.toLocaleString('sk-SK')} €</span></p> <p><strong>Najvyšší prihadzujúci:</strong> ${highestBidderDisplay}</p> <hr style="border:none; border-top: 1px solid #eee; margin: 16px 0;"> <p><strong>Najnižšie podanie:</strong> ${drazba.najnizsiePodanie.toLocaleString('sk-SK')} €</p> <p><strong>Minimálne prihodenie:</strong> ${drazba.minimalnePrihodenie.toLocaleString('sk-SK')} €</p> <p><strong>Začiatok:</strong> ${zaciatok}</p> <p><strong>Koniec:</strong> ${koniec}</p> <p><strong>Adresa:</strong> ${drazba.adresa}, ${drazba.okres}</p> <p><strong>Navrhovateľ:</strong> ${drazba.navrhovatel}</p> </div> </div> `;
                 bidForm.dataset.auctionId = drazba._id;
-                
                 const minBid = drazba.currentPrice + drazba.minimalnePrihodenie;
-                bidAmountInput.min = minBid;
-                bidAmountInput.placeholder = `Min. ${minBid.toLocaleString('sk-SK')} €`;
-                bidAmountInput.value = minBid; 
-
+                bidAmountInput.min = minBid; bidAmountInput.placeholder = `Min. ${minBid.toLocaleString('sk-SK')} €`; bidAmountInput.value = minBid; 
                 if (drazba.bidHistory && drazba.bidHistory.length > 0) {
                     drazba.bidHistory.reverse().forEach(bid => { 
-                        const li = document.createElement('li');
-                        const bidTime = new Date(bid.timestamp).toLocaleString('sk-SK', options);
-                        // ===== OPRAVENÁ KONTROLA PRE bidderId v histórii =====
-                        let bidderDisplay = 'Neznámy';
-                        // Skontrolujeme, či bid.bidderId existuje a nie je prázdny
-                        if (bid.bidderId && bid.bidderId.length > 4) {
-                           bidderDisplay = `ID: ${bid.bidderId.substring(0, 2)}...${bid.bidderId.substring(bid.bidderId.length - 4)}`;
-                        }
-                        // ===============================================
-                        li.innerHTML = `<strong>${bid.amount.toLocaleString('sk-SK')} €</strong> (${bidderDisplay}) - ${bidTime}`;
-                        historyList.appendChild(li);
+                        const li = document.createElement('li'); const bidTime = new Date(bid.timestamp).toLocaleString('sk-SK', options);
+                        let bidderDisplay = 'Neznámy'; if (bid.bidderId && bid.bidderId.length > 4) { bidderDisplay = `ID: ${bid.bidderId.substring(0, 2)}...${bid.bidderId.substring(bid.bidderId.length - 4)}`; }
+                        li.innerHTML = `<strong>${bid.amount.toLocaleString('sk-SK')} €</strong> (${bidderDisplay}) - ${bidTime}`; historyList.appendChild(li);
                     });
-                } else {
-                    historyList.innerHTML = '<li>Zatiaľ žiadne prihodenia.</li>';
-                }
-
+                } else { historyList.innerHTML = '<li>Zatiaľ žiadne prihodenia.</li>'; }
             } catch (error) {
                 console.error("Chyba pri načítaní detailu dražby:", error);
                 contentDiv.innerHTML = `<p style="color: red;">Chyba pri načítaní detailu: ${error.message}</p>`;
             }
         }
         
-        async function handleDrazbaSubmit(event) {
-            event.preventDefault(); 
-            console.log("Formulár sa odosiela...");
-            const submitButton = document.getElementById('submitDrazbaButton');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Odosielam...';
-            try {
-                const data = {
-                    navrhovatel: document.getElementById('navrhovatel').value,
-                    typNehnutelnosti: document.getElementById('typNehnutelnosti').value,
-                    okres: document.getElementById('okres').value,
-                    adresa: document.getElementById('adresa').value,
-                    znalecnaCena: Number(document.getElementById('znalecnaCena').value),
-                    najnizsiePodanie: Number(document.getElementById('najnizsiePodanie').value),
-                    minimalnePrihodenie: Number(document.getElementById('minimalnePrihodenie').value),
-                    casZaciatku: document.getElementById('casZaciatku').value,
-                    casSkoncenia: document.getElementById('casSkoncenia').value,
-                    mobilNavrhovatela: document.getElementById('mobilNavrhovatela').value,
-                    predmetDrazby: document.getElementById('predmetDrazby').value,
-                    imageUrl: document.getElementById('imageUrl').value 
-                };
-                console.log("Odosielam dáta:", data);
-                const response = await fetch(`${API_URL}/api/drazby`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Server vrátil chybu.');
-                }
-                const novaDrazba = await response.json();
-                console.log("Odpoveď zo servera:", novaDrazba);
-                alert('Dražba bola úspešne vytvorená!');
-                drazbaForm.reset(); 
-                updateMapLink(); 
-            } catch (error) {
-                 console.error("Chyba pri odosielaní formulára:", error);
-                 alert(`Nastala chyba pri vytváraní dražby: ${error.message}`);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Vytvoriť dražbu';
-            }
+        async function handleDrazbaSubmit(event) { /* ... zostáva rovnaké ... */ 
+            event.preventDefault(); console.log("Formulár sa odosiela..."); const submitButton = document.getElementById('submitDrazbaButton'); submitButton.disabled = true; submitButton.textContent = 'Odosielam...'; try { const data = { navrhovatel: document.getElementById('navrhovatel').value, typNehnutelnosti: document.getElementById('typNehnutelnosti').value, okres: document.getElementById('okres').value, adresa: document.getElementById('adresa').value, znalecnaCena: Number(document.getElementById('znalecnaCena').value), najnizsiePodanie: Number(document.getElementById('najnizsiePodanie').value), minimalnePrihodenie: Number(document.getElementById('minimalnePrihodenie').value), casZaciatku: document.getElementById('casZaciatku').value, casSkoncenia: document.getElementById('casSkoncenia').value, mobilNavrhovatela: document.getElementById('mobilNavrhovatela').value, predmetDrazby: document.getElementById('predmetDrazby').value, imageUrl: document.getElementById('imageUrl').value }; console.log("Odosielam dáta:", data); const response = await fetch(`${API_URL}/api/drazby`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || 'Server vrátil chybu.'); } const novaDrazba = await response.json(); console.log("Odpoveď zo servera:", novaDrazba); alert('Dražba bola úspešne vytvorená!'); drazbaForm.reset(); updateMapLink(); } catch (error) { console.error("Chyba pri odosielaní formulára:", error); alert(`Nastala chyba pri vytváraní dražby: ${error.message}`); } finally { submitButton.disabled = false; submitButton.textContent = 'Vytvoriť dražbu'; }
         }
 
-        function handleBidderLoginSubmit(event) {
+        // ===== UPRAVENÁ FUNKCIA: Spracovanie formulára pre identifikáciu Záujemcu =====
+        async function handleBidderLoginSubmit(event) { // Pridané async
             event.preventDefault(); 
             console.log("Spracovávam bidder login...");
 
             const docIdInput = document.getElementById('bidderIdDoc');
             const mobileInput = document.getElementById('bidderMobile');
             const auctionIdInput = document.getElementById('loginAuctionId');
+            const maxBidInput = document.getElementById('bidderMaxBid'); // Načítame aj max bid
+            const submitButton = document.getElementById('bidderLoginSubmitButton'); // Nájdeme tlačidlo
 
             const docId = docIdInput.value.trim().toUpperCase(); 
             const mobile = mobileInput.value.trim();
             const auctionId = auctionIdInput.value;
+            const maxBidValue = maxBidInput.value.trim(); // Načítame hodnotu max bid
+            let maxBid = maxBidValue ? Number(maxBidValue) : null; // Prevedieme na číslo, ak je zadané
 
-            if (!docId || !mobile || !auctionId) {
-                alert("Prosím, vyplňte obe polia.");
-                return;
-            }
-            if (!/^09\d{2} \d{3} \d{3}$/.test(mobile)) {
-                 alert("Prosím, zadajte mobilné číslo v správnom tvare (09XX XXX XXX).");
-                 mobileInput.focus(); 
-                 return;
-            }
+            // Validácia
+            if (!docId || !mobile || !auctionId) { alert("Prosím, vyplňte číslo dokladu a mobil."); return; }
+            if (!/^09\d{2} \d{3} \d{3}$/.test(mobile)) { alert("Prosím, zadajte mobilné číslo v správnom tvare (09XX XXX XXX)."); mobileInput.focus(); return; }
+            if (maxBid !== null && (isNaN(maxBid) || maxBid <= 0)) { alert("Prosím, zadajte platnú sumu pre maximálnu ponuku."); maxBidInput.focus(); return; }
 
-            // Jednoduché anonymné ID (NEBEZPEČNÉ!)
+            // Vytvorenie anonymného ID (stále jednoduché)
             const anonymizedDocId = docId.length > 4 ? docId.substring(docId.length - 4) : docId;
             const anonymizedMobile = mobile.length > 3 ? mobile.substring(mobile.length - 3) : mobile;
             const bidderIdentifier = `ID-${anonymizedDocId}${anonymizedMobile}`;
             console.log(`Vygenerované Bidder ID: ${bidderIdentifier}`);
 
+            // Zablokujeme tlačidlo
+            submitButton.disabled = true;
+            submitButton.textContent = 'Spracovávam...';
+
             try {
+                // --- KROK 1: Uložíme si bidderId do sessionStorage ---
                 sessionStorage.setItem('currentBidderId', bidderIdentifier);
                 console.log("Bidder ID uložené do sessionStorage.");
-                showDetailView(auctionId); // Zobrazíme detail
-            } catch (error) {
-                console.error("Chyba pri ukladaní do sessionStorage:", error);
-                alert("Nastala chyba prehliadača pri ukladaní vašich údajov. Skúste prosím znova.");
-            }
-        }
 
-        async function handleBidSubmit(event) {
-            event.preventDefault(); 
-            console.log("Pokus o prihodenie...");
+                // --- KROK 2: Ak bol zadaný maxBid, pošleme ho na server ---
+                if (maxBid !== null) {
+                    console.log(`Odosielam nastavenie proxy bid: ${maxBid} pre ${bidderIdentifier}`);
+                    const proxyResponse = await fetch(`${API_URL}/api/drazby/${auctionId}/setproxy`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ bidderId: bidderIdentifier, maxBid: maxBid })
+                    });
 
-            const form = event.target;
-            const auctionId = form.dataset.auctionId; 
-            const bidAmountInput = document.getElementById('bidAmount');
-            const bidButton = form.querySelector('button[type="submit"]');
-
-            const amount = Number(bidAmountInput.value);
-
-            const bidderId = sessionStorage.getItem('currentBidderId');
-            if (!bidderId) {
-                alert("Chyba: Váš identifikátor sa nenašiel. Skúste sa vrátiť späť a znova zadať údaje.");
-                return; 
-            }
-            console.log(`Prihadzujem ako ${bidderId} sumu ${amount}`);
-
-            bidButton.disabled = true;
-            bidButton.textContent = 'Odosielam...';
-
-            try {
-                const response = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount: amount, bidderId: bidderId }) 
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Neznáma chyba servera');
+                    if (!proxyResponse.ok) {
+                        const errorData = await proxyResponse.json();
+                        // Ak server vráti chybu (napr. maxBid je príliš nízky), zobrazíme ju
+                        // ale POKRAČUJEME ďalej, aby sa zobrazil detail
+                        alert(`Chyba pri nastavovaní maximálnej ponuky: ${errorData.message}`); 
+                        console.error('Chyba pri setproxy:', errorData.message);
+                        // Neukončujeme funkciu, len upozorníme
+                    } else {
+                        const proxyResult = await proxyResponse.json();
+                        console.log('Odpoveď zo setproxy:', proxyResult.message);
+                        // Môžeme zobraziť potvrdenie, ale alert by bol otravný
+                        // alert('Maximálna ponuka bola úspešne nastavená.'); 
+                    }
                 }
 
-                const updatedAuction = await response.json();
-                console.log('Prihodenie úspešné:', updatedAuction);
-                
-                alert('Vaše prihodenie bolo úspešne prijaté!');
-
-                loadAuctionDetail(auctionId); // Obnoví detail
+                // --- KROK 3: Vždy zobrazíme detail dražby ---
+                // Server už mohol medzitým aktualizovať cenu kvôli nášmu proxy bidu,
+                // takže načítanie detailu nám ukáže aktuálny stav.
+                showDetailView(auctionId);
 
             } catch (error) {
-                console.error('Chyba pri prihadzovaní:', error);
-                alert(`Chyba: ${error.message}`); 
-            } finally {
-                bidButton.disabled = false;
-                bidButton.textContent = 'Prihodiť';
-            }
+                console.error("Chyba pri bidder login alebo setproxy:", error);
+                alert(`Nastala chyba: ${error.message}`);
+                // Odblokujeme tlačidlo aj v prípade chyby
+                submitButton.disabled = false;
+                submitButton.textContent = 'Vstúpiť do dražby';
+            } 
+            // Poznámka: Tlačidlo sa odblokuje automaticky, keď sa načíta nový pohľad (detail),
+            // takže `finally` tu explicitne nepotrebujeme na odblokovanie.
+        }
+
+
+        async function handleBidSubmit(event) { /* ... zostáva rovnaké ... */ 
+            event.preventDefault(); console.log("Pokus o prihodenie...");
+            const form = event.target; const auctionId = form.dataset.auctionId; const bidAmountInput = document.getElementById('bidAmount'); const bidButton = form.querySelector('button[type="submit"]');
+            const amount = Number(bidAmountInput.value);
+            const bidderId = sessionStorage.getItem('currentBidderId');
+            if (!bidderId) { alert("Chyba: Váš identifikátor sa nenašiel. Skúste sa vrátiť späť a znova zadať údaje."); return; }
+            console.log(`Prihadzujem ako ${bidderId} sumu ${amount}`);
+            bidButton.disabled = true; bidButton.textContent = 'Odosielam...';
+            try {
+                const response = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: amount, bidderId: bidderId }) });
+                if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || 'Neznáma chyba servera'); }
+                const updatedAuction = await response.json(); console.log('Prihodenie úspešné:', updatedAuction);
+                alert('Vaše prihodenie bolo úspešne prijaté!');
+                loadAuctionDetail(auctionId); // Obnoví detail
+            } catch (error) { console.error('Chyba pri prihadzovaní:', error); alert(`Chyba: ${error.message}`); 
+            } finally { bidButton.disabled = false; bidButton.textContent = 'Prihodiť'; }
         }
 
         // --- INICIALIZÁCIA APLIKÁCIE ---
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => { /* ... zostáva rovnaké ... */ 
              console.log("Kontrolný bod: DOM načítaný, inicializácia.");
              try {
-                 roleSelectionDiv = document.getElementById('role-selection');
-                 navrhovatelViewDiv = document.getElementById('navrhovatel-view');
-                 zaujemcaViewDiv = document.getElementById('zaujemca-view');
-                 detailViewDiv = document.getElementById('detail-view'); 
-                 bidderLoginViewDiv = document.getElementById('bidder-login-view'); 
-                 drazbyListDiv = document.getElementById('drazby-list');
-                 drazbaForm = document.getElementById('drazba-form');
-                 adresaInput = document.getElementById('adresa');
-                 okresSelect = document.getElementById('okres');
-                 adresaMapLink = document.getElementById('adresaMapLink');
-                 imageUrlInput = document.getElementById('imageUrl');
-                 
+                 roleSelectionDiv = document.getElementById('role-selection'); navrhovatelViewDiv = document.getElementById('navrhovatel-view'); zaujemcaViewDiv = document.getElementById('zaujemca-view'); detailViewDiv = document.getElementById('detail-view'); bidderLoginViewDiv = document.getElementById('bidder-login-view'); drazbyListDiv = document.getElementById('drazby-list'); drazbaForm = document.getElementById('drazba-form'); adresaInput = document.getElementById('adresa'); okresSelect = document.getElementById('okres'); adresaMapLink = document.getElementById('adresaMapLink'); imageUrlInput = document.getElementById('imageUrl');
                  showRoleSelection(); 
-                 
                  console.log("Kontrolný bod: Inicializácia dokončená.");
-             } catch (error) {
-                 console.error("KRITICKÁ CHYBA počas inicializácie:", error);
-                 const body = document.querySelector('body');
-                 if(body) body.innerHTML = `<p style="color:red;">Kritická chyba: ${error.message}</p>`;
-             }
+             } catch (error) { console.error("KRITICKÁ CHYBA počas inicializácie:", error); const body = document.querySelector('body'); if(body) body.innerHTML = `<p style="color:red;">Kritická chyba: ${error.message}</p>`; }
         });
         
         console.log("Kontrolný bod: Skript načítaný.");

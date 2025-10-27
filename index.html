@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Dražba (Dynamická Verzia v2)</title> 
+    <title>E-Dražba (Auto-Bid Verzia)</title> 
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS (s novými štýlmi pre časovač) --- */
+        /* --- CSS (bez zmien) --- */
         :root { --google-blue: #1a73e8; --google-blue-hover: #1765cc; --background-color: #f8f9fa; --surface-color: #ffffff; --text-primary: #202124; --text-secondary: #5f6368; --border-color: #dadce0; --error-color: #d93025; }
         body { font-family: 'Roboto', sans-serif; background-color: var(--background-color); color: var(--text-primary); display: flex; justify-content: center; align-items: center; padding: 24px; min-height: 100vh; flex-direction: column; }
         #role-selection { display: flex; flex-direction: column; align-items: center; text-align: center; background-color: var(--surface-color); border-radius: 8px; padding: 40px; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); width: 100%; max-width: 500px; box-sizing: border-box; }
@@ -157,31 +157,22 @@
         let auctionPollInterval = null; 
         let countdownTimerInterval = null; 
         let currentAuctionEndTime = null; 
+
+        // <<< NOVÁ PREMENNÁ: Globálny zámok, aby sa auto-bid nespustil viackrát naraz >>>
+        let isAutoBidding = false;
             
         function safeGet(id){ const el = document.getElementById(id); if(!el) throw new Error(`Element #${id} nenájdený!`); return el; }
         
-        // --- Prepínanie POHĽADOV (Upravené o zastavenie časovačov) ---
         function showView(viewId) {
             console.log(`Prepínam na pohľad: ${viewId}`);
-            
-            if (viewId !== 'detail-view') {
-                stopTimers();
-            }
-
+            if (viewId !== 'detail-view') { stopTimers(); }
             const views = [roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv];
             views.forEach(view => {
-                if (view) { 
-                    view.style.display = (view.id === viewId) ? (viewId === 'role-selection' ? 'flex' : 'block') : 'none';
-                } else {
-                    console.warn(`Element pre pohľad nebol nájdený počas prepínania.`);
-                }
+                if (view) { view.style.display = (view.id === viewId) ? (viewId === 'role-selection' ? 'flex' : 'block') : 'none'; } 
+                else { console.warn(`Element pre pohľad nebol nájdený počas prepínania.`); }
             });
-            
             document.body.style.alignItems = (viewId === 'role-selection') ? 'center' : 'flex-start';
-            
-            if (viewId === 'zaujemca-view') {
-                loadDrazby();
-            }
+            if (viewId === 'zaujemca-view') { loadDrazby(); }
          }
 
         function showRoleSelection() { showView('role-selection'); }
@@ -199,14 +190,11 @@
         function showDetailView(auctionId) { 
             console.log(`Pokus o zobrazenie detailu pre ${auctionId}`);
             showView('detail-view'); 
-            
             const bidderId = sessionStorage.getItem(`bidderId_${auctionId}`); 
-            
             if (bidderId) {
                 console.log(`Nájdené ID ${bidderId} pre ${auctionId}, zobrazujem prihodenie.`);
                 if (bidderLoginSection) bidderLoginSection.style.display = 'none';
                 if (bidSection) bidSection.style.display = 'block';
-                
                 startLiveAuctionUpdates(auctionId);
             } else {
                 console.log(`ID pre ${auctionId} nenájdené, zobrazujem login.`);
@@ -256,40 +244,28 @@
 
         function stopTimers() {
             console.log("Zastavujem všetky časovače...");
-            if (auctionPollInterval) {
-                clearInterval(auctionPollInterval);
-                auctionPollInterval = null;
-            }
-            if (countdownTimerInterval) {
-                clearInterval(countdownTimerInterval);
-                countdownTimerInterval = null;
-            }
+            if (auctionPollInterval) { clearInterval(auctionPollInterval); auctionPollInterval = null; }
+            if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; }
             currentAuctionEndTime = null; 
+            isAutoBidding = false; // <<< ZMENA: Resetujeme zámok pri odchode
         }
 
         function startLiveAuctionUpdates(auctionId) {
             console.log("Spúšťam živé aktualizácie...");
             stopTimers(); 
-
             loadAuctionDetail(auctionId); 
             auctionPollInterval = setInterval(() => {
                 console.log("Polling: Načítavam nové dáta...");
                 loadAuctionDetail(auctionId, true); 
             }, 7000); 
-
             countdownTimerInterval = setInterval(updateCountdown, 1000);
         }
         
         function updateCountdown() {
             const timerElement = document.getElementById('countdown-timer'); 
-            
-            if (!currentAuctionEndTime || !timerElement) {
-                return;
-            }
-
+            if (!currentAuctionEndTime || !timerElement) { return; }
             const now = new Date().getTime();
             const remaining = currentAuctionEndTime - now;
-
             const bidForm = safeGet('bid-form');
             const bidAmountInput = safeGet('bidAmount');
             const bidSubmitButton = bidForm.querySelector('button[type="submit"]');
@@ -297,46 +273,103 @@
             if (remaining <= 0) {
                 timerElement.innerHTML = "DRAŽBA SKONČENÁ";
                 timerElement.className = 'countdown-display ended';
-                
                 stopTimers(); 
-                
                 if(bidAmountInput) bidAmountInput.disabled = true;
-                if(bidSubmitButton) {
-                    bidSubmitButton.disabled = true;
-                    bidSubmitButton.textContent = 'Skončené';
-                }
+                if(bidSubmitButton) { bidSubmitButton.disabled = true; bidSubmitButton.textContent = 'Skončené'; }
             } else {
                 const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-
                 let timeString = "";
                 if (days > 0) timeString += `${days}d `;
                 timeString += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                
                 timerElement.innerHTML = `Do konca: ${timeString}`;
                 timerElement.className = 'countdown-display'; 
             }
         }
         
+        // <<< NOVÁ FUNKCIA: Interná logika na odoslanie prihodenia >>>
+        async function submitBidInternal(auctionId, amount, bidderId) {
+            // Použijeme zámok, aby sa predišlo viacnásobným odoslaniam
+            if (isAutoBidding) {
+                console.log("AUTO-BID: Už prebieha, preskakujem.");
+                return;
+            }
+            isAutoBidding = true;
+            console.log(`AUTO-BID: Posielam ponuku ${amount} €`);
+
+            // Dočasne vypneme tlačidlo, aby sme dali vizuálnu odozvu
+            const form = safeGet('bid-form');
+            const btn = form.querySelector('button[type="submit"]');
+            const originalBtnText = btn.textContent;
+            btn.disabled = true; btn.textContent = 'Auto-prihodenie...';
+
+            try {
+                const r = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: amount, bidderId: bidderId })
+                });
+                if (!r.ok) { const err = await r.json(); throw new Error(err.message || 'Chyba servera.'); }
+                
+                console.log("AUTO-BID: Prihodenie OK!");
+                // Po úspešnom prihodení musíme okamžite načítať čerstvé dáta
+                loadAuctionDetail(auctionId);
+
+            } catch (e) {
+                console.error("Chyba auto-bidu:", e.message);
+                alert(`Chyba automatického prihodenia: ${e.message}`);
+            } finally {
+                // Odomkneme zámok až po krátkej pauze, aby sme sa vyhli slučkám
+                setTimeout(() => { 
+                    isAutoBidding = false; 
+                    console.log("Auto-bid zámok uvoľnený.");
+                }, 2000); // 2-sekundová pauza pred ďalším možným auto-bidom
+                
+                // Vrátime tlačidlo do pôvodného stavu (ak medzitým neskončila dražba)
+                if (!btn.textContent.includes('Skončené')) {
+                    btn.disabled = false;
+                    btn.textContent = originalBtnText;
+                }
+            }
+        }
+
         async function loadAuctionDetail(auctionId, isRefresh = false) { 
             const cDiv=safeGet('detail-content'); const hList=safeGet('bid-history-list'); const bForm=safeGet('bid-form'); const bInput=safeGet('bidAmount'); 
-            
-            if (!isRefresh) {
-                cDiv.innerHTML='<p>Načítavam...</p>'; hList.innerHTML=''; 
-            }
+            if (!isRefresh) { cDiv.innerHTML='<p>Načítavam...</p>'; hList.innerHTML=''; }
             
             try { 
-                
-                // <<< TOTO JE UPRAVENÝ RIADOK s { cache: 'no-cache' } >>>
                 const r=await fetch(`${API_URL}/api/drazby/${auctionId}`, { cache: 'no-cache' }); if(!r.ok) throw new Error(`Server ${r.status}`); 
-                // <<< KONIEC ZMENY >>>
-
                 const d=await r.json(); 
 
+                // <<< ZMENA: Spúšťame logiku pre auto-bid >>>
+                try {
+                    const ourBidderId = sessionStorage.getItem(`bidderId_${auctionId}`);
+                    const ourMaxBidStr = sessionStorage.getItem(`bidderMaxBid_${auctionId}`);
+                    
+                    // Skontrolujeme, či máme nastavený max bid a či už nebeží iný auto-bid
+                    if (ourBidderId && ourMaxBidStr && !isAutoBidding) {
+                        const ourMaxBid = Number(ourMaxBidStr);
+                        const currentPrice = d.currentPrice || d.najnizsiePodanie;
+                        const minNextBid = currentPrice + d.minimalnePrihodenie;
+
+                        // Podmienky: Niekto iný vedie A ZÁROVEŇ náš max bid je dosť vysoký
+                        if (d.highestBidder !== ourBidderId && ourMaxBid >= minNextBid) {
+                            console.log("AUTO-BID: Podmienky splnené, spúšťam prihodenie.");
+                            // Nevoláme s `await`, aby sa zvyšok `loadAuctionDetail`
+                            // mohol dokončiť a vykresliť aktuálny stav.
+                            // `submitBidInternal` sa postará o nové načítanie *po* prihodení.
+                            submitBidInternal(auctionId, minNextBid, ourBidderId);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Chyba v spúšťači auto-bidu:", e);
+                }
+                // <<< KONIEC ZMENY >>>
+
+
                 currentAuctionEndTime = d.casZaciatku ? new Date(d.casSkoncenia).getTime() : null;
-                
                 const opts={dateStyle:'short',timeStyle:'short'}; 
                 const start=d.casZaciatku?new Date(d.casZaciatku).toLocaleString('sk-SK',opts):'N/A'; const end=d.casSkoncenia?new Date(d.casSkoncenia).toLocaleString('sk-SK',opts):'N/A'; 
                 let hb='Nikto'; if(d.highestBidder&&d.highestBidder.length>4){hb=`ID: ${d.highestBidder.substring(0,2)}...${d.highestBidder.substring(d.highestBidder.length-4)}`;} 
@@ -353,7 +386,6 @@
                     <p><strong>Navrhovateľ:</strong> ${d.navrhovatel||'N/A'}</p></div>`; 
                 
                 bForm.dataset.auctionId=d._id; 
-                
                 const minBid=(d.currentPrice||0)+(d.minimalnePrihodenie||1); 
                 
                 if (!isRefresh) {
@@ -369,7 +401,6 @@
                 if(d.bidHistory&&d.bidHistory.length>0){d.bidHistory.reverse().forEach(b=>{const li=document.createElement('li'); const time=b.timestamp?new Date(b.timestamp).toLocaleString('sk-SK',opts):'N/A'; let bDisp='N/A'; if(b.bidderId&&b.bidderId.length>4){bDisp=`ID: ${b.bidderId.substring(0,2)}...${b.bidderId.substring(b.bidderId.length-4)}`;} li.innerHTML=`<strong>${(b.amount||0).toLocaleString('sk-SK')} €</strong> (${bDisp}) - ${time}`; hList.appendChild(li);});} else {hList.innerHTML='<li>Žiadne prihodenia.</li>';} 
 
                 updateCountdown();
-
             } catch(e){
                 console.error("Chyba detailu:",e); 
                 cDiv.innerHTML=`<p style="color: red;">Chyba: ${e.message}</p>`;
@@ -381,7 +412,6 @@
              event.preventDefault(); 
              const btn = safeGet('submitDrazbaButton');
              btn.disabled = true; btn.textContent = 'Vytváram...';
-             
              try {
                  const data = {
                      navrhovatel: safeGet('navrhovatel').value,
@@ -394,18 +424,14 @@
                      casZaciatku: safeGet('casZaciatku').value,
                      casSkoncenia: safeGet('casSkoncenia').value,
                  };
-
                  const r = await fetch(`${API_URL}/api/drazby`, {
                      method: 'POST',
                      headers: { 'Content-Type': 'application/json' },
                      body: JSON.stringify(data)
                  });
-                 
                  if (!r.ok) { const err = await r.json(); throw new Error(err.message || 'Chyba servera'); }
-                 
                  alert('Dražba úspešne vytvorená!');
-                 showZaujemcaView(); // Presmerujeme na zoznam dražieb
-
+                 showZaujemcaView(); 
              } catch (error) {
                  console.error("Chyba pri vytváraní dražby:", error);
                  alert(`Chyba: ${error.message}`);
@@ -414,48 +440,80 @@
              }
         }
         
+        // <<< ZMENA: handleBidderLoginSubmit teraz ULOŽÍ MAX BID >>>
         async function handleBidderLoginSubmit(event) { 
             event.preventDefault(); const docIn=safeGet('bidderIdDoc'); const mobIn=safeGet('bidderMobile'); const aucIdIn=safeGet('loginAuctionId'); const maxIn=safeGet('bidderMaxBid'); const btn=safeGet('bidderLoginSubmitButton'); 
-            const docId=docIn.value.trim().toUpperCase(); const mob=mobIn.value.trim(); const aucId=aucIdIn.value; const maxVal=maxIn.value.trim(); let maxBid=maxVal?Number(maxVal):null; 
-            if(!docId||!mob||!aucId) return alert("Vyplňte doklad a mobil."); if(!/^09\d{2} \d{3} \d{3}$/.test(mob)) return alert("Mobil 09XX XXX XXX."); if(maxBid!==null&&(isNaN(maxBid)||maxBid<=0)) return alert("Neplatný max bid."); 
+            const docId=docIn.value.trim().toUpperCase(); const mob=mobIn.value.trim(); const aucId=aucIdIn.value; const maxVal=maxIn.value.trim(); 
+            
+            // Spracujeme maxBid
+            let maxBid=maxVal?Number(maxVal):null; 
+
+            if(!docId||!mob||!aucId) return alert("Vyplňte doklad a mobil."); if(!/^09\d{2} \d{3} \d{3}$/.test(mob)) return alert("Mobil 09XX XXX XXX."); 
+            
+            // Musíme skontrolovať, či je maxBid platné číslo, ak je zadané
+            if(maxVal && (maxBid===null || isNaN(maxBid) || maxBid <= 0)) {
+                 return alert("Neplatná maximálna ponuka.");
+            }
+
             const anonDoc=docId.length>4?docId.substring(docId.length-4):docId; const anonMob=mob.length>3?mob.substring(mob.length-3):mob; const bidderId=`ID-${anonDoc}${anonMob}`; 
             btn.disabled=true; btn.textContent='Spracovávam...'; 
+            
             try { 
+                // Uložíme ID prihadzujúceho
                 sessionStorage.setItem(`bidderId_${aucId}`, bidderId); 
                 console.log(`Bidder ID ${bidderId} uložené do sessionStorage pre ${aucId}.`); 
-                if(maxBid!==null){ /* TODO: odoslanie proxy bid */ } 
+
+                // Uložíme alebo vymažeme Max Bid
+                if (maxBid !== null && maxBid > 0) {
+                    sessionStorage.setItem(`bidderMaxBid_${aucId}`, maxBid);
+                    console.log(`Max Bid ${maxBid}€ uložené pre ${aucId}.`);
+                } else {
+                    sessionStorage.removeItem(`bidderMaxBid_${aucId}`);
+                    console.log(`Max Bid nebolo zadané, auto-bid je vypnutý pre ${aucId}.`);
+                }
                 
                 if (bidderLoginSection) bidderLoginSection.style.display = 'none';
                 if (bidSection) bidSection.style.display = 'block';
-                
                 startLiveAuctionUpdates(aucId);
                 
             } catch (e) { alert(`Chyba: ${e.message}`); } 
             finally { btn.disabled=false; btn.textContent='Pokračovať k prihodeniu'; }
         } 
         
+        // <<< ZMENA: Manuálne prihodenie teraz zruší auto-bid >>>
         async function handleBidSubmit(event) { 
-            event.preventDefault(); const form=event.target; const aucId=form.dataset.auctionId; const amountIn=safeGet('bidAmount'); const btn=form.querySelector('button[type="submit"]'); 
+            event.preventDefault(); 
+            
+            // Ak beží auto-bid, manuálne prihodenie je zablokované
+            if (isAutoBidding) {
+                alert("Automatický agent práve prihadzuje, počkajte prosím.");
+                return;
+            }
+            
+            const form=event.target; const aucId=form.dataset.auctionId; const amountIn=safeGet('bidAmount'); const btn=form.querySelector('button[type="submit"]'); 
             const amount=Number(amountIn.value); 
             const bidderId = sessionStorage.getItem(`bidderId_${aucId}`); 
             if (!bidderId) { alert("Chyba ID. Skúste sa znova identifikovať."); showZaujemcaView(); return; } 
+            
             btn.disabled=true; btn.textContent='Odosielam...'; 
+            
             try { 
                 const r=await fetch(`${API_URL}/api/drazby/${aucId}/bid`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amount, bidderId:bidderId})}); 
                 if(!r.ok){const err=await r.json(); throw new Error(err.message||'Chyba servera.');} 
                 alert('Prihodenie OK!'); 
                 
-                // Okamžite obnovíme dáta
-                loadAuctionDetail(aucId);
-                // Poznámka: startLiveAuctionUpdates() tu nemusíme volať, 
-                // keďže loadAuctionDetail() nám už dá čerstvé dáta
-                // a časovače už bežia.
+                // Tým, že používateľ prihodil manuálne, ruší svoj auto-bid
+                sessionStorage.removeItem(`bidderMaxBid_${aucId}`);
+                console.log("Manuálne prihodenie úspešné. Auto-bid agent bol zrušený.");
 
+                loadAuctionDetail(aucId);
             } catch (e) { alert(`Chyba: ${e.message}`); } 
-            finally { btn.disabled=false; btn.textContent='Prihodiť'; } 
+            finally { 
+                // Zámok `isAutoBidding` tu neriešime, keďže toto je manuálna akcia
+                btn.disabled=false; btn.textContent='Prihodiť'; 
+            } 
         } 
         
-        // --- INICIALIZÁCIA ---
         document.addEventListener('DOMContentLoaded', () => { 
             console.log("DOM načítaný."); 
             try { 
@@ -468,10 +526,8 @@
                 bidSection = safeGet('bid-section');
                 drazbyListDiv = safeGet('drazby-list'); 
                 console.log("Pohľady OK.");
-                
                 console.log("Volám showRoleSelection...");
                 showRoleSelection(); 
-                
                 console.log("Inicializácia OK."); 
             } catch (error) { 
                 console.error("KRITICKÁ CHYBA INIT:", error); 

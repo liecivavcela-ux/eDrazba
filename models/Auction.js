@@ -21,20 +21,26 @@ const auctionSchema = new Schema({
         type: Number, 
         default: 0 
     },
-    // ===== ZMENA: highestBidder bude ukladať anonymný kód =====
     highestBidder: { 
         type: String 
-        // Už nemá default hodnotu 'Nikto', bude null/undefined kým niekto neprihodí
     },
-    // ===== ZMENA: bidHistory bude ukladať objekty s bidderId =====
     bidHistory: { 
-        type: [{ // Definuje pole objektov s konkrétnou štruktúrou
-            bidderId: String, // Anonymný kód záujemcu
+        type: [{ 
+            bidderId: String, 
             amount: Number,
             timestamp: Date
         }], 
+        default: [] 
+    },
+    // ===== NOVÉ POLE PRE AUTOMATICKÉ PRIHADZOVANIE =====
+    proxyBids: {
+        type: [{
+            bidderId: String, // Kto nastavil limit
+            maxBid: Number    // Aký je jeho limit
+        }],
         default: [] // Štartuje ako prázdne pole
     }
+    // ===================================================
 }, {
     timestamps: true 
 });

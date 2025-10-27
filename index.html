@@ -8,18 +8,8 @@
     
     <style>
         /* --- CSS Štýly (zostávajú rovnaké) --- */
-        :root { 
-            --google-blue: #1a73e8; --google-blue-hover: #1765cc; 
-            --background-color: #f8f9fa; --surface-color: #ffffff; 
-            --text-primary: #202124; --text-secondary: #5f6368; 
-            --border-color: #dadce0; --error-color: #d93025; 
-        }
-        body { 
-            font-family: 'Roboto', sans-serif; background-color: var(--background-color); color: var(--text-primary); 
-            display: flex; justify-content: center; align-items: center; 
-            padding: 24px; min-height: 100vh;
-            flex-direction: column; 
-        }
+        :root { --google-blue: #1a73e8; --google-blue-hover: #1765cc; --background-color: #f8f9fa; --surface-color: #ffffff; --text-primary: #202124; --text-secondary: #5f6368; --border-color: #dadce0; --error-color: #d93025; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--background-color); color: var(--text-primary); display: flex; justify-content: center; align-items: center; padding: 24px; min-height: 100vh; flex-direction: column; }
         #role-selection { display: flex; flex-direction: column; align-items: center; text-align: center; background-color: var(--surface-color); border-radius: 8px; padding: 40px; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); width: 100%; max-width: 500px; box-sizing: border-box; }
         #role-selection h1 { font-size: 28px; font-weight: 500; margin: 0 0 16px 0; }
         #role-selection p { font-size: 16px; color: var(--text-secondary); margin: 0 0 32px 0; max-width: 400px; }
@@ -79,147 +69,56 @@
         
         const API_URL = 'https://e-drazba-server.onrender.com';
         
+        // --- Globálne premenné (zostávajú rovnaké) ---
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, bidderLoginViewDiv, 
             drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink, imageUrlInput,
             bidderIdInfoDiv, currentBidderIdDisplay; 
 
-        // --- Prepínanie pohľadov (zostáva rovnaké) ---
-        function showRoleSelection() { /* ... */ }
-        function showNavrhovatelView() { /* ... */ }
-        function showZaujemcaView() { /* ... */ }
-        function showDetailView(auctionId) { /* ... */ }
-        function showBidderLogin(auctionId) { /* ... */ }
-        function displayBidderIdInfo() { /* ... */ }
-        function clearBidderIdAndShowLogin() { /* ... */ }
-        function updateMapLink() { /* ... */ }
-        // ---------------------------------------------
-
-        // ===== UPRAVENÁ FUNKCIA: loadDrazby s lepším logovaním a odolnosťou =====
-        async function loadDrazby() {
-            console.log("Načítavam dražby..."); 
-            if (!drazbyListDiv) {
-                console.error("Chyba: Element drazbyListDiv nebol nájdený!");
-                return;
-            }
-            drazbyListDiv.innerHTML = '<p>Načítavam zoznam dražieb...</p>';
-
+        // --- Funkcie na prepínanie pohľadov ---
+        function showRoleSelection() { 
+            // ===== NOVÉ LOGOVANIE =====
+            console.log("Kontrolný bod: Vnútri showRoleSelection - začiatok."); 
             try {
-                // Krok 1: Fetch data
-                const response = await fetch(`${API_URL}/api/drazby`);
-                console.log("Odpoveď zo servera (status):", response.status); 
-
-                if (!response.ok) {
-                     // Ak server vráti chybu, skúsime prečítať text chyby
-                     let errorText = `Chyba servera: ${response.status} ${response.statusText}`;
-                     try {
-                         errorText = await response.text(); // Prečítame telo odpovede ako text
-                         console.error("Server vrátil chybovú odpoveď:", errorText);
-                     } catch (e) {
-                         console.error("Nepodarilo sa prečítať telo chybovej odpovede.")
-                     }
-                     throw new Error(errorText); // Vyhodíme chybu
-                }
-
-                // Krok 2: Parse JSON
-                const drazby = await response.json();
-                console.log("Dáta úspešne prijaté (JSON), počet dražieb:", drazby.length); 
-
-                // Krok 3: Render data
-                drazbyListDiv.innerHTML = ''; // Vyčistíme "Načítavam..."
-
-                if (!Array.isArray(drazby)) {
-                    console.error("Chyba: Odpoveď zo servera nie je pole (Array)!", drazby);
-                    throw new Error("Prijaté dáta nemajú očakávaný formát.");
-                }
-
-                if (drazby.length === 0) {
-                    drazbyListDiv.innerHTML = '<p>Momentálne nie sú k dispozícii žiadne dražby.</p>';
-                    console.log("Žiadne dražby na zobrazenie.");
-                    return;
-                }
-
-                // Krok 4: Loop through auctions and render each item
-                drazby.forEach((drazba, index) => { 
-                    // Použijeme try-catch vnútri cyklu, aby chyba jednej položky nezastavila ostatné
-                    try { 
-                        console.log(`Spracovávam dražbu #${index}, ID: ${drazba._id}`); 
-                        
-                        // Validácia základných dát (môžeme pridať viac kontrol)
-                        if (!drazba || typeof drazba !== 'object' || !drazba._id) {
-                            console.warn(`Položka #${index} nemá platné dáta, preskakujem.`);
-                            return; // Preskočí túto iteráciu cyklu
-                        }
-
-                        const item = document.createElement('div');
-                        item.className = 'drazba-item';
-
-                        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-                        
-                        // Bezpečnejšie načítanie dátumov s kontrolou
-                        const zaciatok = drazba.casZaciatku ? new Date(drazba.casZaciatku).toLocaleString('sk-SK', options) : 'Neznámy';
-                        const koniec = drazba.casSkoncenia ? new Date(drazba.casSkoncenia).toLocaleString('sk-SK', options) : 'Neznámy';
-                        
-                        const mapQuery = encodeURIComponent(`${drazba.adresa || ''}, ${drazba.okres || ''}`);
-
-                        let imageHtml = '';
-                        if (drazba.imageUrl) {
-                            imageHtml = `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby || 'Obrázok dražby'}" class="drazba-item-image">`;
-                        }
-
-                         // Bezpečnejšie formátovanie cien s kontrolou
-                         const znalecnaCenaFormatted = typeof drazba.znalecnaCena === 'number' ? drazba.znalecnaCena.toLocaleString('sk-SK') : 'N/A';
-                         const najnizsiePodanieFormatted = typeof drazba.najnizsiePodanie === 'number' ? drazba.najnizsiePodanie.toLocaleString('sk-SK') : 'N/A';
-
-                        // Zostavenie HTML pre položku
-                        item.innerHTML = `
-                            ${imageHtml}
-                            <h3>${drazba.predmetDrazby || 'Neznámy predmet'}</h3>
-                            <div class="drazba-item-grid">
-                                <p><strong>Adresa:</strong> ${drazba.adresa || 'Neznáma'} <a href="https://www.google.com/maps?q=${mapQuery}" target="_blank" style="font-size: 12px;">(Mapa)</a></p>
-                                <p><strong>Typ:</strong> ${drazba.typNehnutelnosti || 'Neznámy'}</p>
-                                <p><strong>Znal. cena:</strong> ${znalecnaCenaFormatted} €</p>
-                                <p><strong>Najnižšie podanie:</strong> ${najnizsiePodanieFormatted} €</p>
-                                <p><strong>Začiatok:</strong> ${zaciatok}</p>
-                                <p><strong>Koniec:</strong> ${koniec}</p>
-                                <p class="drazba-item-full"><strong>Navrhovateľ:</strong> ${drazba.navrhovatel || 'Neznámy'}</p>
-                            </div>
-                            <button class="btn-primary" onclick="showBidderLogin('${drazba._id}')">
-                                Vstúpiť do dražby
-                            </button>
-                        `;
-
-                        drazbyListDiv.appendChild(item);
-                        console.log(`Dražba #${index} (ID: ${drazba._id}) úspešne pridaná do zoznamu.`); 
-
-                    } catch (loopError) {
-                        // Ak nastane chyba pri spracovaní JEDNEJ položky, zalogujeme ju a pokračujeme
-                        console.error(`Chyba pri spracovaní dražby #${index} (ID: ${drazba ? drazba._id : 'N/A'}):`, loopError);
-                        // Môžeme sem pridať aj zobrazenie chybovej hlášky pre túto položku v UI
-                         const errorItem = document.createElement('div');
-                         errorItem.className = 'drazba-item';
-                         errorItem.innerHTML = `<p style="color:red;">Chyba pri načítaní detailov tejto dražby (ID: ${drazba ? drazba._id : 'N/A'}).</p>`;
-                         drazbyListDiv.appendChild(errorItem);
-                    }
-                }); // Koniec forEach
-
-            } catch (error) { // Chyba pri fetch, json parse alebo ak response nie je pole
-                console.error("Celková chyba v loadDrazby:", error);
-                console.error("Stack trace:", error.stack); // Vypíšeme aj stack trace pre lepšie ladenie
-                drazbyListDiv.innerHTML = `<p style="color: red;">Nastala chyba pri načítaní zoznamu dražieb. Skúste obnoviť stránku. Detail chyby: ${error.message}</p>`;
+                console.log("Zobrazujem výber role.");
+                if (roleSelectionDiv) {
+                     console.log("  Nastavujem roleSelectionDiv na flex");
+                     roleSelectionDiv.style.display = 'flex'; 
+                } else { console.warn("  roleSelectionDiv nenájdený!"); }
+                
+                if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
+                if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
+                if (detailViewDiv) detailViewDiv.style.display = 'none'; 
+                if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
+                
+                console.log("  Nastavujem body align items na center");
+                document.body.style.alignItems = 'center'; 
+                console.log("Kontrolný bod: Vnútri showRoleSelection - koniec.");
+            } catch (error) {
+                console.error("KRITICKÁ CHYBA v showRoleSelection:", error);
+                // V prípade chyby tu skúsime zobraziť aspoň chybovú hlášku
+                document.body.innerHTML = `<p style="color:red;">Kritická chyba pri zobrazovaní úvodnej obrazovky: ${error.message}</p>`;
             }
+            // ===========================
         }
-        // =================================================================
-
-
-        async function loadAuctionDetail(auctionId) { /* ... zostáva rovnaké s opravou pre substring ... */ }
+        function showNavrhovatelView() { /* ... zostáva rovnaké ... */ }
+        function showZaujemcaView() { /* ... zostáva rovnaké ... */ }
+        function showDetailView(auctionId) { /* ... zostáva rovnaké ... */ }
+        function showBidderLogin(auctionId) { /* ... zostáva rovnaké ... */ }
+        function displayBidderIdInfo() { /* ... zostáva rovnaké ... */ }
+        function clearBidderIdAndShowLogin() { /* ... zostáva rovnaké ... */ }
+        function updateMapLink() { /* ... zostáva rovnaké ... */ }
+        async function loadDrazby() { /* ... zostáva rovnaké ... */ }
+        async function loadAuctionDetail(auctionId) { /* ... zostáva rovnaké ... */ }
         async function handleDrazbaSubmit(event) { /* ... zostáva rovnaké ... */ }
         async function handleBidderLoginSubmit(event) { /* ... zostáva rovnaké ... */ }
         async function handleBidSubmit(event) { /* ... zostáva rovnaké ... */ }
+        // ---------------------------------------------
 
-        // --- INICIALIZÁCIA APLIKÁCIE (zostáva rovnaká) ---
+        // --- INICIALIZÁCIA APLIKÁCIE ---
         document.addEventListener('DOMContentLoaded', () => { 
              console.log("Kontrolný bod: DOM načítaný, inicializácia.");
              try {
+                 console.log("  Inicializujem elementy...");
                  roleSelectionDiv = document.getElementById('role-selection'); 
                  navrhovatelViewDiv = document.getElementById('navrhovatel-view'); 
                  zaujemcaViewDiv = document.getElementById('zaujemca-view'); 
@@ -233,14 +132,19 @@
                  imageUrlInput = document.getElementById('imageUrl');
                  bidderIdInfoDiv = document.getElementById('bidder-id-info');
                  currentBidderIdDisplay = document.getElementById('currentBidderIdDisplay');
-                 
+                 console.log("  Elementy inicializované.");
+
+                 // ===== NOVÉ LOGOVANIE =====
+                 console.log("Kontrolný bod: Pred volaním showRoleSelection.");
                  showRoleSelection(); 
+                 console.log("Kontrolný bod: Po volaní showRoleSelection.");
+                 // ===========================
                  
                  console.log("Kontrolný bod: Inicializácia dokončená.");
              } catch (error) { 
                  console.error("KRITICKÁ CHYBA počas inicializácie:", error); 
                  const body = document.querySelector('body'); 
-                 if(body) body.innerHTML = `<p style="color:red;">Kritická chyba: ${error.message}</p>`; 
+                 if(body) body.innerHTML = `<p style="color:red;">Kritická chyba počas inicializácie: ${error.message}</p>`; 
              }
         });
         

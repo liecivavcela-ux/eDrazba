@@ -57,34 +57,62 @@
 </head>
 <body>
 
-    <div id="role-selection"> </div>
+    <div id="role-selection">
+        <h1>Vitajte v E-Dražbe</h1>
+        <p>Ste tu, aby ste navrhli novú dražbu, alebo sa chcete zúčastniť ako záujemca?</p>
+        <div class="role-buttons">
+            <button class="btn-primary" onclick="showNavrhovatelView()">Som Navrhovateľ</button>
+            <button class="btn-primary" onclick="showZaujemcaView()">Som Záujemca (kupujúci)</button>
+        </div>
+    </div>
     <div id="navrhovatel-view"> </div>
     <div id="zaujemca-view"> </div>
     <div id="bidder-login-view"> </div>
     <div id="detail-view"> </div>
-
-    
     <script>
         console.log("Kontrolný bod: E-Dražba Skript začal."); 
         
         const API_URL = 'https://e-drazba-server.onrender.com';
         
-        // --- Globálne premenné (zostávajú rovnaké) ---
+        // --- Globálne premenné ---
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, bidderLoginViewDiv, 
             drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink, imageUrlInput,
             bidderIdInfoDiv, currentBidderIdDisplay; 
 
         // --- Funkcie na prepínanie pohľadov ---
         function showRoleSelection() { 
-            // ===== NOVÉ LOGOVANIE =====
             console.log("Kontrolný bod: Vnútri showRoleSelection - začiatok."); 
             try {
+                // ===== NOVÁ DIAGNOSTIKA =====
+                console.log("  Kontrolujem existenciu roleSelectionDiv...");
+                if (roleSelectionDiv) {
+                    console.log("    roleSelectionDiv existuje.");
+                } else {
+                    console.error("    KRITICKÁ CHYBA: roleSelectionDiv je null alebo undefined!");
+                    // Skúsime ho nájsť znova pre istotu
+                    roleSelectionDiv = document.getElementById('role-selection');
+                     if (!roleSelectionDiv) {
+                         console.error("    Ani opakované nájdenie nepomohlo. Pravdepodobne chýba v HTML!");
+                         throw new Error("Element #role-selection nebol nájdený v HTML.");
+                     }
+                }
+                // ===========================
+
                 console.log("Zobrazujem výber role.");
                 if (roleSelectionDiv) {
-                     console.log("  Nastavujem roleSelectionDiv na flex");
+                     console.log("  Nastavujem roleSelectionDiv.style.display na 'flex'");
                      roleSelectionDiv.style.display = 'flex'; 
-                } else { console.warn("  roleSelectionDiv nenájdený!"); }
+                     // ===== NOVÁ DIAGNOSTIKA =====
+                     // Hneď skontrolujeme, či sa štýl naozaj aplikoval
+                     const computedDisplay = window.getComputedStyle(roleSelectionDiv).display;
+                     console.log(`    Aktuálny computed style display pre roleSelectionDiv: ${computedDisplay}`);
+                     if (computedDisplay !== 'flex') {
+                         console.warn("    UPOZORNENIE: display štýl sa nenastavil na 'flex'! Možno ho prepisuje iný CSS?");
+                     }
+                     // ===========================
+                } 
                 
+                // Skrytie ostatných pohľadov (zostáva rovnaké)
                 if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
                 if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
                 if (detailViewDiv) detailViewDiv.style.display = 'none'; 
@@ -95,35 +123,41 @@
                 console.log("Kontrolný bod: Vnútri showRoleSelection - koniec.");
             } catch (error) {
                 console.error("KRITICKÁ CHYBA v showRoleSelection:", error);
-                // V prípade chyby tu skúsime zobraziť aspoň chybovú hlášku
                 document.body.innerHTML = `<p style="color:red;">Kritická chyba pri zobrazovaní úvodnej obrazovky: ${error.message}</p>`;
             }
-            // ===========================
         }
-        function showNavrhovatelView() { /* ... zostáva rovnaké ... */ }
-        function showZaujemcaView() { /* ... zostáva rovnaké ... */ }
-        function showDetailView(auctionId) { /* ... zostáva rovnaké ... */ }
-        function showBidderLogin(auctionId) { /* ... zostáva rovnaké ... */ }
-        function displayBidderIdInfo() { /* ... zostáva rovnaké ... */ }
-        function clearBidderIdAndShowLogin() { /* ... zostáva rovnaké ... */ }
-        function updateMapLink() { /* ... zostáva rovnaké ... */ }
-        async function loadDrazby() { /* ... zostáva rovnaké ... */ }
-        async function loadAuctionDetail(auctionId) { /* ... zostáva rovnaké ... */ }
-        async function handleDrazbaSubmit(event) { /* ... zostáva rovnaké ... */ }
-        async function handleBidderLoginSubmit(event) { /* ... zostáva rovnaké ... */ }
-        async function handleBidSubmit(event) { /* ... zostáva rovnaké ... */ }
-        // ---------------------------------------------
+        // --- Ostatné funkcie (zostávajú rovnaké ako v poslednej verzii) ---
+        function showNavrhovatelView() { /* ... */ }
+        function showZaujemcaView() { /* ... */ }
+        function showDetailView(auctionId) { /* ... */ }
+        function showBidderLogin(auctionId) { /* ... */ }
+        function displayBidderIdInfo() { /* ... */ }
+        function clearBidderIdAndShowLogin() { /* ... */ }
+        function updateMapLink() { /* ... */ }
+        async function loadDrazby() { /* ... */ }
+        async function loadAuctionDetail(auctionId) { /* ... */ }
+        async function handleDrazbaSubmit(event) { /* ... */ }
+        async function handleBidderLoginSubmit(event) { /* ... */ }
+        async function handleBidSubmit(event) { /* ... */ }
+        // -----------------------------------------------------------------
 
         // --- INICIALIZÁCIA APLIKÁCIE ---
         document.addEventListener('DOMContentLoaded', () => { 
              console.log("Kontrolný bod: DOM načítaný, inicializácia.");
              try {
                  console.log("  Inicializujem elementy...");
+                 // ===== NOVÉ LOGOVANIE PRI INICIALIZÁCII =====
                  roleSelectionDiv = document.getElementById('role-selection'); 
+                 console.log(`    roleSelectionDiv: ${roleSelectionDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
                  navrhovatelViewDiv = document.getElementById('navrhovatel-view'); 
+                 console.log(`    navrhovatelViewDiv: ${navrhovatelViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
                  zaujemcaViewDiv = document.getElementById('zaujemca-view'); 
+                 console.log(`    zaujemcaViewDiv: ${zaujemcaViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
                  detailViewDiv = document.getElementById('detail-view'); 
+                 console.log(`    detailViewDiv: ${detailViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
                  bidderLoginViewDiv = document.getElementById('bidder-login-view'); 
+                 console.log(`    bidderLoginViewDiv: ${bidderLoginViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
+                 // ... ostatné elementy ...
                  drazbyListDiv = document.getElementById('drazby-list'); 
                  drazbaForm = document.getElementById('drazba-form'); 
                  adresaInput = document.getElementById('adresa'); 
@@ -132,13 +166,12 @@
                  imageUrlInput = document.getElementById('imageUrl');
                  bidderIdInfoDiv = document.getElementById('bidder-id-info');
                  currentBidderIdDisplay = document.getElementById('currentBidderIdDisplay');
-                 console.log("  Elementy inicializované.");
+                 console.log("  Elementy inicializované (alebo aj nie - pozri vyššie).");
+                 // ============================================
 
-                 // ===== NOVÉ LOGOVANIE =====
                  console.log("Kontrolný bod: Pred volaním showRoleSelection.");
                  showRoleSelection(); 
                  console.log("Kontrolný bod: Po volaní showRoleSelection.");
-                 // ===========================
                  
                  console.log("Kontrolný bod: Inicializácia dokončená.");
              } catch (error) { 

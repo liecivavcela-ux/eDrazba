@@ -3,58 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Dražba</title> 
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <title>E-Dražba - Diagnostika CSS</title> <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     
-    <style>
-        /* --- CSS Štýly (zostávajú rovnaké) --- */
-        :root { --google-blue: #1a73e8; --google-blue-hover: #1765cc; --background-color: #f8f9fa; --surface-color: #ffffff; --text-primary: #202124; --text-secondary: #5f6368; --border-color: #dadce0; --error-color: #d93025; }
-        body { font-family: 'Roboto', sans-serif; background-color: var(--background-color); color: var(--text-primary); display: flex; justify-content: center; align-items: center; padding: 24px; min-height: 100vh; flex-direction: column; }
-        #role-selection { display: flex; flex-direction: column; align-items: center; text-align: center; background-color: var(--surface-color); border-radius: 8px; padding: 40px; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); width: 100%; max-width: 500px; box-sizing: border-box; }
-        #role-selection h1 { font-size: 28px; font-weight: 500; margin: 0 0 16px 0; }
-        #role-selection p { font-size: 16px; color: var(--text-secondary); margin: 0 0 32px 0; max-width: 400px; }
-        .role-buttons { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; }
-        .role-buttons button { width: 100%; padding: 16px; font-size: 16px; }
-        #navrhovatel-view, #zaujemca-view, #detail-view, #bidder-login-view { display: none; width: 100%; max-width: 800px; align-self: flex-start; margin-top: 0; }
-        #bidder-login-view { max-width: 500px; align-self: center; margin-top: 50px; } 
-        .view-header { display: flex; justify-content: flex-end; margin-bottom: 16px; width: 100%; }
-        .view-header button { width: auto; }
-        .panel { background-color: var(--surface-color); border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); padding: 24px; width: 100%; box-sizing: border-box; }
-        h2 { font-size: 22px; font-weight: 500; margin-top: 0; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { margin: 0; }
-        .form-group-full { grid-column: 1 / -1; } 
-        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text-secondary); }
-        label a.address-map-link { font-size: 12px; margin-left: 8px; float: right; } 
-        input, select, textarea { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 16px; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-        textarea { resize: vertical; min-height: 100px; }
-        input[type="datetime-local"] { font-family: sans-serif; } 
-        button { padding: 12px; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; border: none; }
-        button:disabled { background-color: #f1f3f4; color: #bdc1c6; cursor: not-allowed; }
-        .btn-primary { background-color: var(--google-blue); color: white; width: 100%; } .btn-primary:not(:disabled):hover { background-color: var(--google-blue-hover); }
-        .btn-secondary { background-color: var(--surface-color); color: var(--google-blue); border: 1px solid var(--border-color); width: auto; } .btn-secondary:not(:disabled):hover { background-color: #f8f9fa; }
-        #drazby-list { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
-        .drazba-item { background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow: hidden; }
-        .drazba-item h3 { margin: 0 0 12px 0; color: var(--google-blue); font-size: 18px; }
-        .drazba-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14px; }
-        .drazba-item-grid p { margin: 4px 0; }
-        .drazba-item-grid p strong { color: var(--text-primary); }
-        .drazba-item-full { grid-column: 1 / -1; }
-        .drazba-item .btn-primary { width: auto; padding: 8px 16px; margin-top: 16px; }
-        .drazba-item-image { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
-        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
-        .detail-image { width: 100%; border-radius: 8px; object-fit: cover; }
-        .detail-info h2 { border: none; padding-bottom: 8px; margin-bottom: 16px; }
-        .detail-info p { font-size: 16px; margin: 8px 0; color: var(--text-secondary); }
-        .detail-info p strong { color: var(--text-primary); }
-        .current-price { font-size: 28px; font-weight: 500; color: var(--google-blue); display: block; margin-top: 16px; }
-        .bid-form-grid { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: flex-end; }
-        #bid-history-list { list-style-type: none; padding-left: 0; margin-top: 16px; max-height: 200px; overflow-y: auto; border-top: 1px solid var(--border-color); }
-        #bid-history-list li { padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
-        #changeBidderIdButton { font-size: 12px; color: var(--text-secondary); text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; margin-top: 8px; }
-         @media (max-width: 600px) { body { padding: 8px; gap: 8px;} #role-selection, #bidder-login-view { padding: 20px; margin-top: 20px; } #role-selection h1 { font-size: 24px;} .role-buttons { flex-direction: column; width: 100%;} .role-buttons button { width: 100%; } .panel { padding: 12px; } h2 { font-size: 18px; } .form-grid, .drazba-item-grid { grid-template-columns: 1fr; } .form-group-full { grid-column: 1; } .detail-grid { grid-template-columns: 1fr; } }
-    </style>
-</head>
+    </head>
 <body>
 
     <div id="role-selection">
@@ -70,117 +21,13 @@
     <div id="bidder-login-view"> </div>
     <div id="detail-view"> </div>
     <script>
+        // --- JavaScript KÓD (zostáva presne rovnaký ako naposledy, s localStorage a logovaním) ---
         console.log("Kontrolný bod: E-Dražba Skript začal."); 
-        
         const API_URL = 'https://e-drazba-server.onrender.com';
-        
-        // --- Globálne premenné ---
-        let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, bidderLoginViewDiv, 
-            drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink, imageUrlInput,
-            bidderIdInfoDiv, currentBidderIdDisplay; 
-
-        // --- Funkcie na prepínanie pohľadov ---
-        function showRoleSelection() { 
-            console.log("Kontrolný bod: Vnútri showRoleSelection - začiatok."); 
-            try {
-                // ===== NOVÁ DIAGNOSTIKA =====
-                console.log("  Kontrolujem existenciu roleSelectionDiv...");
-                if (roleSelectionDiv) {
-                    console.log("    roleSelectionDiv existuje.");
-                } else {
-                    console.error("    KRITICKÁ CHYBA: roleSelectionDiv je null alebo undefined!");
-                    // Skúsime ho nájsť znova pre istotu
-                    roleSelectionDiv = document.getElementById('role-selection');
-                     if (!roleSelectionDiv) {
-                         console.error("    Ani opakované nájdenie nepomohlo. Pravdepodobne chýba v HTML!");
-                         throw new Error("Element #role-selection nebol nájdený v HTML.");
-                     }
-                }
-                // ===========================
-
-                console.log("Zobrazujem výber role.");
-                if (roleSelectionDiv) {
-                     console.log("  Nastavujem roleSelectionDiv.style.display na 'flex'");
-                     roleSelectionDiv.style.display = 'flex'; 
-                     // ===== NOVÁ DIAGNOSTIKA =====
-                     // Hneď skontrolujeme, či sa štýl naozaj aplikoval
-                     const computedDisplay = window.getComputedStyle(roleSelectionDiv).display;
-                     console.log(`    Aktuálny computed style display pre roleSelectionDiv: ${computedDisplay}`);
-                     if (computedDisplay !== 'flex') {
-                         console.warn("    UPOZORNENIE: display štýl sa nenastavil na 'flex'! Možno ho prepisuje iný CSS?");
-                     }
-                     // ===========================
-                } 
-                
-                // Skrytie ostatných pohľadov (zostáva rovnaké)
-                if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
-                if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none';
-                if (detailViewDiv) detailViewDiv.style.display = 'none'; 
-                if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none';
-                
-                console.log("  Nastavujem body align items na center");
-                document.body.style.alignItems = 'center'; 
-                console.log("Kontrolný bod: Vnútri showRoleSelection - koniec.");
-            } catch (error) {
-                console.error("KRITICKÁ CHYBA v showRoleSelection:", error);
-                document.body.innerHTML = `<p style="color:red;">Kritická chyba pri zobrazovaní úvodnej obrazovky: ${error.message}</p>`;
-            }
-        }
-        // --- Ostatné funkcie (zostávajú rovnaké ako v poslednej verzii) ---
-        function showNavrhovatelView() { /* ... */ }
-        function showZaujemcaView() { /* ... */ }
-        function showDetailView(auctionId) { /* ... */ }
-        function showBidderLogin(auctionId) { /* ... */ }
-        function displayBidderIdInfo() { /* ... */ }
-        function clearBidderIdAndShowLogin() { /* ... */ }
-        function updateMapLink() { /* ... */ }
-        async function loadDrazby() { /* ... */ }
-        async function loadAuctionDetail(auctionId) { /* ... */ }
-        async function handleDrazbaSubmit(event) { /* ... */ }
-        async function handleBidderLoginSubmit(event) { /* ... */ }
-        async function handleBidSubmit(event) { /* ... */ }
-        // -----------------------------------------------------------------
-
-        // --- INICIALIZÁCIA APLIKÁCIE ---
-        document.addEventListener('DOMContentLoaded', () => { 
-             console.log("Kontrolný bod: DOM načítaný, inicializácia.");
-             try {
-                 console.log("  Inicializujem elementy...");
-                 // ===== NOVÉ LOGOVANIE PRI INICIALIZÁCII =====
-                 roleSelectionDiv = document.getElementById('role-selection'); 
-                 console.log(`    roleSelectionDiv: ${roleSelectionDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
-                 navrhovatelViewDiv = document.getElementById('navrhovatel-view'); 
-                 console.log(`    navrhovatelViewDiv: ${navrhovatelViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
-                 zaujemcaViewDiv = document.getElementById('zaujemca-view'); 
-                 console.log(`    zaujemcaViewDiv: ${zaujemcaViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
-                 detailViewDiv = document.getElementById('detail-view'); 
-                 console.log(`    detailViewDiv: ${detailViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
-                 bidderLoginViewDiv = document.getElementById('bidder-login-view'); 
-                 console.log(`    bidderLoginViewDiv: ${bidderLoginViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`);
-                 // ... ostatné elementy ...
-                 drazbyListDiv = document.getElementById('drazby-list'); 
-                 drazbaForm = document.getElementById('drazba-form'); 
-                 adresaInput = document.getElementById('adresa'); 
-                 okresSelect = document.getElementById('okres'); 
-                 adresaMapLink = document.getElementById('adresaMapLink'); 
-                 imageUrlInput = document.getElementById('imageUrl');
-                 bidderIdInfoDiv = document.getElementById('bidder-id-info');
-                 currentBidderIdDisplay = document.getElementById('currentBidderIdDisplay');
-                 console.log("  Elementy inicializované (alebo aj nie - pozri vyššie).");
-                 // ============================================
-
-                 console.log("Kontrolný bod: Pred volaním showRoleSelection.");
-                 showRoleSelection(); 
-                 console.log("Kontrolný bod: Po volaní showRoleSelection.");
-                 
-                 console.log("Kontrolný bod: Inicializácia dokončená.");
-             } catch (error) { 
-                 console.error("KRITICKÁ CHYBA počas inicializácie:", error); 
-                 const body = document.querySelector('body'); 
-                 if(body) body.innerHTML = `<p style="color:red;">Kritická chyba počas inicializácie: ${error.message}</p>`; 
-             }
-        });
-        
+        let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, bidderLoginViewDiv, drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink, imageUrlInput, bidderIdInfoDiv, currentBidderIdDisplay; 
+        function showRoleSelection() { console.log("Kontrolný bod: Vnútri showRoleSelection - začiatok."); try { console.log("  Kontrolujem existenciu roleSelectionDiv..."); if (roleSelectionDiv) { console.log("    roleSelectionDiv existuje."); } else { console.error("    KRITICKÁ CHYBA: roleSelectionDiv je null alebo undefined!"); roleSelectionDiv = document.getElementById('role-selection'); if (!roleSelectionDiv) { console.error("    Ani opakované nájdenie nepomohlo. Pravdepodobne chýba v HTML!"); throw new Error("Element #role-selection nebol nájdený v HTML."); } } console.log("Zobrazujem výber role."); if (roleSelectionDiv) { console.log("  Nastavujem roleSelectionDiv.style.display na 'flex'"); roleSelectionDiv.style.display = 'flex'; const computedDisplay = window.getComputedStyle(roleSelectionDiv).display; console.log(`    Aktuálny computed style display pre roleSelectionDiv: ${computedDisplay}`); if (computedDisplay !== 'flex') { console.warn("    UPOZORNENIE: display štýl sa nenastavil na 'flex'! Možno ho prepisuje iný CSS?"); } } if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none'; if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'none'; if (detailViewDiv) detailViewDiv.style.display = 'none'; if (bidderLoginViewDiv) bidderLoginViewDiv.style.display = 'none'; console.log("  Nastavujem body align items na center"); document.body.style.alignItems = 'center'; console.log("Kontrolný bod: Vnútri showRoleSelection - koniec."); } catch (error) { console.error("KRITICKÁ CHYBA v showRoleSelection:", error); document.body.innerHTML = `<p style="color:red;">Kritická chyba pri zobrazovaní úvodnej obrazovky: ${error.message}</p>`; } }
+        function showNavrhovatelView() { /* ... */ } function showZaujemcaView() { /* ... */ } function showDetailView(auctionId) { /* ... */ } function showBidderLogin(auctionId) { /* ... */ } function displayBidderIdInfo() { /* ... */ } function clearBidderIdAndShowLogin() { /* ... */ } function updateMapLink() { /* ... */ } async function loadDrazby() { /* ... */ } async function loadAuctionDetail(auctionId) { /* ... */ } async function handleDrazbaSubmit(event) { /* ... */ } async function handleBidderLoginSubmit(event) { /* ... */ } async function handleBidSubmit(event) { /* ... */ }
+        document.addEventListener('DOMContentLoaded', () => { console.log("Kontrolný bod: DOM načítaný, inicializácia."); try { console.log("  Inicializujem elementy..."); roleSelectionDiv = document.getElementById('role-selection'); console.log(`    roleSelectionDiv: ${roleSelectionDiv ? 'nájdený' : 'NENÁJDENÝ!'}`); navrhovatelViewDiv = document.getElementById('navrhovatel-view'); console.log(`    navrhovatelViewDiv: ${navrhovatelViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`); zaujemcaViewDiv = document.getElementById('zaujemca-view'); console.log(`    zaujemcaViewDiv: ${zaujemcaViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`); detailViewDiv = document.getElementById('detail-view'); console.log(`    detailViewDiv: ${detailViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`); bidderLoginViewDiv = document.getElementById('bidder-login-view'); console.log(`    bidderLoginViewDiv: ${bidderLoginViewDiv ? 'nájdený' : 'NENÁJDENÝ!'}`); drazbyListDiv = document.getElementById('drazby-list'); drazbaForm = document.getElementById('drazba-form'); adresaInput = document.getElementById('adresa'); okresSelect = document.getElementById('okres'); adresaMapLink = document.getElementById('adresaMapLink'); imageUrlInput = document.getElementById('imageUrl'); bidderIdInfoDiv = document.getElementById('bidder-id-info'); currentBidderIdDisplay = document.getElementById('currentBidderIdDisplay'); console.log("  Elementy inicializované (alebo aj nie - pozri vyššie)."); console.log("Kontrolný bod: Pred volaním showRoleSelection."); showRoleSelection(); console.log("Kontrolný bod: Po volaní showRoleSelection."); console.log("Kontrolný bod: Inicializácia dokončená."); } catch (error) { console.error("KRITICKÁ CHYBA počas inicializácie:", error); const body = document.querySelector('body'); if(body) body.innerHTML = `<p style="color:red;">Kritická chyba počas inicializácie: ${error.message}</p>`; } });
         console.log("Kontrolný bod: Skript načítaný.");
     </script>
 

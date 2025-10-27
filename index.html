@@ -60,13 +60,23 @@
         .btn-secondary { background-color: var(--surface-color); color: var(--google-blue); border: 1px solid var(--border-color); width: auto; } .btn-secondary:not(:disabled):hover { background-color: #f8f9fa; }
 
         #drazby-list { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
-        .drazba-item { background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
+        .drazba-item { background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; overflow: hidden; } /* Pridané overflow: hidden */
         .drazba-item h3 { margin: 0 0 12px 0; color: var(--google-blue); font-size: 18px; }
         .drazba-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14px; }
         .drazba-item-grid p { margin: 4px 0; }
         .drazba-item-grid p strong { color: var(--text-primary); }
         .drazba-item-full { grid-column: 1 / -1; }
         .drazba-item .btn-primary { width: auto; padding: 8px 16px; margin-top: 16px; }
+
+        /* ===== NOVÝ ŠTÝL PRE OBRÁZOK ===== */
+        .drazba-item-image {
+            width: 100%; /* Obrázok bude na plnú šírku karty */
+            height: 250px; /* Obrázok bude mať fixnú výšku */
+            object-fit: cover; /* Obrázok sa oreže, aby vyplnil priestor, nedeformuje sa */
+            border-radius: 8px; /* Zaoblené rohy */
+            margin-bottom: 16px; /* Odsadenie od nadpisu */
+        }
+        /* ================================== */
 
          @media (max-width: 600px) { 
               body { padding: 8px; gap: 8px;}
@@ -164,6 +174,11 @@
                          <label for="casSkoncenia">Dátum a čas skončenia dražby:</label>
                          <input type="datetime-local" id="casSkoncenia" required>
                      </div>
+                     
+                     <div class="form-group form-group-full">
+                         <label for="imageUrl">URL adresa obrázka (nepovinné):</label>
+                         <input type="url" id="imageUrl" placeholder="https://... (napr. adresa z Imgur)">
+                     </div>
                      <div class="form-group form-group-full">
                          <label for="predmetDrazby">Predmet dražby (popis):</label>
                          <textarea id="predmetDrazby" placeholder="Stručne popíšte predmet dražby..." required></textarea>
@@ -189,14 +204,11 @@
     <script>
         console.log("Kontrolný bod: E-Dražba Skript začal."); 
         
-        // --- DÔLEŽITÉ: Adresa nášho servera na Renderi ---
         const API_URL = 'https://e-drazba-server.onrender.com';
         
-        // Globálne premenné pre elementy
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, drazbyListDiv, drazbaForm,
-            adresaInput, okresSelect, adresaMapLink; 
+            adresaInput, okresSelect, adresaMapLink, imageUrlInput; // Pridaná premenná pre imageUrl
 
-        // --- Funkcie na prepínanie pohľadov ---
         function showRoleSelection() {
             console.log("Zobrazujem výber role.");
             if (roleSelectionDiv) roleSelectionDiv.style.display = 'flex';
@@ -217,10 +229,9 @@
             if (navrhovatelViewDiv) navrhovatelViewDiv.style.display = 'none';
             if (zaujemcaViewDiv) zaujemcaViewDiv.style.display = 'block'; 
             document.body.style.alignItems = 'flex-start'; 
-            loadDrazby(); // Načítaj dražby pri zobrazení pohľadu
+            loadDrazby(); 
         }
         
-        // --- Funkcia na aktualizáciu odkazu na mapu ---
         function updateMapLink() {
              if (!adresaInput || !okresSelect || !adresaMapLink) { return; }
              const address = adresaInput.value.trim(); 
@@ -234,14 +245,12 @@
              }
         }
         
-        // --- Funkcia na načítanie dražieb (pre Záujemcu) ---
         async function loadDrazby() {
             console.log("Načítavam dražby...");
             if (!drazbyListDiv) return;
             drazbyListDiv.innerHTML = '<p>Načítavam zoznam dražieb...</p>';
             
             try {
-                // Používame správnu cestu, ktorú si nastavíme na serveri
                 const response = await fetch(`${API_URL}/api/drazby`);
                 if (!response.ok) throw new Error(`Chyba servera: ${response.statusText}`);
                 const drazby = await response.json();
@@ -257,25 +266,24 @@
                     const item = document.createElement('div');
                     item.className = 'drazba-item';
                     
-                    // ===== TU JE OPRAVA PRE FORMÁT DÁTUMU =====
-                    // Definujeme si presný formát, aký chceme
                     const options = { 
-                        year: 'numeric', 
-                        month: '2-digit', 
-                        day: '2-digit', 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                        year: 'numeric', month: '2-digit', day: '2-digit', 
+                        hour: '2-digit', minute: '2-digit' 
                     };
-                    
-                    // Použijeme tieto 'options' pri konverzii
                     const zaciatok = new Date(drazba.casZaciatku).toLocaleString('sk-SK', options);
                     const koniec = new Date(drazba.casSkoncenia).toLocaleString('sk-SK', options);
-                    // ===== KONIEC OPRAVY =====
-
                     const mapQuery = encodeURIComponent(`${drazba.adresa}, ${drazba.okres}`);
 
+                    // ===== PRIDANIE LOGIKY PRE OBRÁZOK =====
+                    let imageHtml = ''; // Vytvoríme prázdnu premennú
+                    if (drazba.imageUrl) {
+                        // Ak v dátach z databázy existuje imageUrl, vytvoríme HTML pre obrázok
+                        imageHtml = `<img src="${drazba.imageUrl}" alt="${drazba.predmetDrazby}" class="drazba-item-image">`;
+                    }
+                    // =========================================
+
                     item.innerHTML = `
-                        <h3>${drazba.predmetDrazby}</h3>
+                        ${imageHtml} <h3>${drazba.predmetDrazby}</h3>
                         <div class="drazba-item-grid">
                             <p><strong>Adresa:</strong> ${drazba.adresa} <a href="https://www.google.com/maps?q=${mapQuery}" target="_blank" style="font-size: 12px;">(Mapa)</a></p>
                             <p><strong>Typ:</strong> ${drazba.typNehnutelnosti}</p>
@@ -296,7 +304,6 @@
             }
         }
         
-        // --- Funkcia na odoslanie formulára (pre Navrhovateľa) ---
         async function handleDrazbaSubmit(event) {
             event.preventDefault(); 
             console.log("Formulár sa odosiela...");
@@ -318,12 +325,13 @@
                     casZaciatku: document.getElementById('casZaciatku').value,
                     casSkoncenia: document.getElementById('casSkoncenia').value,
                     mobilNavrhovatela: document.getElementById('mobilNavrhovatela').value,
-                    predmetDrazby: document.getElementById('predmetDrazby').value
+                    predmetDrazby: document.getElementById('predmetDrazby').value,
+                    // ===== PRIDANIE NOVÉHO POĽA DO ODOSIELANÝCH DÁT =====
+                    imageUrl: document.getElementById('imageUrl').value 
                 };
                 
                 console.log("Odosielam dáta:", data);
                 
-                // Používame správnu cestu, ktorú si nastavíme na serveri
                 const response = await fetch(`${API_URL}/api/drazby`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -355,7 +363,6 @@
         document.addEventListener('DOMContentLoaded', () => {
              console.log("Kontrolný bod: DOM načítaný, inicializácia.");
              try {
-                 // Inicializuj elementy
                  roleSelectionDiv = document.getElementById('role-selection');
                  navrhovatelViewDiv = document.getElementById('navrhovatel-view');
                  zaujemcaViewDiv = document.getElementById('zaujemca-view');
@@ -364,6 +371,7 @@
                  adresaInput = document.getElementById('adresa');
                  okresSelect = document.getElementById('okres');
                  adresaMapLink = document.getElementById('adresaMapLink');
+                 imageUrlInput = document.getElementById('imageUrl'); // Načítame aj nové pole
                  
                  showRoleSelection(); 
                  

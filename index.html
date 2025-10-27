@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Dražba (Dynamická Verzia)</title> 
+    <title>E-Dražba (Dynamická Verzia v2)</title> 
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     
     <style>
@@ -49,7 +49,6 @@
         #bid-history-list { list-style-type: none; padding-left: 0; margin-top: 16px; max-height: 200px; overflow-y: auto; border-top: 1px solid var(--border-color); }
         #bid-history-list li { padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
         
-        /* <<< NOVÉ ŠTÝLY PRE ČASOVAČ >>> */
         .countdown-display {
             font-family: 'Roboto Mono', monospace;
             font-size: 22px;
@@ -66,7 +65,6 @@
             background-color: #f1f3f4;
             font-weight: 500;
         }
-        /* <<< KONIEC NOVÝCH ŠTÝLOV >>> */
 
          @media (max-width: 600px) { body { padding: 8px; gap: 8px;} #role-selection { padding: 20px; margin-top: 20px;} #role-selection h1 { font-size: 24px;} .role-buttons { flex-direction: column; width: 100%;} .role-buttons button { width: 100%; } .panel { padding: 12px; } h2 { font-size: 18px; } .form-grid, .drazba-item-grid { grid-template-columns: 1fr; } .form-group-full { grid-column: 1; } .detail-grid { grid-template-columns: 1fr; } }
     </style>
@@ -156,11 +154,9 @@
             drazbyListDiv, drazbaForm, adresaInput, okresSelect, adresaMapLink,
             bidderLoginSection, bidSection;
 
-        // <<< NOVÉ GLOBÁLNE PREMENNÉ PRE ČASOVAČE >>>
-        let auctionPollInterval = null; // Pre automatické načítanie prihodení
-        let countdownTimerInterval = null; // Pre odpočítavanie (1 sekunda)
-        let currentAuctionEndTime = null; // Uchováva čas konca aktuálnej dražby
-        // <<< KONIEC NOVÝCH PREMENNÝCH >>>
+        let auctionPollInterval = null; 
+        let countdownTimerInterval = null; 
+        let currentAuctionEndTime = null; 
             
         function safeGet(id){ const el = document.getElementById(id); if(!el) throw new Error(`Element #${id} nenájdený!`); return el; }
         
@@ -168,11 +164,9 @@
         function showView(viewId) {
             console.log(`Prepínam na pohľad: ${viewId}`);
             
-            // <<< ZMENA: Ak odchádzame z detailu, zastavíme časovače >>>
             if (viewId !== 'detail-view') {
                 stopTimers();
             }
-            // <<< KONIEC ZMENY >>>
 
             const views = [roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv];
             views.forEach(view => {
@@ -202,7 +196,6 @@
         }
         function showZaujemcaView() { showView('zaujemca-view'); }
         
-        // --- Show Detail View (teraz spúšťa načítanie) ---
         function showDetailView(auctionId) { 
             console.log(`Pokus o zobrazenie detailu pre ${auctionId}`);
             showView('detail-view'); 
@@ -214,9 +207,7 @@
                 if (bidderLoginSection) bidderLoginSection.style.display = 'none';
                 if (bidSection) bidSection.style.display = 'block';
                 
-                // <<< ZMENA: Nenačítame len raz, ale spustíme "živé" načítanie >>>
                 startLiveAuctionUpdates(auctionId);
-                // <<< KONIEC ZMENY >>>
             } else {
                 console.log(`ID pre ${auctionId} nenájdené, zobrazujem login.`);
                 if (bidderLoginSection) bidderLoginSection.style.display = 'block';
@@ -226,7 +217,20 @@
             }
         }
         
-        function updateMapLink() { /* ... bez zmien ... */ } 
+        function updateMapLink() { 
+             adresaInput = adresaInput || safeGet('adresa');
+             okresSelect = okresSelect || safeGet('okres');
+             adresaMapLink = adresaMapLink || safeGet('adresaMapLink');
+             const adresa = adresaInput.value;
+             const okres = okresSelect.value;
+             if (adresa && okres) {
+                 const query = encodeURIComponent(`${adresa}, ${okres}, Slovensko`);
+                 adresaMapLink.href = `https://www.google.com/maps?q=${query}`;
+                 adresaMapLink.style.display = 'inline';
+             } else {
+                 adresaMapLink.style.display = 'none';
+             }
+        } 
         
         async function loadDrazby() { 
             console.log("LoadDrazby..."); drazbyListDiv = safeGet('drazby-list'); drazbyListDiv.innerHTML = '<p>Načítavam...</p>'; 
@@ -250,7 +254,6 @@
             } catch (error) { console.error("Chyba loadDrazby:", error); if (drazbyListDiv) drazbyListDiv.innerHTML = `<p style="color: red;">Chyba: ${error.message}</p>`; } 
         } 
 
-        // <<< NOVÁ FUNKCIA: ZASTAVÍ VŠETKY ČASOVAČE >>>
         function stopTimers() {
             console.log("Zastavujem všetky časovače...");
             if (auctionPollInterval) {
@@ -261,31 +264,25 @@
                 clearInterval(countdownTimerInterval);
                 countdownTimerInterval = null;
             }
-            currentAuctionEndTime = null; // Vynulujeme čas
+            currentAuctionEndTime = null; 
         }
 
-        // <<< NOVÁ FUNKCIA: SPUSTÍ ČASOVAČE A POLLING >>>
         function startLiveAuctionUpdates(auctionId) {
             console.log("Spúšťam živé aktualizácie...");
-            stopTimers(); // Najprv zastavíme staré, ak nejaké bežia
+            stopTimers(); 
 
-            // 1. Spustíme polling (automatické načítanie)
-            // Najprv načítame hneď a potom každých 7 sekúnd
             loadAuctionDetail(auctionId); 
             auctionPollInterval = setInterval(() => {
                 console.log("Polling: Načítavam nové dáta...");
-                loadAuctionDetail(auctionId, true); // true = je to len obnova, neprepisovať formulár
-            }, 7000); // každých 7 sekúnd
+                loadAuctionDetail(auctionId, true); 
+            }, 7000); 
 
-            // 2. Spustíme odpočítavanie (každú sekundu)
             countdownTimerInterval = setInterval(updateCountdown, 1000);
         }
         
-        // <<< NOVÁ FUNKCIA: AKTUALIZUJE ČASOVAČ KAŽDÚ SEKUNDU >>>
         function updateCountdown() {
-            const timerElement = document.getElementById('countdown-timer'); // Element musí existovať
+            const timerElement = document.getElementById('countdown-timer'); 
             
-            // Ak nemáme čas konca alebo element, nerobíme nič
             if (!currentAuctionEndTime || !timerElement) {
                 return;
             }
@@ -298,21 +295,17 @@
             const bidSubmitButton = bidForm.querySelector('button[type="submit"]');
 
             if (remaining <= 0) {
-                // Dražba skončila
                 timerElement.innerHTML = "DRAŽBA SKONČENÁ";
                 timerElement.className = 'countdown-display ended';
                 
-                // Zastavíme oba časovače
                 stopTimers(); 
                 
-                // Vypneme možnosť prihadzovať
                 if(bidAmountInput) bidAmountInput.disabled = true;
                 if(bidSubmitButton) {
                     bidSubmitButton.disabled = true;
                     bidSubmitButton.textContent = 'Skončené';
                 }
             } else {
-                // Dražba beží, formátujeme čas
                 const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
@@ -323,77 +316,104 @@
                 timeString += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 
                 timerElement.innerHTML = `Do konca: ${timeString}`;
-                timerElement.className = 'countdown-display'; // Uistíme sa, že má správnu triedu
+                timerElement.className = 'countdown-display'; 
             }
         }
         
-        // --- UPRAVENÁ FUNKCIA: loadAuctionDetail ---
         async function loadAuctionDetail(auctionId, isRefresh = false) { 
             const cDiv=safeGet('detail-content'); const hList=safeGet('bid-history-list'); const bForm=safeGet('bid-form'); const bInput=safeGet('bidAmount'); 
             
-            // Ak to nie je refresh, ukážeme "Načítavam..."
             if (!isRefresh) {
                 cDiv.innerHTML='<p>Načítavam...</p>'; hList.innerHTML=''; 
             }
             
             try { 
-                const r=await fetch(`${API_URL}/api/drazby/${auctionId}`); if(!r.ok) throw new Error(`Server ${r.status}`); 
+                
+                // <<< TOTO JE UPRAVENÝ RIADOK s { cache: 'no-cache' } >>>
+                const r=await fetch(`${API_URL}/api/drazby/${auctionId}`, { cache: 'no-cache' }); if(!r.ok) throw new Error(`Server ${r.status}`); 
+                // <<< KONIEC ZMENY >>>
+
                 const d=await r.json(); 
 
-                // <<< ZMENA: Uložíme čas konca pre náš časovač >>>
                 currentAuctionEndTime = d.casZaciatku ? new Date(d.casSkoncenia).getTime() : null;
-                // <<< KONIEC ZMENY >>>
                 
                 const opts={dateStyle:'short',timeStyle:'short'}; 
                 const start=d.casZaciatku?new Date(d.casZaciatku).toLocaleString('sk-SK',opts):'N/A'; const end=d.casSkoncenia?new Date(d.casSkoncenia).toLocaleString('sk-SK',opts):'N/A'; 
                 let hb='Nikto'; if(d.highestBidder&&d.highestBidder.length>4){hb=`ID: ${d.highestBidder.substring(0,2)}...${d.highestBidder.substring(d.highestBidder.length-4)}`;} 
                 
-                // <<< ZMENA: Pridali sme DIV pre časovač >>>
                 cDiv.innerHTML=`<div class="detail-info"><h2>${d.predmetDrazby||'N/A'}</h2>
                     <p><strong>Adresa:</strong> ${d.adresa||'N/A'}, ${d.okres||'N/A'}</p>
                     <p><strong>Aktuálna cena:</strong> <span class="current-price">${(d.currentPrice||0).toLocaleString('sk-SK')} €</span></p>
                     <p><strong>Najvyšší prihadzujúci:</strong> ${hb}</p>
                     <hr>
                     <div id="countdown-timer" class="countdown-display">Načítavam čas...</div>
-                    
                     <p><strong>Najnižšie podanie:</strong> ${(d.najnizsiePodanie||0).toLocaleString('sk-SK')} €</p>
                     <p><strong>Minimálne prihodenie:</strong> ${(d.minimalnePrihodenie||0).toLocaleString('sk-SK')} €</p>
                     <p><strong>Začiatok:</strong> ${start}</p><p><strong>Koniec:</strong> ${end}</p>
                     <p><strong>Navrhovateľ:</strong> ${d.navrhovatel||'N/A'}</p></div>`; 
-                // <<< KONIEC ZMENY >>>
                 
                 bForm.dataset.auctionId=d._id; 
                 
                 const minBid=(d.currentPrice||0)+(d.minimalnePrihodenie||1); 
                 
-                // Ak to nie je len refresh, aktualizujeme aj hodnotu v inpute
                 if (!isRefresh) {
                     bInput.min=minBid; 
                     bInput.placeholder=`Min. ${minBid.toLocaleString('sk-SK')} €`; 
                     bInput.value=minBid; 
                 } else {
-                    // Ak je to refresh, len potichu upravíme minimum
                     bInput.min=minBid;
                     bInput.placeholder=`Min. ${minBid.toLocaleString('sk-SK')} €`; 
-                    // Nechceme používateľovi prepísať, čo má rozrobené, takže 'value' nemeníme
                 }
 
                 hList.innerHTML = ''; 
                 if(d.bidHistory&&d.bidHistory.length>0){d.bidHistory.reverse().forEach(b=>{const li=document.createElement('li'); const time=b.timestamp?new Date(b.timestamp).toLocaleString('sk-SK',opts):'N/A'; let bDisp='N/A'; if(b.bidderId&&b.bidderId.length>4){bDisp=`ID: ${b.bidderId.substring(0,2)}...${b.bidderId.substring(b.bidderId.length-4)}`;} li.innerHTML=`<strong>${(b.amount||0).toLocaleString('sk-SK')} €</strong> (${bDisp}) - ${time}`; hList.appendChild(li);});} else {hList.innerHTML='<li>Žiadne prihodenia.</li>';} 
 
-                // Spustíme odpočítavanie (ak už beží, reštartne sa vďaka funkcii update)
                 updateCountdown();
 
             } catch(e){
                 console.error("Chyba detailu:",e); 
                 cDiv.innerHTML=`<p style="color: red;">Chyba: ${e.message}</p>`;
-                stopTimers(); // Ak nastane chyba, zastavíme časovače
+                stopTimers(); 
             } 
         } 
         
-        async function handleDrazbaSubmit(event) { /* ... bez zmien ... */ }
+        async function handleDrazbaSubmit(event) { 
+             event.preventDefault(); 
+             const btn = safeGet('submitDrazbaButton');
+             btn.disabled = true; btn.textContent = 'Vytváram...';
+             
+             try {
+                 const data = {
+                     navrhovatel: safeGet('navrhovatel').value,
+                     okres: safeGet('okres').value,
+                     adresa: safeGet('adresa').value,
+                     predmetDrazby: safeGet('predmetDrazby').value,
+                     najnizsiePodanie: Number(safeGet('najnizsiePodanie').value),
+                     minimalnePrihodenie: Number(safeGet('minimalnePrihodenie').value),
+                     mobilNavrhovatela: safeGet('mobilNavrhovatela').value,
+                     casZaciatku: safeGet('casZaciatku').value,
+                     casSkoncenia: safeGet('casSkoncenia').value,
+                 };
+
+                 const r = await fetch(`${API_URL}/api/drazby`, {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify(data)
+                 });
+                 
+                 if (!r.ok) { const err = await r.json(); throw new Error(err.message || 'Chyba servera'); }
+                 
+                 alert('Dražba úspešne vytvorená!');
+                 showZaujemcaView(); // Presmerujeme na zoznam dražieb
+
+             } catch (error) {
+                 console.error("Chyba pri vytváraní dražby:", error);
+                 alert(`Chyba: ${error.message}`);
+             } finally {
+                 btn.disabled = false; btn.textContent = 'Vytvoriť';
+             }
+        }
         
-        // --- Handle Bidder Login (teraz spúšťa živé načítanie) ---
         async function handleBidderLoginSubmit(event) { 
             event.preventDefault(); const docIn=safeGet('bidderIdDoc'); const mobIn=safeGet('bidderMobile'); const aucIdIn=safeGet('loginAuctionId'); const maxIn=safeGet('bidderMaxBid'); const btn=safeGet('bidderLoginSubmitButton'); 
             const docId=docIn.value.trim().toUpperCase(); const mob=mobIn.value.trim(); const aucId=aucIdIn.value; const maxVal=maxIn.value.trim(); let maxBid=maxVal?Number(maxVal):null; 
@@ -403,20 +423,17 @@
             try { 
                 sessionStorage.setItem(`bidderId_${aucId}`, bidderId); 
                 console.log(`Bidder ID ${bidderId} uložené do sessionStorage pre ${aucId}.`); 
-                if(maxBid!==null){ /* ... odoslanie proxy bid ... */ } 
+                if(maxBid!==null){ /* TODO: odoslanie proxy bid */ } 
                 
                 if (bidderLoginSection) bidderLoginSection.style.display = 'none';
                 if (bidSection) bidSection.style.display = 'block';
                 
-                // <<< ZMENA: Spustíme živé načítanie >>>
                 startLiveAuctionUpdates(aucId);
-                // <<< KONIEC ZMENY >>>
                 
             } catch (e) { alert(`Chyba: ${e.message}`); } 
             finally { btn.disabled=false; btn.textContent='Pokračovať k prihodeniu'; }
         } 
         
-        // --- Handle Bid (teraz obnovuje dáta okamžite) ---
         async function handleBidSubmit(event) { 
             event.preventDefault(); const form=event.target; const aucId=form.dataset.auctionId; const amountIn=safeGet('bidAmount'); const btn=form.querySelector('button[type="submit"]'); 
             const amount=Number(amountIn.value); 
@@ -428,9 +445,11 @@
                 if(!r.ok){const err=await r.json(); throw new Error(err.message||'Chyba servera.');} 
                 alert('Prihodenie OK!'); 
                 
-                // <<< ZMENA: Okamžite načítame nové dáta (a reštartujeme časovače) >>>
-                startLiveAuctionUpdates(aucId);
-                // <<< KONIEC ZMENY >>>
+                // Okamžite obnovíme dáta
+                loadAuctionDetail(aucId);
+                // Poznámka: startLiveAuctionUpdates() tu nemusíme volať, 
+                // keďže loadAuctionDetail() nám už dá čerstvé dáta
+                // a časovače už bežia.
 
             } catch (e) { alert(`Chyba: ${e.message}`); } 
             finally { btn.disabled=false; btn.textContent='Prihodiť'; } 

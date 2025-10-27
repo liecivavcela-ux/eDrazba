@@ -2,16 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-// ===== KROK 1: Importujeme náš NOVÝ model 'Auction' =====
-// Cesta teraz vedie do adresára 'models', ktorý sme vytvorili
+// Importujeme náš model 'Auction'
 const Auction = require('./models/Auction.js'); 
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors()); // Povolí prístup z tvojho frontendu
-app.use(express.json()); // Toto je kľúčové, aby server rozumel JSON dátam z formulára
+app.use(cors()); 
+app.use(express.json()); 
 
 // --- Pripojenie k MongoDB (zostáva rovnaké) ---
 const dbURI = process.env.MONGODB_URI;
@@ -23,7 +22,6 @@ if (!dbURI) {
 mongoose.connect(dbURI)
   .then(() => {
     console.log('ÚSPECH: Databáza MongoDB je úspešne pripojená.');
-    // Server spustíme až po úspešnom pripojení k DB
     app.listen(port, () => {
       console.log(`Server bol spustený a beží na porte ${port}`);
     });
@@ -38,23 +36,16 @@ mongoose.connect(dbURI)
 // API Endpoints (Cesty)
 // -----------------------------------------------------------------
 
-// Testovacia cesta (tú môžeme nechať)
+// Testovacia cesta
 app.get('/', (req, res) => {
   res.send('Vitajte na E-Drazba API serveri! Frontend je pripojený.');
 });
 
 // --- ZMENA 1: Načítanie VŠETKÝCH aukcií ---
-// Zmenili sme cestu z '/api/auctions' na '/api/drazby', 
-// aby sa presne zhodovala s tým, čo volá tvoj 'index.html' (funkcia loadDrazby)
 app.get('/api/drazby', async (req, res) => {
   try {
-    // Nájdi všetky dokumenty v kolekcii 'Auction'
-    // a zoraď ich od najnovšie vytvorených (nech sú nové aukcie hore)
     const allAuctions = await Auction.find({}).sort({ createdAt: -1 });
-    
-    // Pošli ich naspäť klientovi (frontendu) ako JSON
     res.status(200).json(allAuctions);
-
   } catch (error) {
     console.error('Chyba pri načítaní dražieb:', error.message);
     res.status(500).json({ message: 'Nastala chyba na serveri.' });
@@ -62,29 +53,50 @@ app.get('/api/drazby', async (req, res) => {
 });
 
 // --- ZMENA 2: Vytvorenie NOVEJ aukcie ---
-// Toto je úplne nový endpoint, ktorý tvoj formulár volá
-// Prijíma 'POST' požiadavky na adresu '/api/drazby'
 app.post('/api/drazby', async (req, res) => {
   try {
-    // Dáta z formulára nám prídu v 'req.body' (vďaka app.use(express.json()))
     console.log('Server prijal dáta na vytvorenie dražby:', req.body);
-    
-    // Vytvoríme novú inštanciu modelu 'Auction' s dátami z formulára
     const novaDrazba = new Auction(req.body);
-    
-    // Uložíme ju do databázy
-    // (tu sa automaticky spustí aj ten náš 'pre-save' hook z modelu,
-    // ktorý nastaví 'currentPrice' = 'najnizsiePodanie')
     const ulozenaDrazba = await novaDrazba.save();
-    
-    // Ak sa uloženie podarilo, pošleme klientovi (frontendu) naspäť uložený objekt
-    // (je to dobrá prax, klient tak dostane napr. _id a 'createdAt' čas)
     res.status(201).json(ulozenaDrazba);
-
   } catch (error) {
-    // Ak nastane chyba (napr. chýbajú povinné polia, ktoré sme v schéme označili ako 'required: true')
     console.error('Chyba pri ukladaní novej dražby:', error.message);
-    // Pošleme chybu 400 (Bad Request) aj s dôvodom, prečo to zlyhalo
     res.status(400).json({ message: 'Chyba pri ukladaní dát: ' + error.message });
   }
 });
+
+// ===== NOVÝ KÓD ZAČÍNA TU =====
+
+// --- ZMENA 3: Načítanie JEDNEJ dražby podľa jej ID ---
+// Toto je nový endpoint, ktorý bude frontend volať, keď klikneš na detail
+// :id je "parameter" - znamená to, že čokoľvek, čo príde po /api/drazby/,
+// sa uloží do premennej req.params.id
+app.get('/api/drazby/:id', async (req, res) => {
+  try {
+    // 1. Získame ID z URL adresy
+    const auctionId = req.params.id;
+
+    // 2. Skontrolujeme, či je to platné MongoDB ID (ochrana pred chybou)
+    if (!mongoose.Types.ObjectId.isValid(auctionId)) {
+        return res.status(404).json({ message: 'Neplatné ID dražby' });
+    }
+
+    // 3. Nájdeme dražbu v databáze podľa tohto ID
+    const auction = await Auction.findById(auctionId);
+
+    // 4. Ak sa dražba s takým ID nenašla
+    if (!auction) {
+      return res.status(404).json({ message: 'Dražba nebola nájdená' });
+    }
+
+    // 5. Ak sme ju našli, pošleme ju klientovi
+    res.status(200).json(auction);
+
+  } catch (error) {
+    // 6. Ak nastala všeobecná chyba servera
+    console.error('Chyba pri načítaní detailu dražby:', error.message);
+    res.status(500).json({ message: 'Nastala chyba na serveri.' });
+  }
+});
+
+// ===== NOVÝ KÓD KONČÍ TU =====

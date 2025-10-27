@@ -248,8 +248,8 @@
                         <label for="bidAmount">Vaša ponuka (€):</label>
                         <input type="number" id="bidAmount" placeholder="Zadajte sumu" min="0" required>
                     </div>
-                    <button type"submit" class="btn-primary" style="width: auto;">Prihodiť</button>
-                </div>
+                    <button type="submit" class="btn-primary" style="width: auto;">Prihodiť</button>
+                    </div>
             </form>
 
             <h2 style="margin-top: 24px;">História prihodení</h2>
@@ -432,7 +432,6 @@
                 if (drazba.bidHistory && drazba.bidHistory.length > 0) {
                     drazba.bidHistory.reverse().forEach(bid => { 
                         const li = document.createElement('li');
-                        // ===== ZMENA: Krajšie formátovanie histórie =====
                         const bidTime = new Date(bid.timestamp).toLocaleString('sk-SK', options);
                         li.innerHTML = `<strong>${bid.amount.toLocaleString('sk-SK')} €</strong> (Používateľ: ${bid.bidder}) - ${bidTime}`;
                         historyList.appendChild(li);
@@ -500,67 +499,50 @@
             }
         }
 
-        // ===== UPRAVENÁ FUNKCIA: Spracovanie prihodenia =====
         async function handleBidSubmit(event) {
-            event.preventDefault(); // Zastavíme predvolené odoslanie formulára
+            event.preventDefault(); 
             console.log("Pokus o prihodenie...");
 
             const form = event.target;
-            const auctionId = form.dataset.auctionId; // Získame ID dražby
+            const auctionId = form.dataset.auctionId; 
             const bidAmountInput = document.getElementById('bidAmount');
             const bidButton = form.querySelector('button[type="submit"]');
 
-            // Získame sumu a premeníme ju na číslo
             const amount = Number(bidAmountInput.value);
 
-            // Zablokujeme tlačidlo, kým sa prihodenie spracováva
             bidButton.disabled = true;
             bidButton.textContent = 'Odosielam...';
 
             try {
-                // 1. Odošleme dáta na náš nový endpoint
-                // Musíme poslať JSON objekt v správnom formáte, ktorý server čaká: { "amount": suma }
                 const response = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ amount: amount }) // Posielame ako JSON
+                    body: JSON.stringify({ amount: amount }) 
                 });
 
-                // 2. Skontrolujeme, či server vrátil chybu
                 if (!response.ok) {
-                    // Ak áno (napr. nízka ponuka, aukcia skončila),
-                    // prečítame si chybovú správu a zobrazíme ju
                     const errorData = await response.json();
                     throw new Error(errorData.message || 'Neznáma chyba servera');
                 }
 
-                // 3. Ak všetko prebehlo OK, server nám vrátil aktualizovanú dražbu
                 const updatedAuction = await response.json();
                 console.log('Prihodenie úspešné:', updatedAuction);
                 
-                // Zobrazíme hlásenie o úspechu
                 alert('Vaše prihodenie bolo úspešne prijaté!');
 
-                // 4. NAJDÔLEŽITEJŠÍ KROK:
-                // Znovu načítame celý detail dražby. Tým sa automaticky
-                // aktualizuje zobrazená cena, história prihodení
-                // a aj minimálna suma v políčku na prihodenie.
                 loadAuctionDetail(auctionId);
 
             } catch (error) {
-                // 5. Ak nastala akákoľvek chyba (naša, alebo zo servera)
                 console.error('Chyba pri prihadzovaní:', error);
-                alert(`Chyba: ${error.message}`); // Zobrazíme chybu používateľovi
+                alert(`Chyba: ${error.message}`); 
             } finally {
-                // 6. Nakoniec vždy odblokujeme tlačidlo
                 bidButton.disabled = false;
                 bidButton.textContent = 'Prihodiť';
             }
         }
 
-        // --- INICIALIZÁCIA APLIKÁCIE ---
         document.addEventListener('DOMContentLoaded', () => {
              console.log("Kontrolný bod: DOM načítaný, inicializácia.");
              try {

@@ -3,72 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Dražba (Material Dizajn v1)</title> 
+    <title>E-Dražba (v9 - Upravený Formulár N.)</title> 
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS (s úpravami pre App Bar a Karty) --- */
-        :root { 
-            --google-blue: #1a73e8; 
-            --google-blue-hover: #1765cc; 
-            --background-color: #f1f3f4; /* Trochu tmavšie pozadie */
-            --surface-color: #ffffff; 
-            --text-primary: #202124; 
-            --text-secondary: #5f6368; 
-            --border-color: #dadce0; 
-            --error-color: #d93025; 
-            --success-color: #1e8e3e; 
-            --warning-color: #f9ab00; 
-        }
-        
-        /* Reset a základné nastavenia */
+        /* --- CSS (bez zmien oproti v7) --- */
+        :root { --google-blue: #1a73e8; --google-blue-hover: #1765cc; --background-color: #f1f3f4; --surface-color: #ffffff; --text-primary: #202124; --text-secondary: #5f6368; --border-color: #dadce0; --error-color: #d93025; --success-color: #1e8e3e; --warning-color: #f9ab00; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body { 
-            font-family: 'Roboto', sans-serif; 
-            background-color: var(--background-color); 
-            color: var(--text-primary); 
-            padding-top: 88px; /* Priestor pre fixnú hornú lištu + okraj */
-            padding-bottom: 24px;
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            min-height: 100vh; 
-        }
-        
-        /* <<< NOVÉ: Horná Lišta (App Bar) >>> */
-        #app-bar {
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 64px; 
-            background-color: var(--surface-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-            display: flex; align-items: center;
-            padding: 0 24px; z-index: 1000; 
-        }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--background-color); color: var(--text-primary); padding-top: 88px; padding-bottom: 24px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        #app-bar { position: fixed; top: 0; left: 0; width: 100%; height: 64px; background-color: var(--surface-color); box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; padding: 0 24px; z-index: 1000; }
         #app-bar h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
-        
-        /* Kontajner pre hlavný obsah (views) */
         main { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; padding: 0 16px; }
-
-        /* --- Vylepšenia Panelov a Kariet --- */
-        .panel { 
-            background-color: var(--surface-color); border-radius: 8px; border: 1px solid var(--border-color); 
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); 
-            padding: 32px; width: 100%; margin-bottom: 24px; 
-        }
-        #moje-drazby-list .drazba-item, #drazby-list .drazba-item { 
-            position: relative; background-color: var(--surface-color); border: 1px solid var(--border-color);
-            border-radius: 8px; padding: 20px; padding-bottom: 70px; 
-            display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start;
-            box-shadow: 0 1px 3px rgba(60,64,67,0.2), 0 2px 6px rgba(60,64,67,0.1);
-            transition: box-shadow 0.2s ease-in-out; 
-        }
-        #moje-drazby-list .drazba-item:hover, #drazby-list .drazba-item:hover {
-             box-shadow: 0 4px 8px rgba(60,64,67,0.3), 0 6px 12px rgba(60,64,67,0.2); 
-        }
-        .drazba-item-thumb { width: 120px; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-color); }
-
-        /* --- Ostatné štýly (väčšinou bez zmien) --- */
         #role-selection { display: flex; flex-direction: column; align-items: center; text-align: center; background-color: var(--surface-color); border-radius: 8px; padding: 40px; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); width: 100%; max-width: 500px; box-sizing: border-box; margin-top: 24px; }
         #role-selection h1 { font-size: 28px; font-weight: 500; margin: 0 0 16px 0; }
         #role-selection p { font-size: 16px; color: var(--text-secondary); margin: 0 0 32px 0; max-width: 400px; }
@@ -78,8 +23,9 @@
         .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; }
         .view-header button { width: auto; }
         .view-header span { font-size: 14px; color: var(--text-secondary); }
+        .panel { background-color: var(--surface-color); border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); padding: 32px; width: 100%; margin-bottom: 24px; }
         h2 { font-size: 24px; font-weight: 500; margin-top: 0; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 24px; }
-        h3 { font-size: 20px; font-weight: 500; margin-top: 32px; border-top: 1px solid var(--border-color); padding-top: 32px; margin-bottom: 16px; }
+        h3 { font-size: 20px; font-weight: 500; margin-top: 32px; /* border-top: 1px solid var(--border-color); */ padding-top: 0; /* Odstránený padding hore */ margin-bottom: 16px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .form-grid-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
         .form-group { margin: 0; }
@@ -98,6 +44,10 @@
         #filter-box .form-group label { font-size: 13px; margin-bottom: 6px; }
         #filter-box .form-group select, #filter-box .form-group input { font-size: 15px; padding: 10px 14px; }
         #drazby-list { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 24px; } 
+        #moje-drazby-list .drazba-item, #drazby-list .drazba-item { position: relative; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; padding-bottom: 70px; display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; box-shadow: 0 1px 3px rgba(60,64,67,0.2), 0 2px 6px rgba(60,64,67,0.1); transition: box-shadow 0.2s ease-in-out; }
+        #moje-drazby-list .drazba-item:hover, #drazby-list .drazba-item:hover { box-shadow: 0 4px 8px rgba(60,64,67,0.3), 0 6px 12px rgba(60,64,67,0.2); }
+        .drazba-item-thumb { width: 120px; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-color); }
+        .drazba-item-info { grid-column: 2 / 3; }
         .drazba-item-actions { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 12px; }
         .drazba-item-actions button { width: auto; padding: 8px 16px; }
         .btn-edit { background-color: var(--warning-color); color: white; } .btn-edit:hover { background-color: #f29900; } 
@@ -109,7 +59,9 @@
         .drazba-item-grid { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 14px; margin-top: 10px;}
         .drazba-item-grid p { margin: 3px 0; display: flex; align-items: center; } 
         .drazba-item-grid p strong { color: var(--text-primary); min-width: 110px; display: inline-block; }
-        .item-links { margin-top: 10px; } .item-links a { font-size: 13px; margin-right: 16px; color: var(--google-blue); text-decoration: none; } .item-links a:hover { text-decoration: underline; }
+        .item-links { margin-top: 10px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;} 
+        .item-links a, .qr-code-link { font-size: 13px; color: var(--google-blue); text-decoration: none; cursor: pointer;}
+        .item-links a:hover, .qr-code-link:hover { text-decoration: underline; }
         .list-countdown { font-family: 'Roboto Mono', monospace; font-size: 13px; color: var(--error-color); font-weight: 500; margin-left: 8px; } .list-countdown.ended { color: var(--text-secondary); }
         .detail-info h2 { border: none; padding-bottom: 8px; margin-bottom: 16px; font-size: 24px; }
         .detail-info p { font-size: 16px; margin: 10px 0; color: var(--text-secondary); } .detail-info p strong { color: var(--text-primary); margin-right: 8px; }
@@ -135,38 +87,92 @@
 </head>
 <body>
 
-    <header id="app-bar">
-        <h1>E-Dražba</h1>
-    </header>
+    <header id="app-bar"> <h1>E-Dražba</h1> </header>
 
     <main>
-        <div id="role-selection"> <h1>Vitajte v E-Dražbe</h1> <p>Ste tu, aby ste navrhli novú dražbu, alebo sa chcete zúčastniť ako záujemca?</p> <div class="role-buttons"> <button class="btn-primary" onclick="showNavrhovatelLoginView()">Som Navrhovateľ</button> <button class="btn-primary" onclick="showZaujemcaView()">Som Záujemca (kupujúci)</button> </div> </div>
-        <div id="navrhovatel-login-view"> <div class="view-header"> <button class="btn-secondary" onclick="showRoleSelection()">Späť</button> </div> <div class="panel" style="max-width: 500px; margin: 24px auto;"> <h2>Prihlásenie navrhovateľa</h2> <p>Zadajte Vaše údaje...</p> <form id="navrhovatel-login-form" onsubmit="handleNavrhovatelLogin(event)"> <div class="form-group" style="margin-bottom: 16px;"> <label for="navrhovatelIdDoc">Číslo dokladu (OP):</label> <input type="text" id="navrhovatelIdDoc" required> </div> <div class="form-group" style="margin-bottom: 24px;"> <label for="navrhovatelMobil">Mobil (09XXNXXXXX):</label> <input type="tel" id="navrhovatelMobil" placeholder="09XXNXXXXX" required> </div> <button type="submit" class="btn-primary" style="width: 100%;">Prihlásiť sa</button> </form> </div> </div>
-        <div id="navrhovatel-dashboard-view"> <div class="view-header"> <span id="navrhovatel-identita">Načítavam...</span> <button class="btn-secondary" onclick="handleNavrhovatelLogout()">Odhlásiť sa</button> </div> <div class="panel"> <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;"> <h2>Môj prehľad dražieb</h2> <button class="btn-primary" onclick="showCreateDrazbaForm()">+ Vytvoriť novú dražbu</button> </div> <div id="moje-drazby-list" style="margin-top: 24px;"> <p>Načítavam...</p> </div> </div> </div>
-        <div id="navrhovatel-view"> <div class="view-header"> <button class="btn-secondary" onclick="showNavrhovatelDashboard()">Späť na prehľad</button> </div> <div class="panel"> <h2 id="navrhovatel-form-title">Navrhnúť novú dražbu</h2> <form id="drazba-form" onsubmit="handleDrazbaFormSubmit(event)"> <input type="hidden" id="drazbaIdToEdit" value=""> <h3>Kontaktná osoba (Licitátor)</h3> <p>Tieto údaje...</p> <div class="form-grid-tri"> <div class="form-group"> <label for="licitatorMeno">Meno / Názov:</label> <input type="text" id="licitatorMeno" required> </div> <div class="form-group"> <label for="navrhovatel">Typ navrhovateľa:</label> <select id="navrhovatel" required> <option value="">-- Vyberte --</option><option>Vlastník</option><option>Dražobník</option><option>Exekútor</option><option>Správca</option> </select> </div> <div class="form-group"> <label for="licitatorMobil">Mobil:</label> <input type="tel" id="licitatorMobil" placeholder="09XXNXXXXX" required readonly style="background: #eee;"> </div> </div> <div class="form-grid-tri" style="margin-top: 16px;"> <div class="form-group form-group-full" style="grid-column: 1 / span 2;"> <label for="licitatorAdresa">Adresa: <a href="#" id="licitatorMapLink" target="_blank" class="address-map-link" style="display: none;">(Mapa)</a> </label> <input type="text" id="licitatorAdresa" placeholder="Ulica Číslo, Mesto" required oninput="updateLicitatorMapLink()"> </div> <div class="form-group"> <label for="licitatorEmail">Email: <span class="optional">(nepovinné)</span></label> <input type="email" id="licitatorEmail"> </div> </div> <h3 style="margin-top: 32px;">Predmet dražby</h3> <div class="form-grid"> <div class="form-group"> <label for="predmetTyp">Predmet dražby:</label> <select id="predmetTyp" required> <option value="">-- Vyberte --</option><option>Byt</option><option>Rodinný dom</option><option>Pozemok</option><option>Garáž</option><option>Stavba</option><option>Iná nehnuteľnosť</option><option>Vec</option><option>Súbor vecí</option><option>Právo / Súbor práv</option><option>Iná majetková hodnota</option><option>Hromadná vec</option> </select> </div> <div class="form-group"> <label for="okres">Okres:</label> <select id="okres" required> <option value="">-- Vyberte okres --</option> <option>Bánovce nad Bebravou</option><option>Banská Bystrica</option><option>Banská Štiavnica</option><option>Bardejov</option><option>Bratislava I</option><option>Bratislava II</option><option>Bratislava III</option><option>Bratislava IV</option><option>Bratislava V</option><option>Brezno</option><option>Bytča</option><option>Čadca</option><option>Detva</option><option>Dolný Kubín</option><option>Dunajská Streda</option><option>Galanta</option><option>Gelnica</option><option>Hlohovec</option><option>Humenné</option><option>Ilava</option><option>Kežmarok</option><option>Komárno</option><option>Košice I</option><option>Košice II</option><option>Košice III</option><option>Košice IV</option><option>Košice-okolie</option><option>Krupina</option><option>Kysucké Nové Mesto</option><option>Levice</option><option>Levoča</option><option>Liptovský Mikuláš</option><option>Lučenec</option><option>Malacky</option><option>Martin</option><option>Medzilaborce</option><option>Michalovce</option><option>Myjava</option><option>Námestovo</option><option>Nitra</option><option>Nové Mesto nad Váhom</option><option>Nové Zámky</option><option>Partizánske</option><option>Pezinok</option><option>Piešťany</option><option>Poltár</option><option>Poprad</option><option>Považská Bystrica</option><option>Prešov</option><option>Prievidza</option><option>Púchov</option><option>Revúca</option><option>Rimavská Sobota</option><option>Rožňava</option><option>Ružomberok</option><option>Sabinov</option><option>Senec</option><option>Senica</option><option>Skalica</option><option>Snina</option><option>Sobrance</option><option>Spišská Nová Ves</option><option>Stará Ľubovňa</option><option>Stropkov</option><option>Svidník</option><option>Šaľa</option><option>Topoľčany</option><option>Trebišov</option><option>Trenčín</option><option>Trnava</option><option>Turčianske Teplice</option><option>Tvrdošín</option><option>Veľký Krtíš</option><option>Vranov nad Topľou</option><option>Zlaté Moravce</option><option>Zvolen</option><option>Žarnovica</option><option>Žiar nad Hronom</option><option>Žilina</option> </select> </div> </div> <div class="form-group form-group-full" style="margin-top: 16px;"> <label for="adresa">Adresa predmetu dražby: <a href="#" id="adresaMapLink" target="_blank" class="address-map-link" style="display: none;">(Mapa)</a> </label> <input type="text" id="adresa" placeholder="Ulica Číslo, Mesto" required oninput="updatePredmetMapLink()"> </div> <div class="form-group form-group-full" style="margin-top: 16px;"> <label for="predmetDrazby">Opis predmetu:</label> <textarea id="predmetDrazby" placeholder="Podrobný opis..." required></textarea> </div> <div class="form-grid-tri" style="margin-top: 16px;"> <div class="form-group"> <label for="obrazokUrl">Odkaz na obrázok: <span class="optional">(nepovinné)</span></label> <input type="url" id="obrazokUrl" placeholder="https://..."> </div> <div class="form-group"> <label for="webOdkaz">Odkaz na web: <span class="optional">(nepovinné)</span></label> <input type="url" id="webOdkaz" placeholder="https://..."> </div> <div class="form-group"> <label for="prilohaLv">List vlastníctva (PDF): <span class="optional">(nepovinné)</span></label> <input type="file" id="prilohaLv" accept=".pdf"> </div> </div> <h3 style="margin-top: 32px;">Podmienky dražby</h3> <div class="form-grid"> <div class="form-group"> <label for="najnizsiePodanie">Najnižšie podanie (€):</label> <input type="number" id="najnizsiePodanie" min="0" required> </div> <div class="form-group"> <label for="minimalnePrihodenie">Min. prihodenie (€):</label> <input type="number" id="minimalnePrihodenie" min="1" required> </div> <div class="form-group"> <label for="casZaciatku">Začiatok:</label> <input type="datetime-local" id="casZaciatku" required> </div> <div class="form-group"> <label for="casSkoncenia">Koniec:</label> <input type="datetime-local" id="casSkoncenia" required> </div> </div> <button type="submit" id="submitDrazbaButton" class="btn-primary" style="margin-top: 32px; padding: 16px; font-size: 16px; width: 100%;">Vytvoriť dražbu</button> </form> </div> </div>
-        <div id="zaujemca-view"> <div class="view-header"> <button class="btn-secondary" onclick="showRoleSelection()">Zmeniť rolu</button> </div> <div class="panel"> <h2>Vyhľadať dražbu</h2> <div id="filter-box"> <div class="form-group"> <label for="filter-okres">Okres:</label> <select id="filter-okres" onchange="filterAndDisplayAuctions()"> <option value="">-- Všetky --</option> <option>Bánovce nad Bebravou</option><option>Banská Bystrica</option><option>Banská Štiavnica</option><option>Bardejov</option><option>Bratislava I</option><option>Bratislava II</option><option>Bratislava III</option><option>Bratislava IV</option><option>Bratislava V</option><option>Brezno</option><option>Bytča</option><option>Čadca</option><option>Detva</option><option>Dolný Kubín</option><option>Dunajská Streda</option><option>Galanta</option><option>Gelnica</option><option>Hlohovec</option><option>Humenné</option><option>Ilava</option><option>Kežmarok</option><option>Komárno</option><option>Košice I</option><option>Košice II</option><option>Košice III</option><option>Košice IV</option><option>Košice-okolie</option><option>Krupina</option><option>Kysucké Nové Mesto</option><option>Levice</option><option>Levoča</option><option>Liptovský Mikuláš</option><option>Lučenec</option><option>Malacky</option><option>Martin</option><option>Medzilaborce</option><option>Michalovce</option><option>Myjava</option><option>Námestovo</option><option>Nitra</option><option>Nové Mesto nad Váhom</option><option>Nové Zámky</option><option>Partizánske</option><option>Pezinok</option><option>Piešťany</option><option>Poltár</option><option>Poprad</option><option>Považská Bystrica</option><option>Prešov</option><option>Prievidza</option><option>Púchov</option><option>Revúca</option><option>Rimavská Sobota</option><option>Rožňava</option><option>Ružomberok</option><option>Sabinov</option><option>Senec</option><option>Senica</option><option>Skalica</option><option>Snina</option><option>Sobrance</option><option>Spišská Nová Ves</option><option>Stará Ľubovňa</option><option>Stropkov</option><option>Svidník</option><option>Šaľa</option><option>Topoľčany</option><option>Trebišov</option><option>Trenčín</option><option>Trnava</option><option>Turčianske Teplice</option><option>Tvrdošín</option><option>Veľký Krtíš</option><option>Vranov nad Topľou</option><option>Zlaté Moravce</option><option>Zvolen</option><option>Žarnovica</option><option>Žiar nad Hronom</option><option>Žilina</option> </select> </div> <div class="form-group"> <label for="filter-predmet-typ">Predmet:</label> <select id="filter-predmet-typ" onchange="filterAndDisplayAuctions()"> <option value="">-- Všetky --</option> <option>Byt</option><option>Rodinný dom</option><option>Pozemok</option><option>Garáž</option><option>Stavba</option><option>Iná nehnuteľnosť</option><option>Vec</option><option>Súbor vecí</option><option>Právo / Súbor práv</option><option>Iná majetková hodnota</option><option>Hromadná vec</option> </select> </div> <div class="form-group"> <label for="filter-navrhovatel">Navrhovateľ:</label> <select id="filter-navrhovatel" onchange="filterAndDisplayAuctions()"> <option value="">-- Všetci --</option> <option>Vlastník</option><option>Dražobník</option><option>Exekútor</option><option>Správca</option> </select> </div> <div class="form-group"> <label for="filter-datum-zaciatku">Začiatok od:</label> <input type="date" id="filter-datum-zaciatku" onchange="filterAndDisplayAuctions()"> </div> </div> </div> <div class="panel"> <h2>Prehľad aktuálnych dražieb</h2> <div id="drazby-list"> <p>Načítavam...</p> </div> </div> </div>
-        <div id="detail-view"> <div class="view-header"> <button class="btn-secondary" id="detail-back-button" onclick="goBackFromDetail()">Späť</button> </div> <div class="panel"> <div id="navrhovatel-info-box" style="display: none;">Sledujete priebeh Vašej dražby (len na čítanie).</div> <div id="bidder-login-section" style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px;"> <h2>Identifikácia</h2> <p>Zadajte Vaše údaje...</p> <form id="bidder-login-form" onsubmit="handleBidderLoginSubmit(event)"> <input type="hidden" id="loginAuctionId" value=""> <div class="form-group"> <label for="bidderIdDoc">Číslo dokladu:</label> <input type="text" id="bidderIdDoc" required> </div> <div class="form-group"> <label for="bidderMobile">Mobil (09XXNXXXXX):</label> <input type="tel" id="bidderMobile" placeholder="09XXNXXXXX" required> </div> <div class="form-group"> <label for="bidderMaxBid">Max ponuka (€) (nepov.):</label> <input type="number" id="bidderMaxBid" min="0"></div> <button type="submit" id="bidderLoginSubmitButton" class="btn-primary" style="width: 100%;">Pokračovať k prihodeniu</button> </form> </div> <div id="bid-section" style="display: none;"> <div id="detail-content"> <p>Načítavam...</p> </div> <h2>Prihodenie</h2> <form id="bid-form" onsubmit="handleBidSubmit(event)" data-auction-id=""> <div class="bid-form-grid"> <div> <label for="bidAmount">Vaša ponuka (€):</label> <input type="number" id="bidAmount" min="0" required> </div> <button type="submit" class="btn-primary">Prihodiť</button> </div> </form> <h2 style="margin-top: 32px;">História prihodení</h2> <ul id="bid-history-list"> <li>Načítavam...</li> </ul> </div> </div> </div>
+        <div id="role-selection"> <h1>Vitajte v E-Dražbe</h1> <p>Ste tu...</p> <div class="role-buttons"> <button class="btn-primary" onclick="showNavrhovatelLoginView()">Som Navrhovateľ</button> <button class="btn-primary" onclick="showZaujemcaView()">Som Záujemca</button> </div> </div>
+        <div id="navrhovatel-login-view"> <div class="view-header"> <button class="btn-secondary" onclick="showRoleSelection()">Späť</button> </div> <div class="panel" style="max-width: 500px; margin: 24px auto;"> <h2>Prihlásenie navrhovateľa</h2> <p>Zadajte Vaše údaje...</p> <form id="navrhovatel-login-form" onsubmit="handleNavrhovatelLogin(event)"> <div class="form-group" style="margin-bottom: 16px;"> <label for="navrhovatelIdDoc">Doklad (OP):</label> <input type="text" id="navrhovatelIdDoc" required> </div> <div class="form-group" style="margin-bottom: 24px;"> <label for="navrhovatelMobil">Mobil:</label> <input type="tel" id="navrhovatelMobil" placeholder="09XXNXXXXX" required> </div> <button type="submit" class="btn-primary" style="width: 100%;">Prihlásiť sa</button> </form> </div> </div>
+        <div id="navrhovatel-dashboard-view"> <div class="view-header"> <span id="navrhovatel-identita">...</span> <button class="btn-secondary" onclick="handleNavrhovatelLogout()">Odhlásiť sa</button> </div> <div class="panel"> <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;"> <h2>Môj prehľad dražieb</h2> <button class="btn-primary" onclick="showCreateDrazbaForm()">+ Vytvoriť novú</button> </div> <div id="moje-drazby-list" style="margin-top: 24px;"> <p>Načítavam...</p> </div> </div> </div>
+        
+        <div id="navrhovatel-view"> 
+             <div class="view-header"> <button class="btn-secondary" onclick="showNavrhovatelDashboard()">Späť na prehľad</button> </div> 
+             <div class="panel"> 
+                 <h2 id="navrhovatel-form-title">Navrhnúť novú dražbu</h2> 
+                 <form id="drazba-form" onsubmit="handleDrazbaFormSubmit(event)"> 
+                    <input type="hidden" id="drazbaIdToEdit" value=""> 
+                    
+                    <h3>Navrhovateľ</h3>
+                    <div class="form-grid-tri">
+                        <div class="form-group"> 
+                            <label for="navrhovatel">Typ navrhovateľa:</label> 
+                            <select id="navrhovatel" required> 
+                                <option value="">-- Vyberte --</option>
+                                <option>Vlastník</option>
+                                <option>Dražobník</option>
+                                <option>Exekútor</option>
+                                <option>Správca</option> 
+                                <option>Záložný veriteľ</option> <option>Obec/ Mesto</option> <option>VÚC</option> </select> 
+                        </div>
+                        <div class="form-group"> 
+                            <label for="navrhovatelNazov">Názov / Meno Priezvisko:</label> 
+                            <input type="text" id="navrhovatelNazov" required> 
+                        </div>
+                         <div class="form-group"> 
+                            <label for="navrhovatelIco">IČO: <span class="optional">(nepovinné)</span></label> 
+                            <input type="text" id="navrhovatelIco" pattern="\d*"> </div>
+                    </div>
+                     <div class="form-group form-group-full" style="margin-top: 16px;"> 
+                        <label for="navrhovatelAdresa">Adresa navrhovateľa: <a href="#" id="navrhovatelMapLink" target="_blank" class="address-map-link" style="display: none;">(Mapa)</a> </label> 
+                        <input type="text" id="navrhovatelAdresa" placeholder="Ulica Číslo, Mesto" required oninput="updateNavrhovatelMapLink()"> 
+                    </div>
+
+                    <h3 style="margin-top: 32px;">Kontaktná osoba (Licitátor)</h3>
+                    <p>Údaje osoby zodpovednej za komunikáciu ohľadom dražby.</p>
+                     <div class="form-grid">
+                        <div class="form-group"> 
+                            <label for="licitatorMobil">Mobil:</label> 
+                            <input type="tel" id="licitatorMobil" placeholder="09XXNXXXXX" required readonly style="background: #eee;"> 
+                        </div>
+                         <div class="form-group"> 
+                            <label for="licitatorEmail">Email: <span class="optional">(nepovinné)</span></label> 
+                            <input type="email" id="licitatorEmail"> 
+                        </div>
+                        </div> 
+
+                    <h3 style="margin-top: 32px;">Predmet dražby</h3> 
+                    <div class="form-grid"> <div class="form-group"> <label for="predmetTyp">Predmet:</label> <select id="predmetTyp" required> <option value="">-- Vyberte --</option><option>Byt</option><option>Rodinný dom</option><option>Pozemok</option><option>Garáž</option><option>Stavba</option><option>Iná nehnuteľnosť</option><option>Vec</option><option>Súbor vecí</option><option>Právo / Súbor práv</option><option>Iná majetková hodnota</option><option>Hromadná vec</option> </select> </div> <div class="form-group"> <label for="okres">Okres:</label> <select id="okres" required> <option value="">-- Okres --</option> <option>Bánovce nad Bebravou</option><option>Banská Bystrica</option><option>Banská Štiavnica</option><option>Bardejov</option><option>Bratislava I</option><option>Bratislava II</option><option>Bratislava III</option><option>Bratislava IV</option><option>Bratislava V</option><option>Brezno</option><option>Bytča</option><option>Čadca</option><option>Detva</option><option>Dolný Kubín</option><option>Dunajská Streda</option><option>Galanta</option><option>Gelnica</option><option>Hlohovec</option><option>Humenné</option><option>Ilava</option><option>Kežmarok</option><option>Komárno</option><option>Košice I</option><option>Košice II</option><option>Košice III</option><option>Košice IV</option><option>Košice-okolie</option><option>Krupina</option><option>Kysucké Nové Mesto</option><option>Levice</option><option>Levoča</option><option>Liptovský Mikuláš</option><option>Lučenec</option><option>Malacky</option><option>Martin</option><option>Medzilaborce</option><option>Michalovce</option><option>Myjava</option><option>Námestovo</option><option>Nitra</option><option>Nové Mesto nad Váhom</option><option>Nové Zámky</option><option>Partizánske</option><option>Pezinok</option><option>Piešťany</option><option>Poltár</option><option>Poprad</option><option>Považská Bystrica</option><option>Prešov</option><option>Prievidza</option><option>Púchov</option><option>Revúca</option><option>Rimavská Sobota</option><option>Rožňava</option><option>Ružomberok</option><option>Sabinov</option><option>Senec</option><option>Senica</option><option>Skalica</option><option>Snina</option><option>Sobrance</option><option>Spišská Nová Ves</option><option>Stará Ľubovňa</option><option>Stropkov</option><option>Svidník</option><option>Šaľa</option><option>Topoľčany</option><option>Trebišov</option><option>Trenčín</option><option>Trnava</option><option>Turčianske Teplice</option><option>Tvrdošín</option><option>Veľký Krtíš</option><option>Vranov nad Topľou</option><option>Zlaté Moravce</option><option>Zvolen</option><option>Žarnovica</option><option>Žiar nad Hronom</option><option>Žilina</option> </select> </div> </div> 
+                    <div class="form-group form-group-full" style="margin-top: 16px;"> <label for="adresa">Adresa predmetu: <a href="#" id="adresaMapLink" target="_blank" class="address-map-link" style="display: none;">(Mapa)</a> </label> <input type="text" id="adresa" placeholder="Ulica Číslo, Mesto" required oninput="updatePredmetMapLink()"> </div> 
+                    <div class="form-group form-group-full" style="margin-top: 16px;"> <label for="predmetDrazby">Opis:</label> <textarea id="predmetDrazby" placeholder="Podrobný opis..." required></textarea> </div> 
+                    <div class="form-grid-tri" style="margin-top: 16px;"> <div class="form-group"> <label for="obrazokUrl">Obrázok URL: <span class="optional">(nepov.)</span></label> <input type="url" id="obrazokUrl" placeholder="https://..."> </div> <div class="form-group"> <label for="webOdkaz">Web URL: <span class="optional">(nepov.)</span></label> <input type="url" id="webOdkaz" placeholder="https://..."> </div> <div class="form-group"> <label for="prilohaLv">LV (PDF): <span class="optional">(nepov.)</span></label> <input type="file" id="prilohaLv" accept=".pdf"> </div> </div> 
+                    
+                    <h3 style="margin-top: 32px;">Podmienky</h3> 
+                    <div class="form-grid"> <div class="form-group"> <label for="najnizsiePodanie">Najnižšie podanie (€):</label> <input type="number" id="najnizsiePodanie" min="0" required> </div> <div class="form-group"> <label for="minimalnePrihodenie">Min. prihodenie (€):</label> <input type="number" id="minimalnePrihodenie" min="1" required> </div> <div class="form-group"> <label for="casZaciatku">Začiatok:</label> <input type="datetime-local" id="casZaciatku" required> </div> <div class="form-group"> <label for="casSkoncenia">Koniec:</label> <input type="datetime-local" id="casSkoncenia" required> </div> </div> 
+                    
+                    <button type="submit" id="submitDrazbaButton" class="btn-primary" style="margin-top: 32px; padding: 16px; font-size: 16px; width: 100%;">Vytvoriť dražbu</button> 
+                 </form> 
+             </div> 
+        </div>
+
+        <div id="zaujemca-view"> <div class="view-header"> <button class="btn-secondary" onclick="showRoleSelection()">Zmeniť rolu</button> </div> <div class="panel"> <h2>Vyhľadať dražbu</h2> <div id="filter-box"> <div class="form-group"> <label for="filter-okres">Okres:</label> <select id="filter-okres" onchange="filterAndDisplayAuctions()"> <option value="">-- Všetky --</option> <option>Bánovce nad Bebravou</option><option>Banská Bystrica</option><option>Banská Štiavnica</option><option>Bardejov</option><option>Bratislava I</option><option>Bratislava II</option><option>Bratislava III</option><option>Bratislava IV</option><option>Bratislava V</option><option>Brezno</option><option>Bytča</option><option>Čadca</option><option>Detva</option><option>Dolný Kubín</option><option>Dunajská Streda</option><option>Galanta</option><option>Gelnica</option><option>Hlohovec</option><option>Humenné</option><option>Ilava</option><option>Kežmarok</option><option>Komárno</option><option>Košice I</option><option>Košice II</option><option>Košice III</option><option>Košice IV</option><option>Košice-okolie</option><option>Krupina</option><option>Kysucké Nové Mesto</option><option>Levice</option><option>Levoča</option><option>Liptovský Mikuláš</option><option>Lučenec</option><option>Malacky</option><option>Martin</option><option>Medzilaborce</option><option>Michalovce</option><option>Myjava</option><option>Námestovo</option><option>Nitra</option><option>Nové Mesto nad Váhom</option><option>Nové Zámky</option><option>Partizánske</option><option>Pezinok</option><option>Piešťany</option><option>Poltár</option><option>Poprad</option><option>Považská Bystrica</option><option>Prešov</option><option>Prievidza</option><option>Púchov</option><option>Revúca</option><option>Rimavská Sobota</option><option>Rožňava</option><option>Ružomberok</option><option>Sabinov</option><option>Senec</option><option>Senica</option><option>Skalica</option><option>Snina</option><option>Sobrance</option><option>Spišská Nová Ves</option><option>Stará Ľubovňa</option><option>Stropkov</option><option>Svidník</option><option>Šaľa</option><option>Topoľčany</option><option>Trebišov</option><option>Trenčín</option><option>Trnava</option><option>Turčianske Teplice</option><option>Tvrdošín</option><option>Veľký Krtíš</option><option>Vranov nad Topľou</option><option>Zlaté Moravce</option><option>Zvolen</option><option>Žarnovica</option><option>Žiar nad Hronom</option><option>Žilina</option> </select> </div> <div class="form-group"> <label for="filter-predmet-typ">Predmet:</label> <select id="filter-predmet-typ" onchange="filterAndDisplayAuctions()"> <option value="">-- Všetky --</option> <option>Byt</option><option>Rodinný dom</option><option>Pozemok</option><option>Garáž</option><option>Stavba</option><option>Iná nehnuteľnosť</option><option>Vec</option><option>Súbor vecí</option><option>Právo / Súbor práv</option><option>Iná majetková hodnota</option><option>Hromadná vec</option> </select> </div> <div class="form-group"> <label for="filter-navrhovatel">Navrhovateľ:</label> <select id="filter-navrhovatel" onchange="filterAndDisplayAuctions()"> <option value="">-- Všetci --</option> <option>Vlastník</option><option>Dražobník</option><option>Exekútor</option><option>Správca</option><option>Záložný veriteľ</option><option>Obec/ Mesto</option><option>VÚC</option> </select> </div> <div class="form-group"> <label for="filter-datum-zaciatku">Začiatok od:</label> <input type="date" id="filter-datum-zaciatku" onchange="filterAndDisplayAuctions()"> </div> </div> </div> <div class="panel"> <h2>Prehľad aktuálnych dražieb</h2> <div id="drazby-list"> <p>Načítavam...</p> </div> </div> </div>
+        <div id="detail-view"> <div class="view-header"> <button class="btn-secondary" id="detail-back-button" onclick="goBackFromDetail()">Späť</button> </div> <div class="panel"> <div id="navrhovatel-info-box" style="display: none;">Sledujete priebeh Vašej dražby (len na čítanie).</div> <div id="bidder-login-section" style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px;"> <h2>Identifikácia</h2> <p>Zadajte Vaše údaje...</p> <form id="bidder-login-form" onsubmit="handleBidderLoginSubmit(event)"> <input type="hidden" id="loginAuctionId" value=""> <div class="form-group"> <label for="bidderIdDoc">Doklad:</label> <input type="text" id="bidderIdDoc" required> </div> <div class="form-group"> <label for="bidderMobile">Mobil:</label> <input type="tel" id="bidderMobile" placeholder="09XXNXXXXX" required> </div> <div class="form-group"> <label for="bidderMaxBid">Max ponuka (€) (nepov.):</label> <input type="number" id="bidderMaxBid" min="0"></div> <button type="submit" id="bidderLoginSubmitButton" class="btn-primary" style="width: 100%;">Pokračovať</button> </form> </div> <div id="bid-section" style="display: none;"> <div id="detail-content"> <p>Načítavam...</p> </div> <h2>Prihodenie</h2> <form id="bid-form" onsubmit="handleBidSubmit(event)" data-auction-id=""> <div class="bid-form-grid"> <div> <label for="bidAmount">Vaša ponuka (€):</label> <input type="number" id="bidAmount" min="0" required> </div> <button type="submit" class="btn-primary">Prihodiť</button> </div> </form> <h2 style="margin-top: 32px;">História prihodení</h2> <ul id="bid-history-list"> <li>Načítavam...</li> </ul> </div> </div> </div>
     </main>
 
     
     <script>
+        // <<< JavaScript (s úpravami pre nový formulár a map link) >>>
         console.log("Skript začal.");
         window.onerror = function(msg, src, line, col, err) { console.error("CHYBA JS:", msg, "@", src, `${line}:${col}`, err); try{document.body.innerHTML = `<p style='color:red;'>CHYBA: ${msg}</p>`;}catch(e){} return true; };
         
         const API_URL = 'https://e-drazba-server.onrender.com';
         
-        // <<< Referencie na elementy - inicializované v DOMContentLoaded >>>
         let roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, 
             navrhovatelLoginView, navrhovatelDashboardView,
             drazbyListDiv, drazbaForm, bidderLoginSection, bidSection; 
 
-        let auctionPollInterval = null; 
-        let countdownTimerInterval = null; 
-        let currentAuctionEndTime = null; 
-        let isAutoBidding = false;
-        let currentDetailViewMode = 'zaujemca'; 
-        let listCountdownInterval = null;
-        let allAuctionsData = [];
+        let auctionPollInterval = null; let countdownTimerInterval = null; 
+        let currentAuctionEndTime = null; let currentAuctionStartTime = null; 
+        let isAutoBidding = false; let currentDetailViewMode = 'zaujemca'; 
+        let listCountdownInterval = null; let allAuctionsData = [];
         let currentWatchingAuctionId = null; 
             
         function safeGet(id){ const el = document.getElementById(id); if(!el) { console.error(`Element #${id} nenájdený!`); throw new Error(`Element #${id} nenájdený!`); } return el; }
@@ -175,17 +181,7 @@
 
         function formatDateTimeLocal(isoString) { if (!isoString) return 'N/A'; try { const date = new Date(isoString); const options = { dateStyle: 'short', timeStyle: 'short', timeZone: 'Europe/Bratislava' }; return date.toLocaleString('sk-SK', options); } catch (e) { console.error("Chyba formátovania dátumu:", isoString, e); return 'Neplatný dátum'; } }
 
-        function showView(viewId) { 
-            console.log(`Prepínam na ${viewId}`); 
-            if (viewId !== 'detail-view') { stopTimers(); } 
-            if (viewId !== 'zaujemca-view') { stopListTimer(); } 
-            [ roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, navrhovatelLoginView, navrhovatelDashboardView ].forEach(view => { if (view) { view.style.display = 'none'; } });
-            try { const targetView = safeGet(viewId); targetView.style.display = (viewId === 'role-selection' ? 'flex' : 'block'); } 
-            catch (e) { console.error(`Nepodarilo sa zobraziť ${viewId}:`, e); return; } 
-            document.body.style.alignItems = (viewId === 'role-selection' || viewId === 'navrhovatel-login-view') ? 'center' : 'flex-start'; 
-            if (viewId === 'zaujemca-view') { loadDrazby(); } 
-            if (viewId === 'navrhovatel-dashboard-view') { loadMojeDrazby(); } 
-        }
+        function showView(viewId) { console.log(`Prepínam na ${viewId}`); if (viewId !== 'detail-view') { stopTimers(); } if (viewId !== 'zaujemca-view') { stopListTimer(); } [ roleSelectionDiv, navrhovatelViewDiv, zaujemcaViewDiv, detailViewDiv, navrhovatelLoginView, navrhovatelDashboardView ].forEach(view => { if (view) { view.style.display = 'none'; } }); try { const targetView = safeGet(viewId); targetView.style.display = (viewId === 'role-selection' ? 'flex' : 'block'); } catch (e) { console.error(`Nepodarilo sa zobraziť ${viewId}:`, e); return; } document.body.style.alignItems = (viewId === 'role-selection' || viewId === 'navrhovatel-login-view') ? 'center' : 'flex-start'; if (viewId === 'zaujemca-view') { loadDrazby(); } if (viewId === 'navrhovatel-dashboard-view') { loadMojeDrazby(); } }
 
         // --- Prepínače a Prihlásenie/Odhlásenie ---
         function showRoleSelection() { showView('role-selection'); }
@@ -197,34 +193,16 @@
         function handleNavrhovatelLogout() { sessionStorage.removeItem('navrhovatelId'); sessionStorage.removeItem('navrhovatelMobil'); showRoleSelection(); }
 
         // --- Funkcie Navrhovateľa (Dashboard, Edit, Delete) ---
-        async function loadMojeDrazby() {
-            console.log("Načítavam moje dražby..."); 
-            const listDiv = safeGet('moje-drazby-list'); listDiv.innerHTML = '<p>Načítavam...</p>'; const myMobil = sessionStorage.getItem('navrhovatelMobil'); if (!myMobil) { listDiv.innerHTML = '<p>Chyba prihlásenia.</p>'; return; }
-            try { const r = await fetch(`${API_URL}/api/drazby`, { cache: 'no-cache' }); if (!r.ok) throw new Error(`Server ${r.status}`); const vsetkyDrazby = await r.json(); const mojeDrazby = vsetkyDrazby.filter(d => d.mobilNavrhovatela === myMobil); listDiv.innerHTML = ''; if (mojeDrazby.length === 0) { listDiv.innerHTML = '<p>Zatiaľ ste nevytvorili žiadne dražby.</p>'; return; }
-                mojeDrazby.reverse().forEach(d => {
-                    const item = document.createElement('div'); item.className = 'drazba-item';
-                    const formattedEndTime = formatDateTimeLocal(d.casSkoncenia); 
-                    const { status, statusClass, statusText } = getAuctionStatus(d.casZaciatku, d.casSkoncenia, d.highestBidder); 
-                    let cenaText = 'Aktuálna cena:'; if (status === 'skoncena') { cenaText = 'Cena dosiahnutá vydražením:'; } else if (status === 'neuspesna') { cenaText = 'Nedosiahnutá cena:'; } const cP = (d.currentPrice ?? d.najnizsiePodanie ?? 0).toLocaleString('sk-SK');
-                    const thumbHTML = d.obrazokUrl ? `<img src="${d.obrazokUrl}" alt="Náhľad" class="drazba-item-thumb" loading="lazy">` : '<div style="width: 100px; height: 100px; background: #eee; border: 1px solid var(--border-color); border-radius: 4px;"></div>'; 
-                    let linksHTML = '<div class="item-links">'; if (d.adresa && d.okres) { linksHTML += `<a href="${generateMapLink(d.adresa, d.okres)}" target="_blank">Mapa</a>`; } if (d.webOdkaz) { linksHTML += `<a href="${d.webOdkaz}" target="_blank">Web</a>`; } linksHTML += '</div>';
-                    let actionsHTML = ''; 
-                    // Tu musí byť onclick správne priradený
-                    if (status === 'planovana') { actionsHTML = `<button class="btn-edit" onclick="handleEditDrazba('${d._id}')">Upraviť</button> <button class="btn-delete" onclick="handleDeleteDrazba('${d._id}')">Zrušiť</button>`; } 
-                    else if (status === 'prebiehajuca') { actionsHTML = `<button class="btn-view" onclick="showNavrhovatelReadOnlyDetailView('${d._id}')">Sledovať priebeh</button>`; } 
-                    else { actionsHTML = `<button class="btn-secondary" onclick="showNavrhovatelReadOnlyDetailView('${d._id}')">Zobraziť výsledok</button>`; } 
-                    
-                    item.innerHTML = `${thumbHTML} <div class="drazba-item-info"> <h3>${d.predmetTyp || 'Dražba'}: ${d.adresa || 'N/A'}</h3> <p><span class="status-badge ${statusClass}">${statusText}</span></p> <p><strong>${cenaText}</strong> ${cP} €</p> <p><strong>Koniec:</strong> ${formattedEndTime}</p> ${linksHTML} </div> <div class="drazba-item-actions">${actionsHTML}</div>`;
-                    listDiv.appendChild(item);
-                });
-            } catch (error) { console.error("Chyba loadMojeDrazby:", error); listDiv.innerHTML = `<p style="color: red;">Chyba: ${error.message}</p>`; }
+        async function loadMojeDrazby() { /* ... bez zmien (už zobrazuje správne karty) ... */
+             console.log("Načítavam moje dražby..."); const listDiv = safeGet('moje-drazby-list'); listDiv.innerHTML = '<p>Načítavam...</p>'; const myMobil = sessionStorage.getItem('navrhovatelMobil'); if (!myMobil) { listDiv.innerHTML = '<p>Chyba prihlásenia.</p>'; return; } try { const r = await fetch(`${API_URL}/api/drazby`, { cache: 'no-cache' }); if (!r.ok) throw new Error(`Server ${r.status}`); const vsetkyDrazby = await r.json(); const mojeDrazby = vsetkyDrazby.filter(d => d.mobilNavrhovatela === myMobil); listDiv.innerHTML = ''; if (mojeDrazby.length === 0) { listDiv.innerHTML = '<p>Zatiaľ ste nevytvorili žiadne dražby.</p>'; return; } mojeDrazby.reverse().forEach(d => { const item = document.createElement('div'); item.className = 'drazba-item'; const formattedEndTime = formatDateTimeLocal(d.casSkoncenia); const { status, statusClass, statusText } = getAuctionStatus(d.casZaciatku, d.casSkoncenia, d.highestBidder); let cenaText = 'Aktuálna cena:'; if (status === 'skoncena') { cenaText = 'Cena dosiahnutá vydražením:'; } else if (status === 'neuspesna') { cenaText = 'Najnižšie podanie:'; } const cP = (d.currentPrice ?? d.najnizsiePodanie ?? 0).toLocaleString('sk-SK'); const thumbHTML = d.obrazokUrl ? `<img src="${d.obrazokUrl}" alt="Náhľad" class="drazba-item-thumb" loading="lazy">` : '<div style="width: 120px; height: 120px; background: #eee; border: 1px solid var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 12px;">(Bez obr.)</div>'; let linksHTML = '<div class="item-links">'; if (d.adresa && d.okres) { linksHTML += `<a href="${generateMapLink(d.adresa, d.okres)}" target="_blank">Mapa</a>`; } if (d.webOdkaz) { linksHTML += `<a href="${d.webOdkaz}" target="_blank">Web</a>`; } linksHTML += '</div>'; let actionsHTML = ''; if (status === 'planovana') { actionsHTML = `<button class="btn-edit" onclick="handleEditDrazba('${d._id}')">Upraviť</button> <button class="btn-delete" onclick="handleDeleteDrazba('${d._id}')">Zrušiť</button>`; } else if (status === 'prebiehajuca') { actionsHTML = `<button class="btn-view" onclick="showNavrhovatelReadOnlyDetailView('${d._id}')">Sledovať priebeh</button>`; } else { actionsHTML = `<button class="btn-secondary" onclick="showNavrhovatelReadOnlyDetailView('${d._id}')">Zobraziť výsledok</button>`; } item.innerHTML = `${thumbHTML} <div class="drazba-item-info"> <h3>${d.predmetTyp || 'Dražba'}: ${d.adresa || 'N/A'}</h3> <p><span class="status-badge ${statusClass}">${statusText}</span></p> <p><strong>${cenaText}</strong> ${cP} €</p> <p><strong>Koniec:</strong> ${formattedEndTime}</p> ${linksHTML} </div> <div class="drazba-item-actions">${actionsHTML}</div>`; listDiv.appendChild(item); }); } catch (error) { console.error("Chyba loadMojeDrazby:", error); listDiv.innerHTML = `<p style="color: red;">Chyba: ${error.message}</p>`; }
         }
-        async function handleEditDrazba(auctionId) { console.log(`Kliknuté Upraviť pre ${auctionId}`); alert("SIMULÁCIA: Načítavam dáta..."); }
-        function handleDeleteDrazba(auctionId) { console.log(`Kliknuté Zrušiť pre ${auctionId}`); const dovod = prompt("Dôvod zrušenia:"); if (dovod) { alert(`SIMULÁCIA: Dražba ${auctionId} zrušená.\nDôvod: ${dovod}`); } else { alert("Zrušenie prerušené."); } }
+        async function handleEditDrazba(auctionId) { console.log(`Klik Upraviť ${auctionId}`); alert("SIMULÁCIA: Načítavam dáta..."); }
+        function handleDeleteDrazba(auctionId) { console.log(`Klik Zrušiť ${auctionId}`); const dovod = prompt("Dôvod zrušenia:"); if (dovod) { alert(`SIMULÁCIA: Dražba ${auctionId} zrušená.\nDôvod: ${dovod}`); } else { alert("Zrušenie prerušené."); } }
         
         // --- Mapové linky a Stav ---
         function generateMapLink(adresa, okres) { const query = encodeURIComponent(`${adresa}, ${okres || ''}, Slovensko`); return `https://www.google.com/maps?q=${query}`; }
-        function updateLicitatorMapLink() { const adresa = safeGet('licitatorAdresa').value; const link = safeGet('licitatorMapLink'); if (adresa) { link.href = generateMapLink(adresa, ''); link.style.display = 'inline'; } else { link.style.display = 'none'; } }
+        // <<< NOVÉ: Funkcia pre mapu adresy navrhovateľa >>>
+        function updateNavrhovatelMapLink() { const adresa = safeGet('navrhovatelAdresa').value; const link = safeGet('navrhovatelMapLink'); if (adresa) { link.href = generateMapLink(adresa, ''); link.style.display = 'inline'; } else { link.style.display = 'none'; } }
         function updatePredmetMapLink() { const adresa = safeGet('adresa').value; const okres = safeGet('okres').value; const link = safeGet('adresaMapLink'); if (adresa && okres) { link.href = generateMapLink(adresa, okres); link.style.display = 'inline'; } else { link.style.display = 'none'; } }
         function getAuctionStatus(startTime, endTime, highestBidder) { const now = new Date().getTime(); const start = new Date(startTime).getTime(); const end = new Date(endTime).getTime(); if (now < start) { return { status: 'planovana', statusClass: 'status-planovana', statusText: 'Plánovaná' }; } else if (now >= start && now < end) { return { status: 'prebiehajuca', statusClass: 'status-prebiehajuca', statusText: 'Prebieha' }; } else { if (highestBidder) { return { status: 'skoncena', statusClass: 'status-skoncena', statusText: 'Skončená - Vydražené' }; } else { return { status: 'neuspesna', statusClass: 'status-neuspesna', statusText: 'Skončená - Neúspešná' }; } } }
 
@@ -236,205 +214,67 @@
              displayAuctions(filteredAuctions); 
         }
 
-        function displayAuctions(auctions) { /* ... bez zmien (zobrazuje vylepšené karty) ... */
+        function displayAuctions(auctions) { /* ... bez zmien (zobrazuje vylepšené karty s QR) ... */
             drazbyListDiv = safeGet('drazby-list'); drazbyListDiv.innerHTML = ''; stopListTimer(); 
             if (auctions.length === 0) { drazbyListDiv.innerHTML = '<p>Nenašli sa žiadne dražby zodpovedajúce filtru.</p>'; return; }
             auctions.forEach(d => { 
-                try { if (!d || !d._id) return; const item = document.createElement('div'); item.className = 'drazba-item'; const { status, statusClass, statusText } = getAuctionStatus(d.casZaciatku, d.casSkoncenia, d.highestBidder); let cenaText = 'Aktuálna cena:'; if (status === 'skoncena') { cenaText = 'Cena dosiahnutá vydražením:'; } else if (status === 'neuspesna') { cenaText = 'Nedosiahnutá cena:'; } const cP = (d.currentPrice ?? d.najnizsiePodanie ?? 0).toLocaleString('sk-SK'); const bidCount = (d.bidHistory && d.bidHistory.length) ? d.bidHistory.length : 0; const endTimeISO = d.casSkoncenia; let licitatorInfo = 'N/A'; if (d.licitatorMeno) { licitatorInfo = d.licitatorMeno; if (d.mobilNavrhovatela) { licitatorInfo += ` (${d.mobilNavrhovatela})`; } } else if (d.mobilNavrhovatela) { licitatorInfo = d.mobilNavrhovatela; } let countdownHTML = ''; if (status === 'planovana' || status === 'prebiehajuca') { countdownHTML = `<span class="list-countdown" data-end-time="${endTimeISO}">Načítavam čas...</span>`; } else { countdownHTML = `<span class="list-countdown ended">Ukončené</span>`; } const thumbHTML = d.obrazokUrl ? `<img src="${d.obrazokUrl}" alt="Náhľad" class="drazba-item-thumb" loading="lazy">` : '<div style="width: 100px; height: 100px; background: #eee; border: 1px solid var(--border-color); border-radius: 4px;"></div>'; let linksHTML = '<div class="item-links">'; if (d.adresa && d.okres) { linksHTML += `<a href="${generateMapLink(d.adresa, d.okres)}" target="_blank">Mapa</a>`; } if (d.webOdkaz) { linksHTML += `<a href="${d.webOdkaz}" target="_blank">Web</a>`; } linksHTML += '</div>';
-                    item.innerHTML = `${thumbHTML} <div class="drazba-item-info"> <h3>${d.predmetTyp || 'Dražba'}: ${d.adresa || 'N/A'}</h3> <p> <span class="status-badge ${statusClass}">${statusText}</span> ${countdownHTML} </p> ${linksHTML} <div class="drazba-item-grid"> <p><strong>Okres:</strong> ${d.okres||'N/A'}</p> <p><strong>Licitátor:</strong> ${licitatorInfo}</p> <p><strong>Počet prihodení:</strong> ${bidCount}</p> <p><strong>${cenaText}</strong> <span style="font-weight: bold; color: ${status === 'skoncena' ? 'var(--success-color)' : 'var(--google-blue)'};">${cP} €</span></p> </div> </div> <button class="btn-primary" onclick="showDetailView('${d._id}')">Detail / Prihodiť</button>`; 
+                try { if (!d || !d._id) return; const item = document.createElement('div'); item.className = 'drazba-item'; const { status, statusClass, statusText } = getAuctionStatus(d.casZaciatku, d.casSkoncenia, d.highestBidder); let cenaText = 'Aktuálna cena:'; if (status === 'skoncena') { cenaText = 'Cena dosiahnutá vydražením:'; } else if (status === 'neuspesna') { cenaText = 'Najnižšie podanie:'; } cenaText += " "; const cP = (d.currentPrice ?? d.najnizsiePodanie ?? 0).toLocaleString('sk-SK'); const bidCount = (d.bidHistory && d.bidHistory.length) ? d.bidHistory.length : 0; const startTimeISO = d.casZaciatku; const endTimeISO = d.casSkoncenia; let licitatorInfo = 'N/A'; if (d.licitatorMeno) { licitatorInfo = d.licitatorMeno; if (d.mobilNavrhovatela) { licitatorInfo += ` (${d.mobilNavrhovatela})`; } } else if (d.mobilNavrhovatela) { licitatorInfo = d.mobilNavrhovatela; } let countdownHTML = ''; if (status === 'planovana') { countdownHTML = `<span class="list-countdown" data-start-time="${startTimeISO}">Čaká...</span>`; } else if (status === 'prebiehajuca') { countdownHTML = `<span class="list-countdown" data-end-time="${endTimeISO}">Končí o...</span>`; } else { countdownHTML = `<span class="list-countdown ended">Ukončené</span>`; } const thumbHTML = d.obrazokUrl ? `<img src="${d.obrazokUrl}" alt="Náhľad" class="drazba-item-thumb" loading="lazy">` : '<div style="width: 120px; height: 120px; background: #eee; border: 1px solid var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 12px;">(Bez obr.)</div>'; let linksHTML = '<div class="item-links">'; if (d.adresa && d.okres) { linksHTML += `<a href="${generateMapLink(d.adresa, d.okres)}" target="_blank">Mapa</a>`; } if (d.webOdkaz) { linksHTML += `<a href="${d.webOdkaz}" target="_blank">Web</a>`; } linksHTML += `<a href="#" class="qr-code-link" onclick="showQrPlaceholder('${d._id}')">QR Kód</a>`; linksHTML += '</div>'; const startFormatted = formatDateTimeLocal(d.casZaciatku); const endFormatted = formatDateTimeLocal(d.casSkoncenia);
+                    item.innerHTML = `${thumbHTML} <div class="drazba-item-info"> <h3>${d.predmetTyp || 'Dražba'}: ${d.adresa || 'N/A'}</h3> <p> <span class="status-badge ${statusClass}">${statusText}</span> ${countdownHTML} </p> ${linksHTML} <div class="drazba-item-grid"> <p><strong>Okres:</strong> ${d.okres||'N/A'}</p> <p><strong>Licitátor:</strong> ${licitatorInfo}</p> <p><strong>Začiatok:</strong> ${startFormatted}</p> <p><strong>Koniec:</strong> ${endFormatted}</p> <p><strong>Počet prihodení:</strong> ${bidCount}</p> <p><strong>${cenaText}</strong> <span style="font-weight: bold; color: ${status === 'skoncena' ? 'var(--success-color)' : 'var(--google-blue)'};">${cP} €</span></p> </div> </div> <button class="btn-primary" onclick="showDetailView('${d._id}')">Detail / Prihodiť</button>`; 
                     drazbyListDiv.appendChild(item); 
                 } catch (loopErr) { console.error(`Chyba karty ${d._id}:`, loopErr); } 
             }); 
             startListTimer(); 
         }
-        
-        async function loadDrazby() { /* ... bez zmien ... */
-            console.log("LoadDrazby..."); drazbyListDiv = safeGet('drazby-list'); drazbyListDiv.innerHTML = '<p>Načítavam...</p>'; stopListTimer(); try { const r = await fetch(`${API_URL}/api/drazby`, { cache: 'no-cache' }); if (!r.ok) throw new Error(`Server ${r.status}`); allAuctionsData = await r.json(); if (!Array.isArray(allAuctionsData)) throw new Error("Zlý formát dát."); filterAndDisplayAuctions(); } catch (error) { console.error("Chyba loadDrazby:", error); if (drazbyListDiv) drazbyListDiv.innerHTML = `<p style="color: red;">Chyba načítania: ${error.message}</p>`; allAuctionsData = []; } 
-        } 
+        function showQrPlaceholder(auctionId) { event.preventDefault(); alert(`SIMULÁCIA QR KÓDU\n\nTu by sa zobrazil QR kód pre dražbu ${auctionId}.\nNaskenovaním by ste sa dostali priamo na detail.`); }
+        async function loadDrazby() { console.log("LoadDrazby..."); drazbyListDiv = safeGet('drazby-list'); drazbyListDiv.innerHTML = '<p>Načítavam...</p>'; stopListTimer(); try { const r = await fetch(`${API_URL}/api/drazby`, { cache: 'no-cache' }); if (!r.ok) throw new Error(`Server ${r.status}`); allAuctionsData = await r.json(); if (!Array.isArray(allAuctionsData)) throw new Error("Zlý formát dát."); filterAndDisplayAuctions(); } catch (error) { console.error("Chyba loadDrazby:", error); if (drazbyListDiv) drazbyListDiv.innerHTML = `<p style="color: red;">Chyba načítania: ${error.message}</p>`; allAuctionsData = []; } } 
 
         // --- Globálny časovač pre zoznam ---
         function startListTimer() { stopListTimer(); console.log("Spúšťam timer zoznamu."); updateAllListCountdowns(); listCountdownInterval = setInterval(updateAllListCountdowns, 1000); }
         function stopListTimer() { if (listCountdownInterval) { console.log("Zastavujem timer zoznamu."); clearInterval(listCountdownInterval); listCountdownInterval = null; } }
-        function updateAllListCountdowns() { const countdownElements = document.querySelectorAll('.list-countdown'); countdownElements.forEach(el => { const endTimeStr = el.dataset.endTime; if (!endTimeStr || el.classList.contains('ended')) return; const endTime = new Date(endTimeStr).getTime(); const now = new Date().getTime(); const remaining = endTime - now; if (remaining <= 0) { el.innerHTML = "Ukončené"; el.classList.add('ended'); delete el.dataset.endTime; } else { const d=Math.floor(remaining/(1000*60*60*24)); const h=Math.floor((remaining%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((remaining%(1000*60*60))/(1000*60)); const s=Math.floor((remaining%(1000*60))/1000); let ts = ""; if(d>0) ts += `${d}d `; ts += `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; el.innerHTML = ts; } }); }
+        function updateAllListCountdowns() { const now = new Date().getTime(); const countdownElements = document.querySelectorAll('.list-countdown'); countdownElements.forEach(el => { const endTimeStr = el.dataset.endTime; const startTimeStr = el.dataset.startTime; if (el.classList.contains('ended')) return; let remaining; let prefix = ""; let targetTime = null; let isStarting = false; if (startTimeStr) { const startTime = new Date(startTimeStr).getTime(); if (now < startTime) { remaining = startTime - now; prefix = "Začne o: "; targetTime = startTime; isStarting = true; } } if (!isStarting && endTimeStr) { const endTime = new Date(endTimeStr).getTime(); if (now < endTime) { remaining = endTime - now; prefix = "Končí o: "; targetTime = endTime; } } if (targetTime === null || remaining <= 0) { el.innerHTML = "Ukončené"; el.classList.add('ended'); delete el.dataset.endTime; delete el.dataset.startTime; } else { const d=Math.floor(remaining/(1000*60*60*24)); const h=Math.floor((remaining%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((remaining%(1000*60*60))/(1000*60)); const s=Math.floor((remaining%(1000*60))/1000); let ts = ""; if(d>0) ts += `${d}d `; ts += `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; el.innerHTML = prefix + ts; } }); }
 
         // --- Logika Detailu Dražby ---
-        function stopTimers() { 
-            console.log(`Stop timers (detail) pre ${currentWatchingAuctionId}...`); // Debug
-            if (auctionPollInterval) { clearInterval(auctionPollInterval); auctionPollInterval = null; } 
-            if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; } 
-            currentAuctionEndTime = null; isAutoBidding = false; 
-            currentWatchingAuctionId = null; // Vynulujeme ID
-        }
-        
-        // <<< OPRAVA: startLiveAuctionUpdates korektne nastaví ID >>>
-        function startLiveAuctionUpdates(auctionId) {
-            if (!auctionId) { console.error("Chyba: startLiveAuctionUpdates volaná bez ID!"); return; }
-            stopTimers(); // Zastavíme predchádzajúce
-            currentWatchingAuctionId = auctionId; // Uložíme si AKTUÁLNE ID
-            console.log(`Spúšťam živé aktualizácie pre ${auctionId} (Mód: ${currentDetailViewMode})`); 
-            try { const bidForm = document.getElementById('bid-form'); if (bidForm) { bidForm.dataset.auctionId = auctionId; } } catch(e){}
-            loadAuctionDetail(auctionId); // Prvé načítanie
-            auctionPollInterval = setInterval(() => { 
-                // Kontrola, či stále sledujeme tú istú aukciu
-                if (currentWatchingAuctionId === auctionId) {
-                    console.log(`Polling detailu (${auctionId})...`);
-                    loadAuctionDetail(auctionId, true); 
-                } else {
-                    console.log(`Polling (${auctionId}) zastavený, už sledujeme inú.`);
-                    // Interval sa zastaví sám v `stopTimers` pri prechode na iný pohľad/aukciu
-                }
-            }, 7000); 
-            countdownTimerInterval = setInterval(() => {
-                // Podobná kontrola aj pre časovač
-                if (currentWatchingAuctionId === auctionId) {
-                    updateCountdown();
-                } else {
-                     console.log(`Časovač (${auctionId}) zastavený, už sledujeme inú.`);
-                    // Časovač sa zastaví sám v `stopTimers`
-                }
-            }, 1000);
-        }
-        
-        // <<< OPRAVA: show... funkcie volajú štart aktualizácií správne >>>
-        function showDetailView(auctionId) { 
-            console.log(`Detail pre ZÁUJEMCU: ${auctionId}`); 
-            currentDetailViewMode = 'zaujemca'; 
-            showView('detail-view'); 
-            try { safeGet('navrhovatel-info-box').style.display = 'none'; } catch(e){} 
-            const bidderId = sessionStorage.getItem(`bidderId_${auctionId}`); 
-            if (bidderId) { 
-                console.log(`ID ${bidderId} nájdené.`); 
-                try { safeGet('bidder-login-section').style.display = 'none'; safeGet('bid-section').style.display = 'block'; } catch(e){} 
-                startLiveAuctionUpdates(auctionId); // Spustíme aktualizácie
-            } else { 
-                console.log(`ID nenájdené.`); 
-                try { safeGet('bidder-login-section').style.display = 'block'; safeGet('bid-section').style.display = 'none'; safeGet('loginAuctionId').value = auctionId; safeGet('detail-content').innerHTML = '<p>Prosím, identifikujte sa...</p>'; safeGet('bid-history-list').innerHTML = ''; } catch(e){} 
-                stopTimers(); // Ak sa zobrazuje login, časovače netreba
-            } 
-        }
-        function showNavrhovatelReadOnlyDetailView(auctionId) { 
-            console.log(`Detail pre NAVRHOVATEĽA: ${auctionId}`); 
-            currentDetailViewMode = 'navrhovatel'; 
-            try {
-                // Najprv skryjeme sekcie, potom zobrazíme pohľad
-                const loginSect = document.getElementById('bidder-login-section');
-                const bidSect = document.getElementById('bid-section');
-                if (loginSect) loginSect.style.display = 'none'; 
-                if (bidSect) bidSect.style.display = 'none';
-                showView('detail-view'); 
-                safeGet('navrhovatel-info-box').style.display = 'block';
-                startLiveAuctionUpdates(auctionId); // Spustíme aktualizácie
-            } catch (e) { console.error("Chyba zobrazenia read-only detailu:", e); try { safeGet('detail-content').innerHTML = `<p style="color:red;">Chyba: ${e.message}</p>`; } catch(e2){} }
-        }
-        
+        function stopTimers() { console.log(`Stop timers (detail) pre ${currentWatchingAuctionId}...`); if (auctionPollInterval) { clearInterval(auctionPollInterval); auctionPollInterval = null; } if (countdownTimerInterval) { clearInterval(countdownTimerInterval); countdownTimerInterval = null; } currentAuctionEndTime = null; currentAuctionStartTime = null; isAutoBidding = false; currentWatchingAuctionId = null; }
+        function startLiveAuctionUpdates(auctionId) { if (!auctionId) { console.error("Chyba: startLiveAuctionUpdates bez ID!"); return; } stopTimers(); currentWatchingAuctionId = auctionId; console.log(`Spúšťam aktualizácie pre ${auctionId} (Mód: ${currentDetailViewMode})`); try { const bidForm = document.getElementById('bid-form'); if (bidForm) { bidForm.dataset.auctionId = auctionId; } } catch(e){} loadAuctionDetail(auctionId); auctionPollInterval = setInterval(() => { if (currentWatchingAuctionId === auctionId) { console.log(`Polling detailu (${auctionId})...`); loadAuctionDetail(auctionId, true); } }, 7000); countdownTimerInterval = setInterval(() => { if (currentWatchingAuctionId === auctionId) { updateCountdown(); } }, 1000); }
+        function showDetailView(auctionId) { console.log(`Detail ZÁUJEMCA: ${auctionId}`); currentDetailViewMode = 'zaujemca'; showView('detail-view'); try{safeGet('navrhovatel-info-box').style.display = 'none';}catch(e){} const bidderId = sessionStorage.getItem(`bidderId_${auctionId}`); if (bidderId) { console.log(`ID ${bidderId} nájdené.`); try{safeGet('bidder-login-section').style.display = 'none'; safeGet('bid-section').style.display = 'block';}catch(e){} startLiveAuctionUpdates(auctionId); } else { console.log(`ID nenájdené.`); try{safeGet('bidder-login-section').style.display = 'block'; safeGet('bid-section').style.display = 'none'; safeGet('loginAuctionId').value = auctionId; safeGet('detail-content').innerHTML = '<p>Identifikujte sa...</p>'; safeGet('bid-history-list').innerHTML = '';}catch(e){} stopTimers(); } }
+        function showNavrhovatelReadOnlyDetailView(auctionId) { console.log(`Detail NAVRHOVATEĽ: ${auctionId}`); currentDetailViewMode = 'navrhovatel'; try { const loginSect = document.getElementById('bidder-login-section'); const bidSect = document.getElementById('bid-section'); if (loginSect) loginSect.style.display = 'none'; if (bidSect) bidSect.style.display = 'none'; showView('detail-view'); safeGet('navrhovatel-info-box').style.display = 'block'; startLiveAuctionUpdates(auctionId); } catch (e) { console.error("Chyba zobrazenia read-only:", e); try { safeGet('detail-content').innerHTML = `<p style="color:red;">Chyba: ${e.message}</p>`; } catch(e2){} } }
         function goBackFromDetail() { if (currentDetailViewMode === 'navrhovatel') { showNavrhovatelDashboard(); } else { showZaujemcaView(); } }
+        function updateCountdown() { const timerElement = document.getElementById('countdown-timer'); const licitatorBox = document.getElementById('licitator-display'); if (!timerElement || !licitatorBox) { if(countdownTimerInterval) { stopTimers(); } return; } const now = new Date().getTime(); let remaining; let prefix = ""; let ended = false; let running = false; if (currentAuctionStartTime && now < currentAuctionStartTime) { remaining = currentAuctionStartTime - now; prefix = "Začne o: "; } else if (currentAuctionEndTime && now < currentAuctionEndTime) { remaining = currentAuctionEndTime - now; prefix = "Končí o: "; running = true; } else { ended = true; } if (ended) { console.log("Čas vypršal (detail)."); stopTimers(); timerElement.style.display = 'none'; if (currentDetailViewMode === 'zaujemca') { try { const bf=safeGet('bid-form'); const bi=safeGet('bidAmount'); const bs=bf.querySelector('button[type="submit"]'); if(bi) bi.disabled = true; if(bs) { bs.disabled = true; bs.textContent = 'Skončené'; } } catch(e){} } licitatorBox.style.display = 'block'; licitatorBox.className = 'licitator-box'; licitatorBox.innerHTML = 'Overujem stav...'; finalizeAuction(); } else { const d=Math.floor(remaining/(1000*60*60*24)); const h=Math.floor((remaining%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((remaining%(1000*60*60))/(1000*60)); const s=Math.floor((remaining%(1000*60))/1000); let ts = ""; if(d>0) ts += `${d}d `; ts += `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; timerElement.innerHTML = prefix + ts; timerElement.className = running ? 'countdown-display' : 'countdown-display ended'; timerElement.style.display = 'block'; licitatorBox.style.display = 'none'; } }
+        async function finalizeAuction() { let aucId = currentWatchingAuctionId; if (!aucId) { console.error("Chýba ID aukcie."); try { safeGet('licitator-display').innerHTML = 'Chyba identifikácie.'; } catch(e){} return; } console.log(`Finalize: Načítavam ${aucId}...`); try { const r = await fetch(`${API_URL}/api/drazby/${aucId}`, { cache: 'no-cache' }); if (!r.ok) throw new Error(`Server ${r.status}`); const d = await r.json(); startLicitatorCountdown(d); } catch (e) { console.error("Chyba finálneho načítania:", e); try { safeGet('licitator-display').innerHTML = 'Chyba ukončenia.'; } catch(e){} } }
+        function startLicitatorCountdown(auctionData) { const licitatorBox = safeGet('licitator-display'); const aucId = auctionData._id; if (!auctionData.highestBidder) { licitatorBox.className = 'licitator-box no-sale'; licitatorBox.innerHTML = 'DRAŽBA SKONČENÁ<br>Neúspešná (žiadne podanie).'; return; } const winnerId = auctionData.highestBidder; const winnerDisplayId = `ID: ${winnerId.substring(0,2)}...${winnerId.substring(winnerId.length-4)}`; setTimeout(() => { licitatorBox.innerHTML = `PO PRVÉ...<br>pre ${winnerDisplayId} za ${(auctionData.currentPrice||0).toLocaleString('sk-SK')} €`; }, 500); setTimeout(() => { licitatorBox.innerHTML = `PO DRUHÉ...<br>pre ${winnerDisplayId} za ${(auctionData.currentPrice||0).toLocaleString('sk-SK')} €`; }, 5500); setTimeout(() => { licitatorBox.innerHTML = `PO TRETIE...<br>pre ${winnerDisplayId} za ${(auctionData.currentPrice||0).toLocaleString('sk-SK')} €`; }, 10500); setTimeout(() => { licitatorBox.innerHTML = `PRÍKLEP UDNE!<br>Vydražiteľ: ${winnerDisplayId}`; licitatorBox.className = 'licitator-box final'; }, 15500); setTimeout(() => { const myBidderId = sessionStorage.getItem(`bidderId_${aucId}`); if (winnerId === myBidderId) { const myMobile = sessionStorage.getItem(`bidderMobile_${aucId}`); licitatorBox.innerHTML = `GRATULUJEME, VYHRALI STE!<br>Príklep udelený Vám (Mobil: ${myMobile})...`; } else if (currentDetailViewMode === 'navrhovatel') { licitatorBox.innerHTML = `DRAŽBA SKONČENÁ.<br>Príklep udelený ${winnerDisplayId}.<br><span style="font-size: 14px; color: var(--text-secondary);">(Mobil víťaza: N/A - server neposkytuje)</span>`; } else { licitatorBox.innerHTML = `DRAŽBA SKONČENÁ.<br>Príklep udelený ${winnerDisplayId}. Navrhovateľ informovaný.`; } }, 17500); }
+        async function submitBidInternal(auctionId, amount, bidderId) { /* ... bez zmien (auto-bid) ... */ if (isAutoBidding) { console.log("AUTO-BID: Už prebieha."); return; } isAutoBidding = true; console.log(`AUTO-BID: Posielam ${amount} €`); try { const form=safeGet('bid-form'); const btn=form.querySelector('button[type="submit"]'); const originalBtnText = btn.textContent; btn.disabled = true; btn.textContent = 'Auto...'; const r = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: amount, bidderId: bidderId }) }); if (!r.ok) { const err = await r.json(); throw new Error(err.message || 'Chyba servera.'); } console.log("AUTO-BID: OK!"); loadAuctionDetail(auctionId); } catch (e) { console.error("Chyba auto-bidu:", e.message); alert(`Chyba auto-prihodenia: ${e.message}`); } finally { setTimeout(() => { isAutoBidding = false; console.log("Auto-bid zámok uvoľnený."); try{ const form=safeGet('bid-form'); const btn=form.querySelector('button[type="submit"]'); if (btn && !btn.textContent.includes('Skončené')) { btn.disabled = false; btn.textContent = originalBtnText; } } catch(e){} }, 2000); } }
+        async function loadAuctionDetail(auctionId, isRefresh = false) { /* ... bez zmien (nastavuje časy) ... */ if (!auctionId) { console.error("loadAuctionDetail: Chýba auctionId!"); return; } const cDiv = document.getElementById('detail-content'); const hList = document.getElementById('bid-history-list'); const bForm = document.getElementById('bid-form'); const bInput = document.getElementById('bidAmount'); if (!cDiv) { if(auctionPollInterval || countdownTimerInterval){ stopTimers(); } return; } if (!isRefresh) { cDiv.innerHTML='<p>Načítavam...</p>'; if (hList) hList.innerHTML=''; } try { const r = await fetch(`${API_URL}/api/drazby/${auctionId}`, { cache: 'no-cache' }); if (!r.ok) { throw new Error(`Server ${r.status}`); } const d = await r.json(); currentAuctionStartTime = d.casZaciatku ? new Date(d.casZaciatku).getTime() : null; currentAuctionEndTime = d.casSkoncenia ? new Date(d.casSkoncenia).getTime() : null; if (currentDetailViewMode === 'zaujemca') { try { /* auto-bid */ } catch (e) { console.error("Chyba auto-bidu:", e); } } const start = formatDateTimeLocal(d.casZaciatku); const end = formatDateTimeLocal(d.casSkoncenia); let hb='Nikto'; if(d.highestBidder&&d.highestBidder.length>4){hb=`ID: ${d.highestBidder.substring(0,2)}...${d.highestBidder.substring(d.highestBidder.length-4)}`;} const webOdkazHTML = d.webOdkaz ? `<p><strong>Detail na webe:</strong> <a href="${d.webOdkaz}" target="_blank">Otvoriť odkaz</a></p>` : ''; const obrazokHTML = d.obrazokUrl ? `<img src="${d.obrazokUrl}" alt="Predmet dražby" style="width: 100%; max-width: 400px; border-radius: 8px; margin-top: 16px;">` : ''; cDiv.innerHTML=`<div class="detail-info"> <h2>${d.predmetTyp || 'Dražba'}: ${d.predmetDrazby||'N/A'}</h2> ${obrazokHTML} <p><strong>Adresa:</strong> ${d.adresa||'N/A'}, ${d.okres||'N/A'} <a href="${generateMapLink(d.adresa, d.okres)}" target="_blank" style="font-size:12px; margin-left: 5px;">(Mapa)</a></p> <p><strong>Licitátor:</strong> ${d.licitatorMeno||'N/A'}</p> ${webOdkazHTML} <p style="font-size: 14px; margin-top: 16px;"><strong>Opis:</strong> ${d.predmetDrazby||'Bez opisu.'}</p> <hr> <p><strong>Aktuálna cena:</strong> <span class="current-price">${(d.currentPrice||d.najnizsiePodanie||0).toLocaleString('sk-SK')} €</span></p> <p><strong>Najvyšší prihadzujúci:</strong> ${hb}</p> <div id="countdown-timer" class="countdown-display">Načítavam čas...</div> <div id="licitator-display" class="licitator-box" style="display: none;"></div> <p><strong>Najnižšie podanie:</strong> ${(d.najnizsiePodanie||0).toLocaleString('sk-SK')} €</p> <p><strong>Minimálne prihodenie:</strong> ${(d.minimalnePrihodenie||0).toLocaleString('sk-SK')} €</p> <p><strong>Začiatok:</strong> ${start}</p><p><strong>Koniec:</strong> ${end}</p> </div>`; if (bForm) bForm.dataset.auctionId = d._id; const minBid=(d.currentPrice||d.najnizsiePodanie||0)+(d.minimalnePrihodenie||1); if (currentDetailViewMode === 'zaujemca' && bInput) { if (!isRefresh) { bInput.min=minBid; bInput.placeholder=`Min. ${minBid.toLocaleString('sk-SK')} €`; bInput.value=minBid; } else { bInput.min=minBid; bInput.placeholder=`Min. ${minBid.toLocaleString('sk-SK')} €`; } } if (hList) { hList.innerHTML = ''; if(d.bidHistory&&d.bidHistory.length>0){ d.bidHistory.reverse().forEach(b=>{const li=document.createElement('li'); const time=b.timestamp?formatDateTimeLocal(b.timestamp):'N/A'; let bDisp='N/A'; if(b.bidderId&&b.bidderId.length>4){bDisp=`ID: ${b.bidderId.substring(0,2)}...${b.bidderId.substring(b.bidderId.length-4)}`;} li.innerHTML=`<span><strong>${(b.amount||0).toLocaleString('sk-SK')} €</strong> (${bDisp})</span> <span>${time}</span>`; hList.appendChild(li);});} else {hList.innerHTML='<li>Žiadne prihodenia.</li>';} } updateCountdown(); } catch(e){ console.error(`Chyba loadAuctionDetail (${auctionId}):`,e); try{ cDiv.innerHTML=`<p style="color: red;">Chyba: ${e.message}</p>`; } catch(e2){} stopTimers(); } } 
         
-        // <<< OPRAVA: updateCountdown sa uistí, že elementy existujú >>>
-        function updateCountdown() { 
-            const timerElement = document.getElementById('countdown-timer'); 
-            const licitatorBox = document.getElementById('licitator-display');
-            // Ak sme už prepli pohľad a elementy neexistujú, nerobíme nič
-            if (!currentAuctionEndTime || !timerElement || !licitatorBox) { 
-                // Ak časovač stále beží, ale sme mimo detailu, zastavíme ho
-                if(countdownTimerInterval) { 
-                    console.warn("updateCountdown: Elementy nenájdené, zastavujem časovač."); 
-                    stopTimers(); 
-                }
-                return; 
-            } 
-            
-            const now = new Date().getTime(); const remaining = currentAuctionEndTime - now; 
-            if (remaining <= 0) { 
-                console.log("Čas vypršal (detail). Spúšťam finalizeAuction..."); 
-                stopTimers(); // Zastaví aj tento interval
-                timerElement.style.display = 'none'; 
-                if (currentDetailViewMode === 'zaujemca') { 
-                    try { const bf=safeGet('bid-form'); const bi=safeGet('bidAmount'); const bs=bf.querySelector('button[type="submit"]'); if(bi) bi.disabled = true; if(bs) { bs.disabled = true; bs.textContent = 'Skončené'; } } catch(e){} 
-                } 
-                licitatorBox.style.display = 'block'; licitatorBox.className = 'licitator-box'; licitatorBox.innerHTML = 'Overujem stav...'; 
-                finalizeAuction(); 
-            } else { 
-                const d=Math.floor(remaining/(1000*60*60*24)); const h=Math.floor((remaining%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((remaining%(1000*60*60))/(1000*60)); const s=Math.floor((remaining%(1000*60))/1000); let ts = ""; if(d>0) ts += `${d}d `; ts += `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; 
-                timerElement.innerHTML = `Do konca: ${ts}`; timerElement.className = 'countdown-display'; timerElement.style.display = 'block'; 
-                licitatorBox.style.display = 'none'; 
-            } 
-        }
-        
-        // <<< OPRAVA: finalizeAuction používa currentWatchingAuctionId >>>
-        async function finalizeAuction() { 
-            let aucId = currentWatchingAuctionId; 
-            if (!aucId) { console.error("Chýba ID aukcie pre finalizáciu!"); try { safeGet('licitator-display').innerHTML = 'Chyba: Nepodarilo sa identifikovať aukciu.'; } catch(e){} return; }
-            console.log(`Finalize: Načítavam posledný stav pre ${aucId}...`); 
-            try { const r = await fetch(`${API_URL}/api/drazby/${aucId}`, { cache: 'no-cache' }); if (!r.ok) throw new Error(`Server ${r.status}`); const d = await r.json(); startLicitatorCountdown(d); } 
-            catch (e) { console.error("Chyba finálneho načítania:", e); try { safeGet('licitator-display').innerHTML = 'Chyba ukončenia.'; } catch(e){} } 
-        }
-        
-        function startLicitatorCountdown(auctionData) { /* ... bez zmien (zobrazuje výsledok s N/A mobilom) ... */ const licitatorBox = safeGet('licitator-display'); const aucId = auctionData._id; if (!auctionData.highestBidder) { licitatorBox.className = 'licitator-box no-sale'; licitatorBox.innerHTML = 'DRAŽBA SKONČENÁ<br>Neúspešná (žiadne podanie).'; return; } const winnerId = auctionData.highestBidder; const winnerDisplayId = `ID: ${winnerId.substring(0,2)}...${winnerId.substring(winnerId.length-4)}`; setTimeout(() => { licitatorBox.innerHTML = `PO PRVÉ...<br>pre ${winnerDisplayId} za ${(auctionData.currentPrice||0).toLocaleString('sk-SK')} €`; }, 500); setTimeout(() => { licitatorBox.innerHTML = `PO DRUHÉ...<br>pre ${winnerDisplayId} za ${(auctionData.currentPrice||0).toLocaleString('sk-SK')} €`; }, 5500); setTimeout(() => { licitatorBox.innerHTML = `PO TRETIE...<br>pre ${winnerDisplayId} za ${(auctionData.currentPrice||0).toLocaleString('sk-SK')} €`; }, 10500); setTimeout(() => { licitatorBox.innerHTML = `PRÍKLEP UDNE!<br>Vydražiteľ: ${winnerDisplayId}`; licitatorBox.className = 'licitator-box final'; }, 15500); setTimeout(() => { const myBidderId = sessionStorage.getItem(`bidderId_${aucId}`); if (winnerId === myBidderId) { const myMobile = sessionStorage.getItem(`bidderMobile_${aucId}`); licitatorBox.innerHTML = `GRATULUJEME, VYHRALI STE!<br>Príklep udelený Vám (Mobil: ${myMobile}). Navrhovateľ Vás bude kontaktovať.`; } else if (currentDetailViewMode === 'navrhovatel') { licitatorBox.innerHTML = `DRAŽBA SKONČENÁ.<br>Príklep bol udelený vydražiteľovi ${winnerDisplayId}.<br><span style="font-size: 14px; color: var(--text-secondary);">(Mobil víťaza: N/A - server neposkytuje)</span>`; } else { licitatorBox.innerHTML = `DRAŽBA SKONČENÁ.<br>Príklep bol udelený vydražiteľovi s ${winnerDisplayId}. Navrhovateľ bol informovaný.`; } }, 17500); }
-        
-        async function submitBidInternal(auctionId, amount, bidderId) { /* ... bez zmien ... */ if (isAutoBidding) { console.log("AUTO-BID: Už prebieha."); return; } isAutoBidding = true; console.log(`AUTO-BID: Posielam ${amount} €`); try { const form=safeGet('bid-form'); const btn=form.querySelector('button[type="submit"]'); const originalBtnText = btn.textContent; btn.disabled = true; btn.textContent = 'Auto...'; const r = await fetch(`${API_URL}/api/drazby/${auctionId}/bid`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: amount, bidderId: bidderId }) }); if (!r.ok) { const err = await r.json(); throw new Error(err.message || 'Chyba servera.'); } console.log("AUTO-BID: OK!"); loadAuctionDetail(auctionId); } catch (e) { console.error("Chyba auto-bidu:", e.message); alert(`Chyba auto-prihodenia: ${e.message}`); } finally { setTimeout(() => { isAutoBidding = false; console.log("Auto-bid zámok uvoľnený."); try{ const form=safeGet('bid-form'); const btn=form.querySelector('button[type="submit"]'); if (btn && !btn.textContent.includes('Skončené')) { btn.disabled = false; btn.textContent = originalBtnText; } } catch(e){} }, 2000); } }
-
-        // <<< OPRAVA: loadAuctionDetail sa uistí, že elementy existujú pred prístupom >>>
-        async function loadAuctionDetail(auctionId, isRefresh = false) { 
-             if (!auctionId) { console.error("loadAuctionDetail: Chýba auctionId!"); return; }
-             
-             // Získame referencie, ale skontrolujeme ich existenciu pred použitím
-             const cDiv = document.getElementById('detail-content'); 
-             const hList = document.getElementById('bid-history-list'); 
-             const bForm = document.getElementById('bid-form'); 
-             const bInput = document.getElementById('bidAmount');
-             
-             // Ak hlavný kontajner neexistuje (napr. sme prepli pohľad), nerobíme nič
-             if (!cDiv) { 
-                 console.warn(`loadAuctionDetail(${auctionId}): cDiv nenájdený, pravdepodobne sme prepli pohľad.`);
-                 stopTimers(); // Bezpečnostná poistka
-                 return; 
-             }
-             
-             if (!isRefresh) { cDiv.innerHTML='<p>Načítavam...</p>'; if (hList) hList.innerHTML=''; }
-             
+        // <<< ZMENA: handleDrazbaFormSubmit posiela nové polia >>>
+        async function handleDrazbaFormSubmit(event) { 
+             event.preventDefault(); const auctionId = safeGet('drazbaIdToEdit').value; if (auctionId) { alert(`SIMULÁCIA: Ukladám zmeny...`); showNavrhovatelDashboard(); return; } const btn = safeGet('submitDrazbaButton'); btn.disabled = true; btn.textContent = 'Vytváram...'; 
              try { 
-                 const r = await fetch(`${API_URL}/api/drazby/${auctionId}`, { cache: 'no-cache' }); 
-                 if (!r.ok) { 
-                      console.error(`Chyba servera pri načítaní detailu ${auctionId}: ${r.status}`);
-                      throw new Error(`Server ${r.status}`); 
-                 }
-                 const d = await r.json(); 
-                 
-                 // Auto-bid logika (len pre záujemcu)
-                 if (currentDetailViewMode === 'zaujemca') { /* ... auto-bid ... */ }
-                 
-                 currentAuctionEndTime = d.casZaciatku ? new Date(d.casSkoncenia).getTime() : null; 
-                 const start = formatDateTimeLocal(d.casZaciatku); const end = formatDateTimeLocal(d.casSkoncenia); 
-                 let hb='Nikto'; if(d.highestBidder&&d.highestBidder.length>4){hb=`ID: ${d.highestBidder.substring(0,2)}...${d.highestBidder.substring(d.highestBidder.length-4)}`;} 
-                 const webOdkazHTML = d.webOdkaz ? `<p><strong>Detail na webe:</strong> <a href="${d.webOdkaz}" target="_blank">Otvoriť odkaz</a></p>` : ''; 
-                 const obrazokHTML = d.obrazokUrl ? `<img src="${d.obrazokUrl}" alt="Predmet dražby" style="width: 100%; max-width: 400px; border-radius: 8px; margin-top: 16px;">` : '';
-                 
-                 // Vykreslíme obsah
-                 cDiv.innerHTML=`<div class="detail-info"> <h2>${d.predmetTyp || 'Dražba'}: ${d.predmetDrazby||'N/A'}</h2> ${obrazokHTML} <p><strong>Adresa:</strong> ${d.adresa||'N/A'}, ${d.okres||'N/A'} <a href="${generateMapLink(d.adresa, d.okres)}" target="_blank" style="font-size:12px; margin-left: 5px;">(Mapa)</a></p> <p><strong>Licitátor:</strong> ${d.licitatorMeno||'N/A'}</p> ${webOdkazHTML} <p style="font-size: 14px; margin-top: 16px;"><strong>Opis:</strong> ${d.predmetDrazby||'Bez opisu.'}</p> <hr> <p><strong>Aktuálna cena:</strong> <span class="current-price">${(d.currentPrice||d.najnizsiePodanie||0).toLocaleString('sk-SK')} €</span></p> <p><strong>Najvyšší prihadzujúci:</strong> ${hb}</p> <div id="countdown-timer" class="countdown-display">Načítavam čas...</div> <div id="licitator-display" class="licitator-box" style="display: none;"></div> <p><strong>Najnižšie podanie:</strong> ${(d.najnizsiePodanie||0).toLocaleString('sk-SK')} €</p> <p><strong>Minimálne prihodenie:</strong> ${(d.minimalnePrihodenie||0).toLocaleString('sk-SK')} €</p> <p><strong>Začiatok:</strong> ${start}</p><p><strong>Koniec:</strong> ${end}</p> </div>`; 
-                 
-                 // Nastavíme formulár (ak existuje)
-                 if (bForm) bForm.dataset.auctionId = d._id; 
-                 const minBid=(d.currentPrice||d.najnizsiePodanie||0)+(d.minimalnePrihodenie||1); 
-                 if (currentDetailViewMode === 'zaujemca' && bInput) { if (!isRefresh) { bInput.min=minBid; bInput.placeholder=`Min. ${minBid.toLocaleString('sk-SK')} €`; bInput.value=minBid; } else { bInput.min=minBid; bInput.placeholder=`Min. ${minBid.toLocaleString('sk-SK')} €`; } }
-                 
-                 // Vykreslíme históriu (ak existuje)
-                 if (hList) {
-                     hList.innerHTML = ''; 
-                     if(d.bidHistory && d.bidHistory.length>0){ d.bidHistory.reverse().forEach(b=>{const li=document.createElement('li'); const time=b.timestamp?formatDateTimeLocal(b.timestamp):'N/A'; let bDisp='N/A'; if(b.bidderId&&b.bidderId.length>4){bDisp=`ID: ${b.bidderId.substring(0,2)}...${b.bidderId.substring(b.bidderId.length-4)}`;} li.innerHTML=`<span><strong>${(b.amount||0).toLocaleString('sk-SK')} €</strong> (${bDisp})</span> <span>${time}</span>`; hList.appendChild(li);});} 
-                     else { hList.innerHTML='<li>Žiadne prihodenia.</li>'; } 
-                 }
-                 
-                 updateCountdown(); // Spustí alebo aktualizuje časovač
-                 
-             } catch(e){ 
-                 console.error(`Chyba loadAuctionDetail (${auctionId}):`,e); 
-                 try{ cDiv.innerHTML=`<p style="color: red;">Chyba načítania detailu: ${e.message}</p>`; } catch(e2){} 
-                 stopTimers(); // Zastavíme časovače pri chybe
-             } 
-        } 
-        
-        async function handleDrazbaFormSubmit(event) { /* ... bez zmien ... */ 
-             event.preventDefault(); const auctionId = safeGet('drazbaIdToEdit').value; if (auctionId) { alert(`SIMULÁCIA: Ukladám zmeny...`); showNavrhovatelDashboard(); return; } const btn = safeGet('submitDrazbaButton'); btn.disabled = true; btn.textContent = 'Vytváram...'; try { const mobil = validateMobile(safeGet('licitatorMobil').value); if (!mobil) throw new Error("Chyba mobilu."); const startTime = new Date(safeGet('casZaciatku').value).getTime(); const endTime = new Date(safeGet('casSkoncenia').value).getTime(); if (endTime <= startTime) { throw new Error("Koniec musí byť neskôr ako začiatok."); } const data = { navrhovatel: safeGet('navrhovatel').value, mobilNavrhovatela: mobil, licitatorMeno: safeGet('licitatorMeno').value, licitatorEmail: safeGet('licitatorEmail').value, licitatorAdresa: safeGet('licitatorAdresa').value, navrhovatelId: sessionStorage.getItem('navrhovatelId'), predmetTyp: safeGet('predmetTyp').value, okres: safeGet('okres').value, adresa: safeGet('adresa').value, predmetDrazby: safeGet('predmetDrazby').value, obrazokUrl: safeGet('obrazokUrl').value, webOdkaz: safeGet('webOdkaz').value, najnizsiePodanie: Number(safeGet('najnizsiePodanie').value), minimalnePrihodenie: Number(safeGet('minimalnePrihodenie').value), casZaciatku: safeGet('casZaciatku').value, casSkoncenia: safeGet('casSkoncenia').value, }; const r = await fetch(`${API_URL}/api/drazby`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (!r.ok) { const errData = await r.json(); let errMsg = errData.message || 'Chyba servera'; if (errData.errors) { errMsg = errData.errors.map(e => e.msg).join(', '); } throw new Error(errMsg); } alert('Dražba vytvorená!'); showNavrhovatelDashboard(); } catch (error) { console.error("Chyba vytvárania dražby:", error); alert(`Chyba: ${error.message}`); } finally { btn.disabled = false; btn.textContent = 'Vytvoriť dražbu'; }
+                 const mobil = validateMobile(safeGet('licitatorMobil').value); if (!mobil) throw new Error("Chyba mobilu licitátora."); 
+                 const startTime = new Date(safeGet('casZaciatku').value).getTime(); const endTime = new Date(safeGet('casSkoncenia').value).getTime(); if (endTime <= startTime) { throw new Error("Koniec musí byť neskôr ako začiatok."); } 
+                 // Zbierame dáta vrátane nových polí
+                 const data = { 
+                     // Pôvodné + serverom vyžadované
+                     navrhovatel: safeGet('navrhovatel').value, 
+                     mobilNavrhovatela: mobil, // Používame mobil licitátora ako identifikátor
+                     okres: safeGet('okres').value, adresa: safeGet('adresa').value, predmetDrazby: safeGet('predmetDrazby').value,
+                     najnizsiePodanie: Number(safeGet('najnizsiePodanie').value), minimalnePrihodenie: Number(safeGet('minimalnePrihodenie').value),
+                     casZaciatku: safeGet('casZaciatku').value, casSkoncenia: safeGet('casSkoncenia').value,
+                     // Nové polia
+                     navrhovatelNazov: safeGet('navrhovatelNazov').value,
+                     navrhovatelIco: safeGet('navrhovatelIco').value,
+                     navrhovatelAdresa: safeGet('navrhovatelAdresa').value,
+                     licitatorMeno: safeGet('licitatorMeno').value, // Ukladáme aj meno licitátora
+                     licitatorEmail: safeGet('licitatorEmail').value, 
+                     predmetTyp: safeGet('predmetTyp').value, 
+                     obrazokUrl: safeGet('obrazokUrl').value, 
+                     webOdkaz: safeGet('webOdkaz').value, 
+                     navrhovatelId: sessionStorage.getItem('navrhovatelId'), 
+                 };
+                 const r = await fetch(`${API_URL}/api/drazby`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); 
+                 if (!r.ok) { const errData = await r.json(); let errMsg = errData.message || 'Chyba servera'; if (errData.errors) { errMsg = errData.errors.map(e => e.msg).join(', '); } throw new Error(errMsg); } 
+                 alert('Dražba vytvorená!'); showNavrhovatelDashboard(); 
+             } catch (error) { console.error("Chyba vytvárania dražby:", error); alert(`Chyba: ${error.message}`); } 
+             finally { btn.disabled = false; btn.textContent = 'Vytvoriť dražbu'; }
         }
         
         async function handleBidderLoginSubmit(event) { /* ... bez zmien ... */ 
@@ -449,33 +289,16 @@
         document.addEventListener('DOMContentLoaded', () => { 
             console.log("DOM načítaný."); 
             try { 
-                console.log("Inicializujem referencie na pohľady..."); 
-                roleSelectionDiv = safeGet('role-selection'); 
-                navrhovatelLoginView = safeGet('navrhovatel-login-view'); 
-                navrhovatelDashboardView = safeGet('navrhovatel-dashboard-view'); 
-                navrhovatelViewDiv = safeGet('navrhovatel-view'); 
-                zaujemcaViewDiv = safeGet('zaujemca-view'); 
-                detailViewDiv = safeGet('detail-view'); 
-                bidderLoginSection = safeGet('bidder-login-section'); 
-                bidSection = safeGet('bid-section'); 
-                drazbyListDiv = safeGet('drazby-list'); // Pre záujemcu
-                // Možno bude treba aj #moje-drazby-list, ak ho používame inde
-                console.log("Referencie pohľadov OK.");
-                
-                try { 
-                    safeGet('filter-okres').addEventListener('change', filterAndDisplayAuctions); 
-                    safeGet('filter-predmet-typ').addEventListener('change', filterAndDisplayAuctions); 
-                    safeGet('filter-navrhovatel').addEventListener('change', filterAndDisplayAuctions); 
-                    safeGet('filter-datum-zaciatku').addEventListener('change', filterAndDisplayAuctions); 
-                    console.log("Listenery filtrov pridané."); 
-                } catch (e) { console.error("Chyba listenerov filtrov:", e); }
-                
-                if (sessionStorage.getItem('navrhovatelMobil')) { console.log("Nájdené prihlásenie navrhovateľa..."); showNavrhovatelDashboard(); } 
+                console.log("Inicializujem referencie..."); 
+                roleSelectionDiv = safeGet('role-selection'); navrhovatelLoginView = safeGet('navrhovatel-login-view'); navrhovatelDashboardView = safeGet('navrhovatel-dashboard-view'); navrhovatelViewDiv = safeGet('navrhovatel-view'); zaujemcaViewDiv = safeGet('zaujemca-view'); detailViewDiv = safeGet('detail-view'); 
+                bidderLoginSection = safeGet('bidder-login-section'); bidSection = safeGet('bid-section'); drazbyListDiv = safeGet('drazby-list'); 
+                console.log("Referencie OK.");
+                try { safeGet('filter-okres').addEventListener('change', filterAndDisplayAuctions); safeGet('filter-predmet-typ').addEventListener('change', filterAndDisplayAuctions); safeGet('filter-navrhovatel').addEventListener('change', filterAndDisplayAuctions); safeGet('filter-datum-zaciatku').addEventListener('change', filterAndDisplayAuctions); console.log("Listenery filtrov OK."); } catch (e) { console.error("Chyba listenerov filtrov:", e); }
+                if (sessionStorage.getItem('navrhovatelMobil')) { console.log("Nájdený navrhovateľ..."); showNavrhovatelDashboard(); } 
                 else { console.log("Volám showRoleSelection..."); showRoleSelection(); }
                 console.log("Inicializácia OK."); 
             } catch (error) { 
-                console.error("KRITICKÁ CHYBA INIT:", error); 
-                try { document.body.innerHTML = `<p style="color:red; padding: 20px;">Chyba inicializácie: ${error.message}. Skontrolujte konzolu prehliadača (F12).</p>`; } catch(e){}
+                console.error("KRITICKÁ CHYBA INIT:", error); try { document.body.innerHTML = `<p style="color:red; padding: 20px;">Chyba inicializácie: ${error.message}. Skontrolujte konzolu (F12).</p>`; } catch(e){}
             } 
         }); 
         
